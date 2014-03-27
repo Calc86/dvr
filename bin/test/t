@@ -1,0 +1,8 @@
+DIR[0]="dir1"
+DIR[1]="dir2"
+DIR[2]="dir3"
+
+for i in ${DIR[@]}
+do
+  echo $i
+done 

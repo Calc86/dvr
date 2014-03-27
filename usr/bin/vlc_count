@@ -1,0 +1,1 @@
+echo "запущено "`ps -A | grep vlc | wc -l`" процессов vlc, в ./proc "`ls /home/calc/vlc/proc | wc -l`" файлов"

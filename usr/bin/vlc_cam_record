@@ -1,0 +1,21 @@
+#!/usr/bin/expect -f
+#0 - порт телнета
+#1 - имя камеры
+#2 - организация
+#3 - дата
+#4 - время
+#5 - mnt или rec
+spawn telnet localhost [lindex $argv 0]
+#expect -re "Username:"
+#send "iamuser\n"
+expect -re "Password"
+send "12345\n"
+expect ">"
+#send "control [lindex $argv 1] stop\n"
+#expect ">"
+#                       test_   ubnt_zerkalo _mtn                                                                    mtn              test            2013-01-01     ubnt_zerkalo       2013-01-01    19:55:55           
+send "setup [lindex $argv 2]_[lindex $argv 1]_[lindex $argv 5] output #std{access=file,mux=ts,dst=/home/calc/vlc/[lindex $argv 5]/[lindex $argv 2]/[lindex $argv 3]/[lindex $argv 1]_[lindex $argv 3]_[lindex $argv 4].avi}\n"
+expect ">"
+send "control [lindex $argv 2]_[lindex $argv 1]_[lindex $argv 5] play\n"
+expect ">"
+send "quit\n"

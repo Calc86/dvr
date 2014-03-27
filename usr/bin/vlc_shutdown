@@ -1,0 +1,9 @@
+#!/usr/bin/expect -f
+spawn telnet localhost [lindex $argv 0]
+#expect -re "Username:"
+#send "iamuser\n"
+expect -re "Password"
+send "12345\n"
+expect ">"
+send "shutdown\n"
+expect ">"

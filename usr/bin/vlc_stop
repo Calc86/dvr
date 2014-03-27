@@ -1,0 +1,9 @@
+source `dirname $0`/../../bin/config.sh
+DIR=$VLCDIR
+
+#DIR=/home/calc/vlc
+
+ORG=$1
+TLPORT=`/bin/bash $DIR/usr/bin/vlc_get_tlport $ORG`
+/bin/bash $DIR/usr/bin/vlc_shutdown $TLPORT
+echo "\n"

@@ -1,0 +1,371 @@
+[0x8aa48f0] main libvlc debug: configured with ./configure  '--enable-static' '--build=i486-linux-gnu' 'CFLAGS=-g -O2' 'CPPFLAGS=' 'CXXFLAGS=-g -O2' 'LDFLAGS=' '--config-cache' '--disable-maintainer-mode' '--disable-silent-rules' '--disable-update-check' '--enable-fast-install' '--prefix=/usr' '--docdir=/usr/share/doc/vlc-nox' '--sysconfdir=/etc' '--with-binary-version=1~bpo60+1' '--enable-a52' '--enable-aa' '--enable-bluray' '--enable-bonjour' '--enable-caca' '--enable-dbus' '--enable-dca' '--enable-dirac' '--enable-directfb' '--enable-dvbpsi' '--enable-dvdnav' '--enable-faad' '--enable-flac' '--enable-fluidsynth' '--enable-freetype' '--enable-fribidi' '--enable-gnutls' '--enable-jack' '--enable-kate' '--enable-libass' '--enable-libmpeg2' '--enable-libproxy' '--enable-libxml2' '--enable-lirc' '--enable-live555' '--enable-mad' '--enable-mkv' '--enable-mod' '--enable-mpc' '--enable-mtp' '--enable-mux_ogg' '--enable-ncurses' '--enable-notify' '--enable-ogg' '--enable-oss' '--enable-pulse' '--enable-qt4' '--enable-realrtsp' '--enable-samplerate' '--enable-sdl' '--enable-shout' '--enable-skins2' '--enable-smb' '--enable-speex' '--enable-svg' '--enable-taglib' '--enable-theora' '--enable-twolame' '--enable-upnp' '--enable-vcd' '--enable-vcdx' '--enable-vorbis' '--enable-x264' '--enable-zvbi' '--with-kde-solid=/usr/share/kde4/apps/solid/actions/' '--disable-dxva2' '--disable-gnomevfs' '--disable-goom' '--disable-portaudio' '--disable-projectm' '--disable-sqlite' '--disable-telx' '--disable-crystalhd' '--disable-omxil' '--enable-alsa' '--enable-atmo' '--enable-dc1394' '--enable-dv' '--enable-fbosd' '--enable-libva' '--enable-linsys' '--enable-pvr' '--enable-udev' '--enable-v4l2' '--enable-mmx' '--enable-sse' '--disable-neon' '--disable-altivec' 'build_alias=i486-linux-gnu'
+[0x8aa48f0] main libvlc debug: loading plugins cache file /usr/lib/vlc/plugins/plugins.dat
+[0x8aa48f0] main libvlc debug: recursively browsing `/usr/lib/vlc/plugins'
+[0x8aa48f0] main libvlc debug: saving plugins cache /usr/lib/vlc/plugins/plugins.dat
+[0x8aa48f0] main libvlc debug: opening config file (/home/calc/.config/vlc/vlcrc)
+[0x8aa48f0] main libvlc debug: translation test: code is "ru"
+[0x8aa48f0] main libvlc debug: CPU has capabilities MMX MMXEXT SSE SSE2 SSE3 SSSE3 SSE4.1 SSE4.2 FPU 
+[0x8c21e38] main stream output debug: using sout chain=`transcode{vcodec=MJPG,vb=4096,width=640,height=368}:std{access=http{mime=multipart/x-mixed-replace;boundary=--7b3cc56e5f51db803f790dad720ed50a},mux=mpjpeg,dst=*:19002}'
+[0x8c21e38] main stream output debug: stream=`std'
+[0x8c22178] main stream out debug: set config option: sout-standard-access to http{mime=multipart/x-mixed-replace;boundary=--7b3cc56e5f51db803f790dad720ed50a}
+[0x8c22178] main stream out debug: set config option: sout-standard-mux to mpjpeg
+[0x8c22178] main stream out debug: set config option: sout-standard-dst to *:19002
+[0x8c13688] mux_mpjpeg mux debug: Multipart jpeg muxer opened
+[0x8c13688] main mux debug: using sout mux module "mux_mpjpeg"
+[0x8c13688] main mux debug: TIMER module_need() : 0.078 ms - Total 0.078 ms / 1 intvls (Avg 0.078 ms)
+[0x8c21e38] main stream output debug: muxer support adding stream at any time
+[0x8c21e38] main stream output debug: muxer prefers to wait for all ES before starting to mux
+[0x8c22178] stream_out_standard stream out debug: using `http{mime=multipart/x-mixed-replace;boundary=--7b3cc56e5f51db803f790dad720ed50a}/mpjpeg://*:19002'
+[0x8c22178] main stream out debug: using sout stream module "stream_out_standard"
+[0x8c22178] main stream out debug: TIMER module_need() : 0.459 ms - Total 0.459 ms / 1 intvls (Avg 0.459 ms)
+[0x8c21e38] main stream output debug: stream=`transcode'
+[0x8c13ae0] main stream out debug: looking for sout stream module: 1 candidate
+[0x8c13ae0] main stream out debug: set config option: sout-transcode-vcodec to MJPG
+[0x8c13ae0] main stream out debug: set config option: sout-transcode-vb to 4096
+[0x8c13ae0] main stream out debug: set config option: sout-transcode-width to 640
+[0x8c13ae0] main stream out debug: set config option: sout-transcode-height to 368
+[0x8c13ae0] stream_out_transcode stream out debug: codec video=MJPG 640x368 scaling: 0.000000 4096kb/s
+[0x8c13ae0] main stream out debug: using sout stream module "stream_out_transcode"
+[0x8c13ae0] main stream out debug: TIMER module_need() : 0.176 ms - Total 0.176 ms / 1 intvls (Avg 0.176 ms)
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: using timeshift granularity of 50 MiB, in path '/tmp'
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: `rtsp://10.113.151.151:554/test1' gives access `rtsp' demux `' path `10.113.151.151:554/test1'
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: creating demux: access='rtsp' demux='' location='10.113.151.151:554/test1' file='(null)'
+[0x8c11ab0] [Поток: test1_vova_12k_live] main demux debug: looking for access_demux module: 1 candidate
+[0x8c11ab0] [Поток: test1_vova_12k_live] live555 demux debug: version 2012.05.17
+Opening connection to 10.113.151.151, port 554...
+[0x8c204c8] inhibit interface error: Failed to connect to the D-Bus session daemon: /usr/bin/dbus-launch terminated abnormally with the following error: Autolaunch error: X11 initialization failed.
+
+[0x8c204c8] main interface debug: no interface module matching "inhibit,none" could be loaded
+[0x8c204c8] main interface debug: TIMER module_need() : 2.073 ms - Total 2.073 ms / 1 intvls (Avg 2.073 ms)
+[0x8c204c8] main interface error: no suitable interface module
+[0x8c204c8] main interface debug: looking for interface module: 1 candidate
+[0x8c204c8] main interface debug: no interface module matching "globalhotkeys,none" could be loaded
+[0x8c204c8] main interface debug: TIMER module_need() : 0.136 ms - Total 0.136 ms / 1 intvls (Avg 0.136 ms)
+[0x8c204c8] main interface error: no suitable interface module
+[0x8aa48f0] main libvlc error: interface "globalhotkeys,none" initialization failed
+[0x8c21a90] main interface debug: looking for interface module: 1 candidate
+[0x8c21a90] [telnet] lua interface debug: Found lua interface script: /usr/lib/vlc/lua/intf/telnet.luac
+[0x8c21a90] [telnet] lua interface debug: Setting config variable: config={telnet={host='telnet://localhost:4302',password='******'}}
+[0x8c21a90] [telnet] main interface debug: using interface module "lua"
+[0x8c21a90] [telnet] main interface debug: TIMER module_need() : 0.294 ms - Total 0.294 ms / 1 intvls (Avg 0.294 ms)
+[0x8c21a90] [telnet] lua interface: Listening on host "telnet://localhost:4302".
+[0x8c21a90] [telnet] main interface debug: net: listening to localhost port 4302
+...remote connection opened
+Sending request: OPTIONS rtsp://10.113.151.151:554/test1 RTSP/1.0
+CSeq: 2
+User-Agent: LibVLC/2.0.3 (LIVE555 Streaming Media v2012.05.17)
+
+
+Received 130 new bytes of response data.
+Received a complete OPTIONS response:
+RTSP/1.0 200 OK
+CSeq: 2
+Date: Wed, Mar 06 2013 10:21:07 GMT
+Public: OPTIONS, DESCRIBE, SETUP, TEARDOWN, SET_PARAMETER, PLAY
+
+
+Sending request: DESCRIBE rtsp://10.113.151.151:554/test1 RTSP/1.0
+CSeq: 3
+User-Agent: LibVLC/2.0.3 (LIVE555 Streaming Media v2012.05.17)
+Accept: application/sdp
+
+
+Received 641 new bytes of response data.
+Received a complete DESCRIBE response:
+RTSP/1.0 200 OK
+CSeq: 3
+Date: Wed, Mar 06 2013 10:21:07 GMT
+Content-Base: rtsp://10.113.151.151:554/test1/
+Content-Type: application/sdp
+Content-Length: 476
+
+v=0
+o=RTSP 1362228743751151 1 IN IP4 0.0.0.0
+s=RTSP Server
+t=0 0
+a=range:npt=0-
+a=control:*
+m=video 0 RTP/AVP 99
+c=IN IP4 0.0.0.0
+b=AS:0
+a=rtpmap:99 H264/90000
+a=fmtp:99 packetization-mode=1;profile-level-id=42E01F;sprop-parameter-sets=Z0LgH9oBQBbE,aM4wpIA=
+a=control:track1
+m=audio 0 RTP/AVP 0
+c=IN IP4 0.0.0.0
+b=AS:64
+a=control:track2
+m=application 0 RTP/AVP 107
+c=IN IP4 0.0.0.0
+b=AS:0
+a=rtpmap:107 vnd.onvif.metadata/90000
+a=recvonly
+a=control:track3
+
+[0x8c11ab0] [Поток: test1_vova_12k_live] live555 demux debug: RTP subsession 'video/H264'
+Sending request: SETUP rtsp://10.113.151.151:554/test1/track1 RTSP/1.0
+CSeq: 4
+User-Agent: LibVLC/2.0.3 (LIVE555 Streaming Media v2012.05.17)
+Transport: RTP/AVP;unicast;client_port=52402-52403
+
+
+Received 183 new bytes of response data.
+Received a complete SETUP response:
+RTSP/1.0 200 OK
+CSeq: 4
+Date: Wed, Mar 06 2013 10:21:07 GMT
+Transport: RTP/AVP;unicast;client_port=52402-52403;server_port=5000-5001;ssrc=7BC52C25
+Session: 1341FE8D;timeout=60
+
+
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: selecting program id=0
+[0x8c11ab0] [Поток: test1_vova_12k_live] live555 demux debug: RTP subsession 'audio/PCMU'
+Sending request: SETUP rtsp://10.113.151.151:554/test1/track2 RTSP/1.0
+CSeq: 5
+User-Agent: LibVLC/2.0.3 (LIVE555 Streaming Media v2012.05.17)
+Transport: RTP/AVP;unicast;client_port=59456-59457
+Session: 1341FE8D
+
+
+Received 183 new bytes of response data.
+Received a complete SETUP response:
+RTSP/1.0 200 OK
+CSeq: 5
+Date: Wed, Mar 06 2013 10:21:07 GMT
+Transport: RTP/AVP;unicast;client_port=59456-59457;server_port=5002-5003;ssrc=7E621817
+Session: 1341FE8D;timeout=60
+
+
+[0x8c11ab0] [Поток: test1_vova_12k_live] live555 demux debug: setup start: 0.000000 stop:0.000000
+Sending request: PLAY rtsp://10.113.151.151:554/test1/ RTSP/1.0
+CSeq: 6
+User-Agent: LibVLC/2.0.3 (LIVE555 Streaming Media v2012.05.17)
+Session: 1341FE8D
+Range: npt=0.000-
+
+
+Received 311 new bytes of response data.
+Received a complete PLAY response:
+RTSP/1.0 200 OK
+CSeq: 6
+Date: Wed, Mar 06 2013 10:21:07 GMT
+Range: npt=0.000-
+Session: 1341FE8D; timeout=60
+RTP-Info: url=rtsp://10.113.151.151:554/test1/track1;seq=39813;rtptime=0,url=rtsp://10.113.151.151:554/test1/track2;seq=43876;rtptime=0,url=rtsp://10.113.151.151:554/test1/track3;seq=0;rtptime=0
+
+
+[0x8c11ab0] [Поток: test1_vova_12k_live] live555 demux debug: play start: 0.000000 stop:0.000000
+[0x8c11ab0] [Поток: test1_vova_12k_live] main demux debug: using access_demux module "live555"
+[0x8c11ab0] [Поток: test1_vova_12k_live] main demux debug: TIMER module_need() : 80.023 ms - Total 80.023 ms / 1 intvls (Avg 80.023 ms)
+[0x8c155f8] [Поток: test1_vova_12k_live] main decoder debug: looking for packetizer module: 21 candidates
+[0x8c155f8] [Поток: test1_vova_12k_live] packetizer_h264 decoder debug: found NAL_SPS (sps_id=0)
+[0x8c155f8] [Поток: test1_vova_12k_live] packetizer_h264 decoder debug: found NAL_PPS (pps_id=0 sps_id=0)
+[0x8c155f8] [Поток: test1_vova_12k_live] main decoder debug: using packetizer module "packetizer_h264"
+[0x8c155f8] [Поток: test1_vova_12k_live] main decoder debug: TIMER module_need() : 0.522 ms - Total 0.522 ms / 1 intvls (Avg 0.522 ms)
+[0x8b021c8] [Поток: test1_vova_12k_live] main decoder debug: looking for packetizer module: 21 candidates
+[0x8b021c8] [Поток: test1_vova_12k_live] main decoder debug: using packetizer module "packetizer_copy"
+[0x8b021c8] [Поток: test1_vova_12k_live] main decoder debug: TIMER module_need() : 0.504 ms - Total 0.504 ms / 1 intvls (Avg 0.504 ms)
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: starting in async mode
+[0x8b06b50] [Поток: test1_vova_12k_live] main demux meta debug: looking for meta reader module: 2 candidates
+[0x8b06b50] [Поток: test1_vova_12k_live] lua demux meta debug: Trying Lua scripts in /home/calc/.local/share/vlc/lua/meta/reader
+[0x8b06b50] [Поток: test1_vova_12k_live] lua demux meta debug: Trying Lua scripts in /usr/lib/vlc/lua/meta/reader
+[0x8b06b50] [Поток: test1_vova_12k_live] lua demux meta debug: Trying Lua playlist script /usr/lib/vlc/lua/meta/reader/filename.luac
+[0x8b06b50] [Поток: test1_vova_12k_live] lua demux meta debug: Trying Lua scripts in /usr/share/vlc/lua/meta/reader
+[0x8b06b50] [Поток: test1_vova_12k_live] main demux meta debug: no meta reader module matching "any" could be loaded
+[0x8b06b50] [Поток: test1_vova_12k_live] main demux meta debug: TIMER module_need() : 0.296 ms - Total 0.296 ms / 1 intvls (Avg 0.296 ms)
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: `rtsp://10.113.151.151:554/test1' successfully opened
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: switching to sync mode
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 0%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 0%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 7%
+MultiFramedRTPSource::doGetNextFrame1(): The total received frame size exceeds the client's buffer size (65536).  50492 bytes of trailing data will be dropped!
+[0x8c11ab0] [Поток: test1_vova_12k_live] live555 demux debug: lost 50492 bytes
+[0x8c11ab0] [Поток: test1_vova_12k_live] live555 demux debug: increasing buffer size to 131072
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 7%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 7%
+[0x8c21e38] main stream output debug: adding a new sout input (sout_input:0x8b06bf0)
+[0x8c13ae0] stream_out_transcode stream out debug: creating video transcoding from fcc=`h264' to fcc=`MJPG'
+[0x8b07228] main generic debug: looking for decoder module: 28 candidates
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 9%
+[0x8c21e38] main stream output debug: adding a new sout input (sout_input:0x8b04000)
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 23%
+[0x8b07228] avcodec generic debug: libavcodec initialized (interface 0x352300)
+[0x8b07228] avcodec generic debug: trying to use direct rendering
+[0x8b07228] avcodec generic debug: allowing 1 thread(s) for decoding
+[0x8b07228] avcodec generic warning: threaded frame decoding is not compatible with ffmpeg-hw, disabled
+[0x8b07228] avcodec generic debug: ffmpeg codec (H264 - MPEG-4 AVC (part 10)) started
+[0x8b07228] main generic debug: using decoder module "avcodec"
+[0x8b07228] main generic debug: TIMER module_need() : 6.650 ms - Total 6.650 ms / 1 intvls (Avg 6.650 ms)
+[0x8b0a070] main encoder debug: looking for encoder module: 12 candidates
+[0x8b0a070] avcodec encoder debug: libavcodec already initialized
+[mjpeg @ 0x8b1ca20] removing common factors from framerate
+[0x8b0a070] avcodec encoder debug: found encoder Motion JPEG Video
+[0x8b0a070] main encoder debug: using encoder module "avcodec"
+[0x8b0a070] main encoder debug: TIMER module_need() : 1.261 ms - Total 1.261 ms / 1 intvls (Avg 1.261 ms)
+[0x8b0a070] main encoder debug: removing module "avcodec"
+[0x8c13ae0] stream_out_transcode stream out debug: not transcoding a stream (fcc=`mlaw')
+[0x8c13688] main mux debug: adding a new input
+[0x8c13688] mux_mpjpeg mux debug: adding input
+[0x8c13688] main mux error: cannot add this stream
+[0x8b021c8] [Поток: test1_vova_12k_live] main decoder error: cannot create packetizer output (mlaw)
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 30%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 45%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 45%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 45%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 54%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 54%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 54%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 54%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 54%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 70%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 70%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 70%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 70%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 70%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 86%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 86%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 86%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 86%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 86%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 86%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 86%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 86%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 86%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 86%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 86%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 86%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 86%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Stream buffering done (1027 ms in 1119 ms)
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Decoder buffering done in 0 ms
+[0x8b07228] avcodec generic debug: Available decoder output format 61 (Unknown)
+[0x8b07228] avcodec generic debug: Available decoder output format 53 (PIX_FMT_VAAPI_VLD)
+[0x8b07228] avcodec generic debug: Trying VA API
+[0x8b07228] avcodec generic warning: Failed to open VA API
+[0x8b07228] avcodec generic debug: Available decoder output format 81 (Unknown)
+[0x8b07228] avcodec generic debug: Available decoder output format 0 (PIX_FMT_YUV420P)
+[0x8b07228] avcodec generic debug: using direct rendering
+[h264 @ 0x8c2d2c0] corrupted macroblock 61 22 (total_coeff=-1)
+[h264 @ 0x8c2d2c0] error while decoding MB 61 22
+[h264 @ 0x8c2d2c0] concealing 1828 DC, 1828 AC, 1828 MV errors
+[0x8c13ae0] stream_out_transcode stream out debug: late picture skipped (50750)
+[0x8c13ae0] stream_out_transcode stream out debug: decoder aspect is 1.777778:1
+[0x8c13ae0] stream_out_transcode stream out debug: source pixel aspect is 1.000000:1
+[0x8c13ae0] stream_out_transcode stream out debug: scaled pixel aspect is 1.022222:1
+[0x8c13ae0] stream_out_transcode stream out debug: source 1280x720, destination 640x368
+[0x8c13ae0] stream_out_transcode stream out debug: encoder aspect is 29440:16560
+[0x8b29828] main filter debug: looking for video filter2 module: 18 candidates
+[0x8b29828] swscale filter debug: 1280x720 chroma: I420 -> 640x368 chroma: J420 with scaling using Bicubic (good quality)
+[0x8b29828] main filter debug: using video filter2 module "swscale"
+[0x8b29828] main filter debug: TIMER module_need() : 1.412 ms - Total 1.412 ms / 1 intvls (Avg 1.412 ms)
+[0x8c13ae0] main stream out debug: Filter 'Swscale' (0x8b29828) appended to chain
+[0x8c13ae0] stream_out_transcode stream out debug: destination (after video filters) 640x368
+[0x8b0a070] main encoder debug: looking for encoder module: 12 candidates
+[0x8b0a070] avcodec encoder debug: libavcodec already initialized
+[mjpeg @ 0x8c42e00] removing common factors from framerate
+[0x8b0a070] avcodec encoder debug: found encoder Motion JPEG Video
+[0x8b0a070] main encoder debug: using encoder module "avcodec"
+[0x8b0a070] main encoder debug: TIMER module_need() : 0.318 ms - Total 0.318 ms / 1 intvls (Avg 0.318 ms)
+[0x8c13688] main mux debug: adding a new input
+[0x8c13688] mux_mpjpeg mux debug: adding input
+[0x8c13ae0] stream_out_transcode stream out debug: late picture skipped (221425)
+[0x8c13ae0] stream_out_transcode stream out debug: late picture skipped (14356)
+[0x8c13ae0] stream_out_transcode stream out debug: late picture skipped (15695)
+[0x8c13ae0] stream_out_transcode stream out debug: late picture skipped (18223)
+[0x8c13ae0] stream_out_transcode stream out debug: late picture skipped (14461)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6156790261, last: 6156899524)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6156790927, last: 6156899524)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6156792082, last: 6156899524)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6156792793, last: 6156899524)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6156793859, last: 6156899524)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6156846659, last: 6156899524)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157603961, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157605394, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157607882, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157609126, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157611048, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157612692, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157614658, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157593107, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157603284, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157610317, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157624994, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157635360, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157641148, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157642748, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157690363, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157718474, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157788051, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157801173, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157829895, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157831783, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157840460, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157847848, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157863214, last: 6157905645)
+[0x8c13ae0] stream_out_transcode stream out debug: late picture skipped (3851)
+[0x8c13ae0] stream_out_transcode stream out debug: late picture skipped (6011)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157877241, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6157899074, last: 6157905645)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6159099960, last: 6159211204)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6159100926, last: 6159211204)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6159101492, last: 6159211204)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6159108503, last: 6159211204)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6159115480, last: 6159211204)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6159118546, last: 6159211204)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6159057740, last: 6159211204)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6159066295, last: 6159211204)
+[0x8b0a070] avcodec encoder warning: almost fed libavcodec with a frame in the past (current: 6159085706, last: 6159211204)
+[0x8c11ab0] [Поток: test1_vova_12k_live] live555 demux debug: tk->rtpSource->hasBeenSynchronizedUsingRTCP()
+[0x8c1b870] [Поток: test1_vova_12k_live] main input error: ES_OUT_RESET_PCR called
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 0%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 0%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 0%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 2%
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Buffering 2%
+[0x8c11ab0] [Поток: test1_vova_12k_live] live555 demux debug: tk->rtpSource->hasBeenSynchronizedUsingRTCP()
+[0x8c1b870] [Поток: test1_vova_12k_live] main input error: ES_OUT_RESET_PCR called
+[0x8aa48f0] main libvlc debug: deactivating the playlist
+[0x8aa48f0] main libvlc debug: removing all services discovery tasks
+[0x8aa48f0] main libvlc debug: removing all interfaces
+[0x8aa48f0] main libvlc debug: exiting
+[0x8c21a90] [telnet] main interface debug: removing module "lua"
+[0x8c1bcb8] main interface debug: removing module "hotkeys"
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: control: stopping input
+[0x8c155f8] [Поток: test1_vova_12k_live] main decoder debug: removing module "packetizer_h264"
+[0x8c155f8] [Поток: test1_vova_12k_live] main decoder debug: killing decoder fourcc `h264', 0 PES in FIFO
+[0x8c21e38] main stream output debug: removing a sout input (sout_input:0x8b06bf0)
+[0x8b0a070] main encoder debug: TIMER encoding video frame : 0.002 ms - Total 674.272 ms / 107 intvls (Avg 6.302 ms)
+[0x8b07228] main generic debug: removing module "avcodec"
+[0x8b07228] avcodec generic debug: ffmpeg codec (H264 - MPEG-4 AVC (part 10)) stopped
+[0x8b0a070] main encoder debug: removing module "avcodec"
+[0x8c13ae0] main stream out debug: Filter 0x8b29828 removed from chain
+[0x8b29828] main filter debug: removing module "swscale"
+[0x8c13688] mux_mpjpeg mux debug: removing input
+[0x8c13688] main mux warning: no more input streams for this mux
+[0x8b021c8] [Поток: test1_vova_12k_live] main decoder debug: removing module "packetizer_copy"
+[0x8b021c8] [Поток: test1_vova_12k_live] main decoder debug: killing decoder fourcc `mlaw', 0 PES in FIFO
+[0x8c11ab0] [Поток: test1_vova_12k_live] main demux debug: removing module "live555"
+Sending request: TEARDOWN rtsp://10.113.151.151:554/test1/ RTSP/1.0
+CSeq: 7
+User-Agent: LibVLC/2.0.3 (LIVE555 Streaming Media v2012.05.17)
+Session: 1341FE8D
+
+
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: Program doesn't contain anymore ES
+[0x8c1b870] [Поток: test1_vova_12k_live] main input debug: TIMER input launching for 'rtsp://10.113.151.151:554/test1' : 83.222 ms - Total 83.222 ms / 1 intvls (Avg 83.222 ms)
+[0x8c21e38] main stream output debug: destroying useless sout
+[0x8c13ae0] main stream out debug: destroying chain... (name=transcode)
+[0x8c13ae0] main stream out debug: removing module "stream_out_transcode"
+[0x8c13ae0] main stream out debug: destroying chain done
+[0x8c22178] main stream out debug: destroying chain... (name=std)
+[0x8c22178] main stream out debug: removing module "stream_out_standard"
+[0x8c13688] main mux debug: removing module "mux_mpjpeg"
+[0x8c13688] mux_mpjpeg mux debug: Multipart jpeg muxer closed
+[0x8c12a18] main access out debug: removing module "access_output_http"
+[0x8c132b0] main http host debug: waitpipe: object killed
+[0x8c132b0] main http host debug: HTTP host removed
+[0x8c12a18] access_output_http access out debug: Close
+[0x8c22178] main stream out debug: destroying chain done
+[0x8ab7708] main playlist debug: destroying
+[0x8aa48f0] main libvlc debug: TIMER ML Load : Total 2.857 ms / 1 intvls (Avg 2.857 ms)
+[0x8aa48f0] main libvlc debug: removing stats
+[0x8aa48f0] main libvlc debug: removing module "memcpymmxext"

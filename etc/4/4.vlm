@@ -1,0 +1,72 @@
+
+#ruben(4):cam1(1)
+#вещаем в воздух
+new OID_4__CID_1_live broadcast enabled loop
+setup OID_4__CID_1_live input "rtsp://10.112.249.47:10001/live/ch00_0"
+setup OID_4__CID_1_live option http-reconnect
+setup OID_4__CID_1_live output http-continious
+setup OID_4__CID_1_live output #std{access=http{mime=video/mp4},mux=ts,dst=*:9001/qwer1.mp4}
+control OID_4__CID_1_live play
+
+#new OID_4__CID_1_rtsp broadcast enabled
+#setup OID_4__CID_1_rtsp input "rtsp://10.112.249.47:10001/live/ch00_0"
+#setup OID_4__CID_1_rtsp output http-reconnect
+#setup OID_4__CID_1_rtsp output http-continious
+#setup OID_4__CID_1_rtsp output #rtp{dst=10.112.28.202,port=19001,sdp=rtsp://10.112.28.202:19001/qwer1.sdp}
+#control OID_4__CID_1_rtsp play
+#
+
+
+#ruben(4):cam2(2)
+#вещаем в воздух
+new OID_4__CID_2_live broadcast enabled
+setup OID_4__CID_2_live input "rtsp://10.112.249.47:10002/live/ch00_0"
+setup OID_4__CID_2_live output http-reconnect
+setup OID_4__CID_2_live output http-continious
+setup OID_4__CID_2_live output #std{access=http{mime=video/mp4},mux=ts,dst=*:9002/qwer2.mp4}
+control OID_4__CID_2_live play
+
+#new OID_4__CID_2_rtsp broadcast enabled
+#setup OID_4__CID_2_rtsp input "rtsp://10.112.249.47:10002/live/ch00_0"
+#setup OID_4__CID_2_rtsp output http-reconnect
+#setup OID_4__CID_2_rtsp output http-continious
+#setup OID_4__CID_2_rtsp output #rtp{dst=10.112.28.202,port=19002,sdp=rtsp://10.112.28.202:19002/qwer2.sdp}
+#control OID_4__CID_2_rtsp play
+#
+
+
+#ruben(4):cam3(3)
+#вещаем в воздух
+new OID_4__CID_3_live broadcast enabled
+setup OID_4__CID_3_live input "rtsp://10.112.249.47:10003/live/ch00_0"
+setup OID_4__CID_3_live output http-reconnect
+setup OID_4__CID_3_live output http-continious
+setup OID_4__CID_3_live output #std{access=http{mime=video/mp4},mux=ts,dst=*:9003/wwe3.mp4}
+control OID_4__CID_3_live play
+
+#new OID_4__CID_3_rtsp broadcast enabled
+#setup OID_4__CID_3_rtsp input "rtsp://10.112.249.47:10003/live/ch00_0"
+#setup OID_4__CID_3_rtsp output http-reconnect
+#setup OID_4__CID_3_rtsp output http-continious
+#setup OID_4__CID_3_rtsp output #rtp{dst=10.112.28.202,port=19003,sdp=rtsp://10.112.28.202:19003/wwe3.sdp}
+#control OID_4__CID_3_rtsp play
+#
+
+
+#ruben(4):cam4(7)
+#вещаем в воздух
+new OID_4__CID_7_live broadcast enabled
+setup OID_4__CID_7_live input "rtsp://10.112.249.47:10004/live/ch00_0"
+setup OID_4__CID_7_live output http-reconnect
+setup OID_4__CID_7_live output http-continious
+setup OID_4__CID_7_live output #std{access=http{mime=video/mp4},mux=ts,dst=*:9005/asdda3.mp4}
+control OID_4__CID_7_live play
+
+#new OID_4__CID_7_rtsp broadcast enabled
+#setup OID_4__CID_7_rtsp input "rtsp://10.112.249.47:10004/live/ch00_0"
+#setup OID_4__CID_7_rtsp output http-reconnect
+#setup OID_4__CID_7_rtsp output http-continious
+#setup OID_4__CID_7_rtsp output #rtp{dst=10.112.28.202,port=19005,sdp=rtsp://10.112.28.202:19005/asdda3.sdp}
+#control OID_4__CID_7_rtsp play
+#
+

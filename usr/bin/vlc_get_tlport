@@ -1,0 +1,5 @@
+#!/bin/bash
+#calc      1501     1  0 13:34 ?        00:00:00 /usr/bin/vlc -I dummy 
+#--ffmpeg-hw -d -I http --http-host 10.112.30.100 --http-port 8101 -I telnet 
+#--telnet-port 44301 --telnet-password
+ps -aef | grep $1/ | grep -v grep | grep telnet-port | awk '{print $22}'

@@ -1,0 +1,14 @@
+#!/usr/bin/expect -f
+#0-tlport
+#1-fullcamname org_cam_rec/mtn/live
+spawn telnet localhost [lindex $argv 0]
+#expect -re "Username:"
+#send "iamuser\n"
+expect -re "Password"
+send "12345\n"
+expect ">"
+send "control [lindex $argv 1] stop\n"
+expect ">"
+#send "control [lindex $argv 1] play\n"
+#expect ">"
+send "quit\n"

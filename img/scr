@@ -1,0 +1,1 @@
+ffmpeg -i $1 -an -ss 00:01:30 -r 1 -vframes 1 -s 640x480 -y -f mjpeg $1.jpg

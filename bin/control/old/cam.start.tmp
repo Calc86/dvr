@@ -1,0 +1,2 @@
+#daemon -d
+cvlc -d -I http --http-host {http-host} --http-port {http-port} -I telnet --telnet-port {telnet-port} --telnet-password {telnet-paswd} --vlm-conf {vlc-path}/etc/{user-name}.vlm
