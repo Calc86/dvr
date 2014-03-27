@@ -9,16 +9,16 @@ class vlc_rpc{
      */
     protected $vlc;
     /**
-     * @var int
+     * @var UserID
      */
     protected $uid;
 
     /**
-     * @param int $uid
+     * @param UserID $uid
      */
-    public function __construct($uid) {
+    public function __construct(UserID $uid) {
         $this->uid = $uid;
-        $this->vlc = new vlc($uid);
+        $this->vlc = new vlc($uid, new YesNo(true));
     }
 
     /**
@@ -109,7 +109,7 @@ class vlc_rpc{
      * @param $pref
      */
     public function create_cam($cid,$pref){
-        $this->vlc->create_cam($cid[0],$pref[0]);
+        $this->vlc->create_cam($cid[0],$pref[0], new YesNo(false));
     }
 
     /**
@@ -117,7 +117,7 @@ class vlc_rpc{
      * @param $pref
      */
     public function delete_cam($cid,$pref){
-        $this->vlc->delete_cam($cid[0],$pref[0]);
+        $this->vlc->delete_cam($cid[0],$pref[0], new YesNo(false));
     }
 
     /**
@@ -125,7 +125,7 @@ class vlc_rpc{
      * @param $pref
      */
     public function play_cam($cid,$pref){
-        $this->vlc->play_cam($cid[0],$pref[0]);
+        $this->vlc->play_cam($cid[0],$pref[0], new YesNo(false));
     }
 
     /**
@@ -144,7 +144,7 @@ class vlc_rpc{
  */
 class vlc{
     /**
-     * @var int id пользователя в базе mysql
+     * @var UserID id пользователя в базе mysql
      */
     protected $uid;
     /**
@@ -164,23 +164,23 @@ class vlc{
      */
     protected $vlm = '';
     /**
-     * @var string proc файл
+     * @var Path proc файл
      */
     protected $proc;
     /**
-     * @var string путь к лог файлу
+     * @var Path путь к лог файлу
      */
     protected $log = '';
     /**
-     * @var string путь к конфигу ротации логов
+     * @var Path путь к конфигу ротации логов
      */
     protected $logrotate = '';
     /**
-     * @var int порт для управления по telnet протоколу
+     * @var Port порт для управления по telnet протоколу
      */
     protected $tl_port;
     /**
-     * @var int порт для управления по http протоколу
+     * @var Port порт для управления по http протоколу
      */
     protected $ht_port;
 
@@ -190,16 +190,16 @@ class vlc{
     protected $cams = array();
 
     /**
-     * @var int динамические камеры или нет
+     * @var YesNo динамические камеры или нет
      */
-    protected $dyn = 1;
+    protected $dyn;
     //вообще мы выходим на полностью динамические камеры
 
     /**
-     * @param $uid int id пользователя в базе
-     * @param int $dyn динамические камеры?
+     * @param UserID $uid id пользователя в базе
+     * @param YesNo $dyn динамические камеры?
      */
-    public function __construct($uid,$dyn=1) {
+    public function __construct(UserID $uid,YesNo $dyn) {
         if(!$uid) die($this->error(__LINE__, " пользователь не указан"));
         $this->uid = $uid;
         $this->dyn = $dyn;
@@ -255,7 +255,7 @@ class vlc{
     }
 
     /**
-     * @return int id пользователя
+     * @return UserID
      */
     public function get_uid() {
         return $this->uid;
@@ -272,13 +272,13 @@ class vlc{
     }
 
     /**
-     * @param int $cid
-     * @param string $pref
-     * @param int $debug
+     * @param CamID $cid
+     * @param CamPrefix $pref
+     * @param YesNo $debug
      */
-    public function create_cam($cid,$pref,$debug=0){
+    public function create_cam(CamID $cid, CamPrefix $pref, YesNo $debug){
 
-        $cam = $this->cams[$cid];
+        $cam = $this->cams[$cid->get()];
         $cc = new cam_control_archive($this->uid,$cam->cam_id,$pref);
 
         //todo: remove 9000
@@ -313,12 +313,12 @@ class vlc{
     }
 
     /**
-     * @param int $cid
-     * @param string $pref
-     * @param int $debug
+     * @param CamID $cid
+     * @param CamPrefix $pref
+     * @param YesNo $debug
      */
-    public function play_cam($cid,$pref,$debug=0){
-        $cam = $this->cams[$cid];
+    public function play_cam(CamID $cid, CamPrefix $pref, YesNo $debug){
+        $cam = $this->cams[$cid->get()];
         $cc = new cam_control_archive($this->uid,$cam->cam_id,$pref);
 
         switch($pref){
@@ -342,24 +342,24 @@ class vlc{
     }
 
     /**
-     * @param int $cid
-     * @param string $pref
-     * @param int $debug
+     * @param CamID $cid
+     * @param CamPrefix $pref
+     * @param YesNo $debug
      */
-    public function delete_cam($cid,$pref,$debug=0){
-        $cam = $this->cams[$cid];
+    public function delete_cam(CamID $cid, CamPrefix $pref, YesNo $debug){
+        $cam = $this->cams[$cid->get()];
         $cc = new cam_control_archive($this->uid,$cam->cam_id,$pref);
 
         $cc->delete();
     }
 
     /**
-     * @param int $cid
-     * @param string $pref
-     * @param int $debug
+     * @param CamID $cid
+     * @param CamPrefix $pref
+     * @param YesNo $debug
      */
-    public function stop_cam($cid,$pref,$debug=0){
-        $cam = $this->cams[$cid];
+    public function stop_cam(CamID $cid, CamPrefix $pref, YesNo $debug=0){
+        $cam = $this->cams[$cid->get()];
         $cc = new cam_control_archive($this->uid,$cam->cam_id,$pref);
 
         $cc->stop();
@@ -404,7 +404,7 @@ class vlc{
         }
         else{
             echo "vlc: $vlc_shell\n";   //комманда запуска
-            `$vlc_shell`;
+            (new BashCommand($vlc_shell))->exec();
 
             //todo: сделать проверку на успешный старт unix процесса
             if($this->dyn){
@@ -413,17 +413,12 @@ class vlc{
                 echo "Динамическое добавление\n";
                 foreach($this->cams as $cam)
                 {
-                    $this->create_cam($cam->cam_id,'live',1);
-                    $this->create_cam($cam->cam_id,'rec',1);
-                    $this->create_cam($cam->cam_id,'mtn',1);
+                    $this->create_cam($cam->cam_id, new CamPrefix('live'), new YesNo(true));
+                    $this->create_cam($cam->cam_id, new CamPrefix('rec'), new YesNo(true));
+                    $this->create_cam($cam->cam_id, new CamPrefix('mtn'), new YesNo(true));
 
-                    $this->play_cam($cam->cam_id,'live',1);
-                    $this->play_cam($cam->cam_id,'rec',1);
-                    //$this->play_cam($cam->cam_id,'mtn',1);
-
-                    //создание камеры rtmp
-                    //$this->create_cam($cam->cam_id,'rtmp',1);
-                    //$this->play_cam($cam->cam_id,'rtmp',1);
+                    $this->play_cam($cam->cam_id, new CamPrefix('live'), new YesNo(true));
+                    $this->play_cam($cam->cam_id,new CamPrefix('rec'), new YesNo(true));
                 }
             }
         }
@@ -510,7 +505,7 @@ class vlc{
         if(!$proc){
             if(is_file($this->proc)){
                 $kill = "kill `cat $this->proc`";
-                `$kill`;
+                (new BashCommand($kill))->exec();
                 $this->del_proc();
             }
             else
@@ -521,7 +516,7 @@ class vlc{
         else 
         {
             $kill = "kill $proc";
-            `$kill`;
+            (new BashCommand($kill))->exec();
             $this->del_proc();
         }
         sleep(1);

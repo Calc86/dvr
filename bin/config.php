@@ -38,11 +38,11 @@ define('VLCD','-d');
 define('VLCNETCACHE',500);
 define('VLCSOUTCACHE',200);
 
-require_once BIN.'/class/Type.php';
+require_once BIN.'/class/types.class.php';
 require_once BIN.'/class/config.class.php';
 require_once BIN."/class/telnet.class.php";
 require_once BIN."/class/vlm.class.php";
 require_once BIN.'/class/nas.class.php';
 require_once BIN.'/class/vlc.class.php';
 
-?>
+

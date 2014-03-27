@@ -14,35 +14,35 @@ control ruben_cam1_live play
  */
 class vlc_http{
     /**
-     * @var int
+     * @var YesNo
      */
-    protected $debug = 0;
+    protected $debug;
     /**
      * @var string
      */
     protected $msg;
     /**
-     * @var string
+     * @var IP
      */
     protected $ip;
     /**
-     * @var var int
+     * @var Port
      */
     protected $port;
     /**
-     * @var var string
+     * @var Url
      */
     protected $url;
     /**
-     * @var var string
+     * @var Url
      */
     protected $full_url;
 
     /**
-     * @param int $port
-     * @param string $url
+     * @param Port $port
+     * @param Url $url
      */
-    public function __construct($port,$url) {
+    public function __construct(Port $port, Url $url) {
         $this->ip = LIVEHOST;
         $this->port = $port;
         $this->set_url($url);
@@ -51,9 +51,9 @@ class vlc_http{
     }
 
     /**
-     * @param string $url
+     * @param Url $url
      */
-    protected function set_url($url) {
+    protected function set_url(Url $url) {
         $this->url = $url;
         $this->full_url();
     }
@@ -62,19 +62,19 @@ class vlc_http{
      *
      */
     protected function full_url() {
-        $this->full_url = "http://$this->ip:$this->port/$this->url";
+        $this->full_url = new Url("http://$this->ip:$this->port/$this->url");
     }
 
     /**
-     * @param string $cmd
+     * @param VLMCommand $cmd
      */
-    protected function cmd($cmd) {
+    protected function cmd(VLMCommand $cmd) {
         $this->msg = '';
         $path = $this->full_url.rawurlencode(trim($cmd));
         if($this->debug) echo $path;
-        @$f = fopen($path,"r");
+        $f = fopen($path,"r");
         if($f){
-            while ($buf=fread($f, 1024)){
+            while (($buf=fread($f, 1024)) != 0){
                 $this->msg.=$buf;
             }
             fclose($f);
@@ -89,25 +89,27 @@ class vlc_http{
  */
 class vlm extends vlc_http{
     /**
-     * @param int $port
+     * @param Port $port
      */
-    public function __construct($port) {
-        parent::__construct($port, 'requests/vlm_cmd.xml?command=');
+    public function __construct(Port $port) {
+        parent::__construct($port, new Url('requests/vlm_cmd.xml?command='));
     }
 
     /**
-     * @param string $cam
+     * @param CamName $cam
      */
-    public function _new($cam) {
-        $this->cmd("new $cam broadcast enabled loop");
+    public function _new(CamName $cam) {
+        $this->cmd(new VLMCommand("new $cam broadcast enabled loop"));
     }
 
     /**
-     * @param string $cam
-     * @param string $cmd
-     * @param int $io
+     * @param CamName $cam
+     * @param VLMCommand $cmd
+     * @param YesNo $io
      */
-    public function _setup($cam, $cmd,$io=1) {
+    public function _setup(CamName $cam, VLMCommand $cmd, YesNo $io=null) {
+        //todo: io заменить на значения из VLC комманда?
+        if($io == null) $io = new YesNo(true);
         $direction = '';
         switch ($io) {
             case 0:
@@ -120,31 +122,30 @@ class vlm extends vlc_http{
                 //$this->cmd("setup $cam output $cmd");
                 break;
         }
-        $cmd = "setup $cam $direction $cmd";
-        //echo $cmd;
-        $this->cmd($cmd);
+
+        $this->cmd(new VLMCommand("setup $cam $direction $cmd"));
     }
 
     /**
-     * @param string $cam
-     * @param string $cmd
+     * @param CamName $cam
+     * @param VLMCommand $cmd
      */
-    public function _control($cam,$cmd) {
-        $this->cmd("control $cam $cmd");
+    public function _control(CamName $cam, VLMCommand $cmd) {
+        $this->cmd(new VLMCommand("control $cam $cmd"));
     }
 
     /**
-     * @param string $cam
+     * @param CamName $cam
      */
-    public function _show($cam) {
-        $this->cmd("show $cam");
+    public function _show(CamName $cam) {
+        $this->cmd(new VLMCommand("show $cam"));
     }
 
     /**
-     * @param string $cam
+     * @param CamName $cam
      */
-    public function _del($cam) {
-        $this->cmd("del $cam");
+    public function _del(CamName $cam) {
+        $this->cmd(new VLMCommand("del $cam"));
     }
 
     /**
@@ -162,21 +163,20 @@ class vlm extends vlc_http{
 class org_vlm extends vlm{
     //protected $org;
     /**
-     * @var int
+     * @var UserID
      */
     protected $uid;
 
     /**
-     * @param int $uid
+     * @param UserID $uid
      */
-    public function __construct($uid) {
+    public function __construct(UserID $uid) {
         $port = HTSTART+$uid;
-        parent::__construct($port);
+        parent::__construct(new Port($port));
         //$this->org = $org;
         $this->uid = $uid;
     }
 }
-
 
 //pref = live|rec|mtn
 /**
@@ -185,24 +185,24 @@ class org_vlm extends vlm{
 class cam_vlm extends org_vlm{
     //protected $cam;
     /**
-     * @var int
+     * @var CamID
      */
     protected $cid;
     /**
-     * @var string
+     * @var CamPrefix
      */
     protected $pref;
     /**
-     * @var string
+     * @var CamName
      */
     protected $full;
 
     /**
-     * @param $uid
-     * @param $cid
-     * @param $pref
+     * @param UserID $uid
+     * @param CamID $cid
+     * @param CamPrefix $pref
      */
-    public function __construct($uid, $cid, $pref) {
+    public function __construct(UserID $uid, CamID $cid, CamPrefix $pref) {
         parent::__construct($uid);
         
         $this->set_cid($cid);
@@ -215,22 +215,21 @@ class cam_vlm extends org_vlm{
      */
     protected function full_cam() {
         //new UID_{uid}__CID_{id}_live broadcast enabled
-        $this->full = "UID_".$this->uid."__CID_".$this->cid."_".$this->pref;
-        //$this->full = $this->org.'_'.$this->cam.'_'.$this->pref;
+        $this->full = new CamName("UID_".$this->uid."__CID_".$this->cid."_".$this->pref);
     }
 
     /**
-     * @param int $cid
+     * @param CamID $cid
      */
-    protected function set_cid($cid) {
+    protected function set_cid(CamID $cid) {
         $this->cid = $cid;
         //$this->full_url();
     }
 
     /**
-     * @param string $pref
+     * @param CamPrefix $pref
      */
-    protected function set_pref($pref) {
+    protected function set_pref(CamPrefix $pref) {
         $this->pref = $pref;
         //$this->full_url();
     }
@@ -240,78 +239,73 @@ class cam_vlm extends org_vlm{
  * Class cam_control
  */
 class cam_control extends cam_vlm{
-    //protected $org;
-    //protected $cam;
-    //protected $pref;
-    //protected $full;
 
     /**
-     * @var string
+     * @var Path
      */
     protected $filename;    //путь к записываемому файлу
 
     /**
-     * @param int $uid
-     * @param int $cid
-     * @param string $pref
+     * @param UserID $uid
+     * @param CamID $cid
+     * @param CamPrefix $pref
      */
-    public function __construct($uid,$cid,$pref='live') {
+    public function __construct(UserID $uid, CamID $cid, CamPrefix $pref='live') {
         parent::__construct($uid, $cid, $pref);
     }
-    
+
     /**
-     * Динамически создает камеру
-     * @param string $input
-     * @param string $output
+     * @param VLMInput $input
+     * @param VLMOutput $output
      */
-    public function create($input,$output) {
+    public function create(VLMInput $input, VLMOutput $output) {
         $this->_new($this->full);   //new UID_{uid}__CID_{id}_live broadcast enabled loop
-        $this->_setup($this->full, $input, 0);  //setup UID_{uid}__CID_{id}_live input "{source-proto}://{cam-ip}:{source-port}/{source-path}"
+        $this->_setup($this->full, $input, new YesNo(false));  //setup UID_{uid}__CID_{id}_live input "{source-proto}://{cam-ip}:{source-port}/{source-path}"
         $this->_setup($this->full, $output);    //setup UID_{uid}__CID_{id}_live output #std{access=http{mime=video/mp4},mux=ts,dst=*:{stream-port}/{stream-path}.mp4}
     }
 
     /**
-     * @param int $port
-     * @param string $path
-     * @return string
+     * @param Port $port
+     * @param Path $path
+     * @return WebPath
      */
-    public function get_stream_string($port,$path) {
+    public function get_stream_string(Port $port, Path $path) {
         //"http://localhost:{stream-port}/{stream-path}.mp4"
-        $ret = "http://localhost:$port/$path.mp4";
-        return $ret;
+        return new WebPath("http://localhost:$port/$path.mp4");
     }
 
     /**
-     * @param string $proto
-     * @param string $ip
-     * @param int $port
-     * @param string $path
-     * @return string
+     * @param WebProto $proto
+     * @param IP $ip
+     * @param Port $port
+     * @param Path $path
+     * @return WebPath
      */
-    public function gen_input_string($proto,$ip,$port,$path) {
-        $ret = "$proto://$ip:$port/$path";
-        return $ret;
+    public function gen_input_string(WebProto $proto, IP $ip, Port $port, Path $path) {
+        return new WebPath("$proto://$ip:$port/$path");
     }
 
     /**
-     * @param int $port
-     * @param string $path
-     * @return string
+     * @param Port $port
+     * @param Path $path
+     * @return VLMInput
      */
-    public function gen_live_string($port,$path) {
-        $ret = "#std{access=http{mime=video/mp4},mux=ts{use-key-frame,pcr=100,dts-delay=100},dst=*:$port/$path.mp4}";
+    public function gen_live_string(Port $port, Path $path) {
+        //$ret = "#std{access=http{mime=video/mp4},mux=ts{use-key-frame,pcr=100,dts-delay=100},dst=*:$port/$path.mp4}";
         //$ret = "#transcode{venc=ffmpeg{codec=copy,fflags=+genpts}:std{access=http{mime=video/mp4},mux=ts,dst=*:$port/$path.mp4}";
         //$ret = "#std{access=http{mime=video/mp4},mux=ts{dts-delay=100},dst=*:$port/$path.mp4}";
         //$ret = "#std{access=http{mime=video/mp4},mux=ts,dst=*:$port/$path.mp4}";
-        return $ret;
+        //return $ret;
+        return new VLMOutput("#std{access=http{mime=video/mp4},mux=ts{use-key-frame,pcr=100,dts-delay=100},dst=*:$port/$path.mp4}");
     }
 
     /**
-     * @param int $port
-     * @param string $path
+     * @param Port $port
+     * @param Path $path
+     * @return VLMOutput
      */
-    public function gen_rtmp_string($port,$path){
-        $ret = "#transcode{venc=ffmpeg{keyint=1}}:std{access=http{mime=video/mp4},mux=ts,dst=*:$port/1$path";
+    public function gen_rtmp_string(Port $port, Path $path){
+        return new VLMOutput("#transcode{venc=ffmpeg{keyint=1}}:std{access=http{mime=video/mp4},mux=ts,dst=*:$port/1$path");
     }
 
     /**
@@ -319,8 +313,7 @@ class cam_control extends cam_vlm{
      * @return string
      */
     public function gen_rec_string($path) {
-        $ret = "#std{access=file,mux=ts,dst=$path/rec.avi}";
-        return $ret;
+        return new VLMOutput("#std{access=file,mux=ts,dst=$path/rec.avi}");
     }
 
     /**
@@ -331,14 +324,15 @@ class cam_control extends cam_vlm{
     }
 
     /**
-     * @param int $new_file
+     * @param YesNo $new_file
      */
-    public function play($new_file=1) {
+    public function play(YesNo $new_file=null) {
+        if($new_file == null) $new_file = new YesNo(true);
         //echo "PLAY: $this->full\n";
         //todo: Запет запуска, если камера уже "вещает"
         switch($this->pref){
-            case 'rec':
-            case 'mtn':
+            case CamPrefix::RECORD:
+            case CamPrefix::MOTION:
                 //send "output #std{access=file,mux=ts,dst=/home/calc/vlc/$pref/$org/$date/$full.avi}"
                 //берем текущее время
                 $date = date("Y-m-d");
@@ -355,13 +349,13 @@ class cam_control extends cam_vlm{
                 $this->filename = $path.'/'.$time.'_'.$this->full;
                 $cmd = "#std{access=file,mux=ts,dst=$this->filename.avi}";
                 //echo $cmd;
-                if($new_file) $this->_setup($this->full, $cmd);
-                $this->_control($this->full, 'play');
+                if($new_file) $this->_setup($this->full, new VLMCommand($cmd));
+                $this->_control($this->full, new VLMCommand('play'));
 
                 break;
-            case 'live':
+            case CamPrefix::LIVE:
             default:
-                $this->_control($this->full, 'play');
+                $this->_control($this->full, new VLMCommand('play'));
                 break;
         }
     }
@@ -371,7 +365,7 @@ class cam_control extends cam_vlm{
      */
     public function stop() {
         //echo "STOP: $this->full\n";   !!! не должно быть ни каких echo!!!
-        $this->_control($this->full, 'stop');
+        $this->_control($this->full, new VLMCommand('stop'));
     }
 
     /**
@@ -389,25 +383,26 @@ class cam_control extends cam_vlm{
 class cam_control_archive extends cam_control{
 
     /**
-     * @param int $uid
-     * @param int $cid
-     * @param string $pref
+     * @param UserID $uid
+     * @param CamID $cid
+     * @param CamPrefix $pref
      */
-    public function __construct($uid,$cid,$pref='live') {
+    public function __construct(UserID $uid, CamID $cid, CamPrefix $pref='live') {
         parent::__construct($uid, $cid, $pref);
     }
 
 
     /**
-     * @param int $new_file
+     * @param YesNo $new_file
      */
-    public function play($new_file=1){
+    public function play(YesNo $new_file=null){
+        if(is_null($new_file)) $new_file = new YesNo(true);
         parent::play($new_file);
 
         if($new_file){
             switch($this->pref){
-                case 'rec':
-                case 'mtn':
+                case CamPrefix::RECORD:
+                case CamPrefix::MOTION:
                     // занести информацию о нашем файле в базу
                     $now = time();
                     $q_arc = "insert into archive values(0, $this->cid, '$this->pref', $now, 0, 0, 0, 'busy', 0, '$this->filename')";
@@ -428,7 +423,7 @@ class cam_control_archive extends cam_control{
         // узнать, велась ли запись по данному файлику или нет.
         parent::stop();
 
-        if($this->pref=='rec'){
+        if($this->pref==CamPrefix::RECORD){
             $db = open_db(MYHOST, MYUSER, MYPASS, MYDB);
             //$q = "select max(id) from archive where cam_id=$this->cid and type='$this->pref'";
             $q = "select id,file from archive where cam_id=$this->cid and type='$this->pref' order by id desc limit 1";
@@ -462,7 +457,7 @@ class cam_control_archive extends cam_control{
  */
 class org_status extends cam_vlm{
     /**
-     * @var sting
+     * @var string
      */
     protected $sxml;
     /**
@@ -471,16 +466,16 @@ class org_status extends cam_vlm{
     protected $status;  //[cam][pref]
 
     /**
-     * @param int $uid
-     * @param string $org
-     * @param string $cam
-     * @param string $pref
+     * @param UserID $uid
+     * @param OrgName $org
+     * @param CamName $cam
+     * @param CamPrefix $pref
      */
-    public function __construct($uid, $org, $cam, $pref='') {
+    public function __construct(UserID $uid, OrgName $org, CamName $cam, CamPrefix $pref='') {
         parent::__construct($uid, $org, $cam, $pref);
         $this->set_pref($pref);
-        $this->set_url('requests/vlm.xml');
-        $this->cmd('');
+        $this->set_url(new Url('requests/vlm.xml'));
+        $this->cmd(new VLMCommand(''));
         $this->status = array();
         
         //парсим 
@@ -566,4 +561,3 @@ class org_status extends cam_vlm{
     }
 }
 
-?>

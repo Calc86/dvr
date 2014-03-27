@@ -12,54 +12,85 @@
 
 
 class nas{
+    /**
+     * @var IP
+     */
     protected $ip;
     protected $path;
+
+    /**
+     *
+     */
     public function __construct(){
-        $this->ip = NAS_HOST;
-        $this->path = NAS_PATH;
+        $this->ip = new IP(NAS_HOST);
+        $this->path = new Path(NAS_PATH);
     }
 
     public function mount(){
         //mount -t nfs nas1.xsrv.ru:/mnt/raid1/mx/video /mnt/nas
         if(!$this->is_mount())
-            `mount /home/vlc/vlc/mount/`;
+            (new BashCommand('mount /home/vlc/vlc/mount'))->exec();
         if($this->is_mount()){
             //примонтированы
-            $this->bind('/home/vlc/vlc/rec');
-            $this->bind('/home/vlc/vlc/mtn');
-            $this->bind('/home/vlc/vlc/tmp');
+            $this->bind(new Path('/home/vlc/vlc/rec'));
+            $this->bind(new Path('/home/vlc/vlc/mtn'));
+            $this->bind(new Path('/home/vlc/vlc/tmp'));
         }
     }
 
     public function un_mount(){
         if($this->is_mount()){
-            $this->unbind('/home/vlc/vlc/rec');
-            $this->unbind('/home/vlc/vlc/mtn');
-            $this->unbind('/home/vlc/vlc/tmp');
+            $this->unbind(new Path('/home/vlc/vlc/rec'));
+            $this->unbind(new Path('/home/vlc/vlc/mtn'));
+            $this->unbind(new Path('/home/vlc/vlc/tmp'));
         }
         if($this->is_mount())
-            `umount /home/vlc/vlc/mount/`;
+            (new BashCommand('umount /home/vlc/vlc/mount/'))->exec();
     }
 
+    /**
+     * @return YesNo
+     */
     public function is_mount(){
-        $nas = NAS_HOST;
-        $mount = `mount | grep $this->ip | grep -v rec | grep -v mtn | grep -v tmp | wc -l`;
-        return (int) $mount;    //0 or 1
+        //$mount = `mount | grep $this->ip | grep -v rec | grep -v mtn | grep -v tmp | wc -l`;
+        //return (int) $mount;    //0 or 1
+        return new YesNo(
+            boolval(
+                (new BashCommand("mount | grep $this->ip | grep -v rec | grep -v mtn | grep -v tmp | wc -l"))->exec()
+            )
+        );
     }
 
-    protected  function bind($path){
+    /**
+     * @param Path $path
+     * @return BashResult
+     */
+    protected  function bind(Path $path){
         if(!$this->is_bind($path))
-            `mount $path`;
+            return (new BashCommand("mount $path"))->exec();
+        return new BashResult("");
     }
 
-    protected  function unbind($path){
+
+    /**
+     * @param Path $path
+     * @return BashResult
+     */
+    protected  function unbind(Path $path){
         if($this->is_bind($path))
-            `umount $path`;
+            return (new BashCommand("umount $path"))->exec();
+        return new BashResult("");
     }
 
+    /**
+     * @param $path
+     * @return YesNo
+     */
     protected  function is_bind($path){
-        $mount = `mount | grep $this->ip | grep $path | wc -l`;
-        return (int) $mount;    //0 or 1
+        return new YesNo(
+            boolval(
+                (new BashCommand("mount | grep $this->ip | grep $path | wc -l"))->exec()
+            )
+        );
     }
-
 }

@@ -52,7 +52,7 @@ class config{
     }
     
     public function vlm() {
-        if(!$this->uid)  die($this->error(__LINE, "Пользователь не указан"));
+        if(!$this->uid)  die($this->error(__LINE__, "Пользователь не указан"));
         $buf = '';
         
         //$search =  $this->get_search();
