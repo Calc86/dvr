@@ -43,11 +43,11 @@ class config{
     protected function split_vlm_tmp($tmp) {
         $a = explode('<cam>', $tmp);
         $cam = $a[1];
-        $a = explode('<live>', $cam);
+        $a = explode('<'.CamPrefix::LIVE.'>', $cam);
         $this->vlm['live'] = $a[1];
-        $a = explode('<rec>', $cam);
+        $a = explode('<'.CamPrefix::RECORD.'>', $cam);
         $this->vlm['rec'] = $a[1];
-        $a = explode('<mtn>', $cam);
+        $a = explode('<'.CamPrefix::MOTION.'>', $cam);
         $this->vlm['mtn'] = $a[1];
     }
     
@@ -60,7 +60,7 @@ class config{
         $q = "select * from cam as c, cam_settings as cs where c.id=cs.user_id and c.user_id=$this->uid";
         $r = mysql_query($q);
         
-        while($row = mysql_fetch_assoc($r)){
+        while(($row = mysql_fetch_assoc($r)) != 0){
             $dbv = $this->db_to_var($row);
             foreach ($dbv as $k=>$v) $$k=$v;
             

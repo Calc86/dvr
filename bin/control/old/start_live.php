@@ -5,7 +5,7 @@ require(DIR."/class/vlm.class.php");
 $q = "select c.uid as uid, o.name as org, c.`cam-name` as cam, c.live as live from cam as c, org as o where o.id=c.uid and c.live=1";
 $r = mysql_query($q);
 
-while($row = mysql_fetch_row($r)){
+while(($row = mysql_fetch_row($r0) != 0)){
     list($uid,$org,$cam,$live) = $row;
     $cc = new cam_control_archive($uid, $org, $cam, 'live');
     if($live){
@@ -18,4 +18,3 @@ while($row = mysql_fetch_row($r)){
 }
 
 
-?>

@@ -43,4 +43,3 @@ function usage() {
     return 'Usage: play/stop/show/delete uid cid live/rec/mtn' . PHP_EOL;
 }
 
-?>

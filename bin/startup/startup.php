@@ -8,9 +8,9 @@ $db = open_db(MYHOST, MYUSER, MYPASS, MYDB);
 $q = "select id,login from users where banned=0";
 $r = mysql_query($q);
 
-while($row = mysql_fetch_row($r)){
+while(($row = mysql_fetch_row($r)) != 0){
     list($uid,$name) = $row;
-    $vlc = new vlc($uid);
+    $vlc = new vlc(new UserID($uid));
     echo "запускаем $name\n";
     $vlc->ps_kill(); //убить живые процессы, если есть (для безопасности)
     $vlc->start();
@@ -19,4 +19,3 @@ while($row = mysql_fetch_row($r)){
 mysql_close($db);
 
 
-?>

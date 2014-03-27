@@ -19,7 +19,7 @@ $path = DIR;
 $cmd = '/usr/bin/find {path}/{uid} -mtime +{days} -and -type f -and -name "*UID_{uid}__CID_{cid}*avi"';
 echo $cmd."\n";
 
-while($row = mysql_fetch_assoc($r)){
+while(($row = mysql_fetch_assoc($r)) != 0){
     echo $row['uid'].' '.$row['cid'].' ';
     //print_r($row);
     
@@ -45,4 +45,3 @@ while($row = mysql_fetch_assoc($r)){
     echo "\n";
 }
 
-?>

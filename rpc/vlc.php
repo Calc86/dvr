@@ -6,7 +6,8 @@
  */
 
 require_once dirname(__FILE__).'/../bin/config.php';    //все классы указаны в конфиге
-require_once 'Zend/XmlRpc/Server.php'; 
+/** @noinspection PhpIncludeInspection */
+require_once 'Zend/XmlRpc/Server.php';
 
 $db = open_db(MYHOST, MYUSER, MYPASS, MYDB);
 
@@ -32,4 +33,3 @@ if($uid){
 
 echo $server->handle();
 
-?>

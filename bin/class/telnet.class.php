@@ -39,7 +39,7 @@ class telnet{
     
     public function read() {
         $buf = '';
-        while($ln = fread($this->f,128))
+        while(($ln = fread($this->f,128)) != 0)
             $buf.=$ln;
         return $buf;
     }
@@ -50,4 +50,3 @@ class telnet{
     }
 }
 
-?>

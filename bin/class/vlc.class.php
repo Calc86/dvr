@@ -199,7 +199,8 @@ class vlc{
      * @param UserID $uid id пользователя в базе
      * @param YesNo $dyn динамические камеры?
      */
-    public function __construct(UserID $uid,YesNo $dyn) {
+    public function __construct(UserID $uid, YesNo $dyn=null) {
+        if(is_null($dyn)) $dyn = new YesNo(true);
         if(!$uid) die($this->error(__LINE__, " пользователь не указан"));
         $this->uid = $uid;
         $this->dyn = $dyn;
@@ -293,11 +294,11 @@ class vlc{
                 break;
             case 'rec':
                 $path = DIR."/rec/$this->uid";
-                $cc->create($stream, $cc->gen_rec_string($path));
+                $cc->create(new VLMInput($stream), $cc->gen_rec_string($path));
                 break;
             case 'mtn':
                 $path = DIR."/mtn/$this->uid";
-                $cc->create($stream, $cc->gen_rec_string($path));
+                $cc->create(new VLMInput($stream), $cc->gen_rec_string($path));
                 break;
         }
 

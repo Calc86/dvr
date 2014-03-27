@@ -338,6 +338,8 @@ function tag_tr($c=0,$n='') {
             break;
         case 2: return '<tr>'.$n.'</tr>'."\n";
             break;
+        default:
+            return '';
     }
 }
 
@@ -354,7 +356,7 @@ function tag_div_($type=0,$text='',$array=array()) {
     
     $param = str_strip_last($param);
 
-    $ret.= "<div$param>";
+    $ret.= "<div{$param}>";
 
     switch($type){
         case 2:
@@ -363,6 +365,8 @@ function tag_div_($type=0,$text='',$array=array()) {
             return $ret.nl();
         case 1:
             return '</div>'.nl();
+        default:
+            return '';
     }
 }
 
@@ -429,8 +433,8 @@ function js_d_c($wn) {
 }
 
 /**
- * Комментарии
- * @param string  $s коммент
+ * @param $s
+ * @return string
  */
 function js_c($s) {
     return "// $s".nl();
@@ -480,9 +484,9 @@ foreach($_REQUEST as $k=>$v)
 
 
 /**
- *
- * @param int  $v Значение
- * @param int  $p Положение
+ * @param $v
+ * @param $p
+ * @return int
  */
 function pack_byte($v,$p) {
     return $v << $p;
@@ -527,4 +531,3 @@ function yn($n) {
     else
         return 'no';
 }
-?>

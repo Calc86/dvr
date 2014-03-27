@@ -267,11 +267,11 @@ class cam_control extends cam_vlm{
     /**
      * @param Port $port
      * @param Path $path
-     * @return WebPath
+     * @return VLMOutput
      */
     public function get_stream_string(Port $port, Path $path) {
         //"http://localhost:{stream-port}/{stream-path}.mp4"
-        return new WebPath("http://localhost:$port/$path.mp4");
+        return new VLMOutput("http://localhost:$port/$path.mp4");
     }
 
     /**
@@ -279,16 +279,16 @@ class cam_control extends cam_vlm{
      * @param IP $ip
      * @param Port $port
      * @param Path $path
-     * @return WebPath
+     * @return VLMInput
      */
     public function gen_input_string(WebProto $proto, IP $ip, Port $port, Path $path) {
-        return new WebPath("$proto://$ip:$port/$path");
+        return new VLMInput("$proto://$ip:$port/$path");
     }
 
     /**
      * @param Port $port
      * @param Path $path
-     * @return VLMInput
+     * @return VLMOutput
      */
     public function gen_live_string(Port $port, Path $path) {
         //$ret = "#std{access=http{mime=video/mp4},mux=ts{use-key-frame,pcr=100,dts-delay=100},dst=*:$port/$path.mp4}";
@@ -309,8 +309,8 @@ class cam_control extends cam_vlm{
     }
 
     /**
-     * @param string $path
-     * @return string
+     * @param $path
+     * @return VLMOutput
      */
     public function gen_rec_string($path) {
         return new VLMOutput("#std{access=file,mux=ts,dst=$path/rec.avi}");

@@ -17,7 +17,7 @@ $r = mysql_query($q);
 $nas = new nas();
 
 if($nas->is_mount()){
-    while($row=mysql_fetch_row($r)){
+    while(($row=mysql_fetch_row($r)) != 0){
         list($id,$file) = $row;
         echo "start #$id ";
         $time = time();

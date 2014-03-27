@@ -22,7 +22,7 @@ if ($argc < 3) {
 $uid = $argv[2];
 $cmd = $argv[1];
 
-$vlc = new vlc($uid);
+$vlc = new vlc(new UserID($uid));
 
 mysql_close($db);
 
@@ -51,9 +51,6 @@ switch($cmd){
     case 'un_mount':
         $vlc->un_mount();
         break;
-    case 'status':
-        $vlc->status();
-        break;
     case 'is_run':
         echo $vlc->is_run();
         break;
@@ -65,4 +62,3 @@ function usage() {
     return 'Usage: start/stop/status/is_run/restart/kill/ps_kill uid' . PHP_EOL;
 }
 
-?>

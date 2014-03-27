@@ -10,20 +10,20 @@ $q = "select user_id as uid, id as cid, live as live, rec as rec from cams";
 
 $r = mysql_query($q);
 
-while($row = mysql_fetch_row($r)){
+while(($row = mysql_fetch_row($r)) != 0){
     list($uid,$cid,$live,$rec) = $row;
 
-    $cc_live = new cam_control($uid, $cid, 'live');
-    $cc_rec = new cam_control_archive($uid, $cid, 'rec');
+    $cc_live = new cam_control(new UserID($uid), new CamID($cid), new CamPrefix(CamPrefix::LIVE));
+    $cc_rec = new cam_control_archive(new UserID($uid), new CamID($cid), new CamPrefix(CamPrefix::RECORD));
     if($live){
-        $cc_live->play(0);
+        $cc_live->play(null);
     }else
     {
         $cc_live->stop();
     }
     
     if($rec && $live){
-        $cc_rec->play(0);
+        $cc_rec->play(null);
     }else
     {
         $cc_rec->stop();
