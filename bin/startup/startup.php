@@ -19,7 +19,8 @@ try{
     }
 }
 catch (Exception $e){
-    throw $e;
+    echo $e->getMessage();
+    echo $e->getTraceAsString();
 }
 
 
