@@ -756,8 +756,15 @@ class vlc{
     public function create_user_dirs() {
         foreach($this->dirs as $dir){
             $path = DIR."/$dir/".$this->getUserID();
-            if(!is_dir($path))
-                if(!mkdir($path, 0775)) throw PathException($path);
+            if(!is_dir($path)){
+                try{
+                    mkdir($path, 0775);
+                }
+                catch (Exception $e)
+                {
+                    throw new PathException($path);
+                }
+            }
         }
     }
 
