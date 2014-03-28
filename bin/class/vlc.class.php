@@ -497,14 +497,14 @@ class vlc{
         $stream = $cc->get_stream_string($stream_port, new Path($cam->stream_path));
 
         switch($pref){
-            case 'live':
+            case CamPrefix::LIVE:
                 $cc->create($input, $output);
                 break;
-            case 'rec':
+            case CamPrefix::RECORD:
                 $path = DIR."/rec/$this->uid";
                 $cc->create(new VLMInput($stream), $cc->gen_rec_string($path));
                 break;
-            case 'mtn':
+            case CamPrefix::MOTION:
                 $path = DIR."/mtn/$this->uid";
                 $cc->create(new VLMInput($stream), $cc->gen_rec_string($path));
                 break;
@@ -531,17 +531,17 @@ class vlc{
         $cc = new cam_control_archive($this->uid,new CamID($cam->cam_id),$pref);
 
         switch($pref){
-            case 'live':
+            case CamPrefix::LIVE:
                 if($debug)  echo "$cam->cam_id live\n";
                 if($cam->live) $cc->play();
                 break;
-            case 'rec':
+            case CamPrefix::RECORD:
                 if($cam->live && $cam->rec){
                     if($debug) echo "$cam->cam_id rec\n";
                     $cc->play();
                 }
                 break;
-            case 'mtn':
+            case CamPrefix::MOTION:
                 if($cam->live && $cam->mtn){
                     if($debug) echo "$cam->cam_id mtn\n";
                     $cc->play();

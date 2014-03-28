@@ -13,7 +13,7 @@ $db = open_db(MYHOST, MYUSER, MYPASS, MYDB);
 
 $token = get_var('token');
 $cid = get_var('cid');
-$pref = get_var('pref','live');
+$pref = get_var('pref',CamPrefix::LIVE);
 
 //проверка на авторизацию отложена на следующие реализации
 $uid = $token;

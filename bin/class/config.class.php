@@ -46,11 +46,11 @@ class config{
         $a = explode('<cam>', $tmp);
         $cam = $a[1];
         $a = explode('<'.CamPrefix::LIVE.'>', $cam);
-        $this->vlm['live'] = $a[1];
+        $this->vlm[CamPrefix::LIVE] = $a[1];
         $a = explode('<'.CamPrefix::RECORD.'>', $cam);
-        $this->vlm['rec'] = $a[1];
+        $this->vlm[CamPrefix::RECORD] = $a[1];
         $a = explode('<'.CamPrefix::MOTION.'>', $cam);
-        $this->vlm['mtn'] = $a[1];
+        $this->vlm[CamPrefix::MOTION] = $a[1];
     }
     
     public function vlm() {
@@ -77,9 +77,9 @@ class config{
                         ));
             //print_r($ar);
             if($row_live){
-                $buf.= str_replace($ar['search'], $ar['replace'], $this->vlm['live']);
-                if($row_rec) $buf.= str_replace($search, $replace, $this->vlm['rec']);
-                if($row_mtn) $buf.= str_replace($search, $replace, $this->vlm['mtn']);
+                $buf.= str_replace($ar['search'], $ar['replace'], $this->vlm[CamPrefix::LIVE]);
+                if($row_rec) $buf.= str_replace($search, $replace, $this->vlm[CamPrefix::RECORD]);
+                if($row_mtn) $buf.= str_replace($search, $replace, $this->vlm[CamPrefix::MOTION]);
                 $buf.= "\n\n"; 
             }
         }

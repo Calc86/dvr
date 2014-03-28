@@ -210,9 +210,9 @@ class OrgName extends NameType{};
  * Class CamPrefix
  */
 class CamPrefix extends NameType{
+    const LIVE = 'live';
     const RECORD = "rec";
     const MOTION = 'mtn';
-    const LIVE = 'live';
 };
 /**
  * Class Url
