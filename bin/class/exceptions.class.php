@@ -14,9 +14,9 @@ class BBException extends Exception{
     /**
      * Измененный конструктор, чтобы класть информацию в БД
      */
-    public function __construct()
+    public function __construct($message = "", $code = 0, Exception $previous = null)
     {
-        parent::__construct();
+        parent::__construct($message, $code, $previous);
         $this->putLog();
     }
 
