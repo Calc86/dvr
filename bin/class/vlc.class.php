@@ -14,10 +14,10 @@ class vlc_rpc{
     protected $uid;
 
     /**
-     * @param UserID $uid
+     * @param int $uid
      */
     public function __construct($uid) {
-        $this->uid = new UserID($uid);
+        $this->uid = (int)$uid;
         $this->vlc = new vlc( new UserID($uid), new YesNo(true));
     }
 
