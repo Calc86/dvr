@@ -11,19 +11,19 @@
  */
 class BBException extends Exception{
 
+    /**
+     * Измененный конструктор, чтобы класть информацию в БД
+     */
     public function __construct()
     {
         parent::__construct();
         $this->putLog();
     }
 
+    /**
+     * Кладем информацию в БД
+     */
     public function putLog(){
-        $this->getCode();
-        $this->getFile();
-        $this->getLine();
-        $this->getMessage();
-        $this->getPrevious();
-        $this->getTraceAsString();
         $db = Database::getInstance()->getDB();
         $q = "insert into exceptions values(0, now(), '{$this->getCode()}', '{$this->getFile()}', '{$this->getLine()}', '{$this->getMessage()}', '{$this->getTraceAsString()}')";
         $db->query($q);
