@@ -6,14 +6,13 @@
  */
 
 require_once dirname(__FILE__).'/../bin/config.php';    //все классы указаны в конфиге
-/** @noinspection PhpIncludeInspection */
-require_once 'Zend/XmlRpc/Server.php';
 
 $db = open_db(MYHOST, MYUSER, MYPASS, MYDB);
-
 $token = get_var('token');
 $cid = get_var('cid');
 $pref = get_var('pref',CamPrefix::LIVE);
+/** @noinspection PhpIncludeInspection */
+require_once 'Zend/XmlRpc/Server.php';
 
 //проверка на авторизацию отложена на следующие реализации
 $uid = $token;
@@ -33,3 +32,31 @@ if($uid){
 
 echo $server->handle();
 
+
+
+// Use reflection to get method names and parameters
+/*$my = new vlc_rpc($token);
+
+$mirror = new ReflectionClass($my);
+foreach ($mirror->getMethods() as $method)
+{
+    // Create new "lambda" function for each method
+
+    // Generate argument list
+    $args = array();
+    foreach ($method->getParameters() as $param)
+    {
+        $args[] = '$'.$param->getName();
+    }
+    $args = implode(',', $args);
+
+    // Generate code
+    $methodname = $method->getName();
+    $code = "return vlc_rpc->{$methodname}({$args});";
+
+    // Create function, retrieve function name
+    $function_name = create_function($args, $code);
+
+    // Register the function
+    xmlrpc_server_register_method($myserver, $methodname, $function_name);
+}*/

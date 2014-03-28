@@ -9,7 +9,7 @@ class vlc_rpc{
      */
     protected $vlc;
     /**
-     * @var UserID
+     * @var int
      */
     protected $uid;
 
@@ -18,7 +18,7 @@ class vlc_rpc{
      */
     public function __construct($uid) {
         $this->uid = new UserID($uid);
-        $this->vlc = new vlc($uid, new YesNo(true));
+        $this->vlc = new vlc( new UserID($uid), new YesNo(true));
     }
 
     /**
@@ -81,7 +81,7 @@ class vlc_rpc{
 
         //todo: Если не запустился - лепим какую нибудь ошибку и разбираемся дальше
 
-        $vlm = new cam_control_archive($this->uid, new CamID($cid[0]), new CamPrefix($pref[0]));
+        $vlm = new cam_control_archive( new UserID($this->uid), new CamID($cid[0]), new CamPrefix($pref[0]));
         $vlm->play();
 
         return 1;
@@ -96,7 +96,7 @@ class vlc_rpc{
     public function cam_stop($cid,$pref) {
         if(!$this->vlc->is_run()) return 0; //запущен ли vlc?
 
-        $vlm = new cam_control_archive($this->uid, new CamID($cid[0]), new CamPrefix($pref[0]));
+        $vlm = new cam_control_archive( new UserID($this->uid), new CamID($cid[0]), new CamPrefix($pref[0]));
         $vlm->stop();
         return 1;
     }
