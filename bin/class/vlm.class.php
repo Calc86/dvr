@@ -432,11 +432,16 @@ class cam_control_archive extends cam_control{
 
             $now = time();
             $row = $r->fetch_row();
-            $id = $row[0];
-            $file = $row[1];
-            $qu = "update archive set date_end=$now, rebuilded='no' where id=$id limit 1";
-            $r = $db->query($qu);
-            if(!$r) throw new MysqlQueryException($qu);
+            if($row != NULL){
+                $id = $row[0];
+                $file = $row[1];
+                $qu = "update archive set date_end=$now, rebuilded='no' where id=$id limit 1";
+                $r = $db->query($qu);
+                if(!$r) throw new MysqlQueryException($qu);
+            }
+            else{
+                //нет записи в базе
+            }
         }
 
     }
