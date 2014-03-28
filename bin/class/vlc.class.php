@@ -16,8 +16,8 @@ class vlc_rpc{
     /**
      * @param UserID $uid
      */
-    public function __construct(UserID $uid) {
-        $this->uid = $uid;
+    public function __construct($uid) {
+        $this->uid = new UserID($uid);
         $this->vlc = new vlc($uid, new YesNo(true));
     }
 
@@ -81,7 +81,7 @@ class vlc_rpc{
 
         //todo: Если не запустился - лепим какую нибудь ошибку и разбираемся дальше
 
-        $vlm = new cam_control_archive($this->uid,$cid[0],$pref[0]);
+        $vlm = new cam_control_archive($this->uid, new CamID($cid[0]), new CamPrefix($pref[0]));
         $vlm->play();
 
         return 1;
@@ -96,7 +96,7 @@ class vlc_rpc{
     public function cam_stop($cid,$pref) {
         if(!$this->vlc->is_run()) return 0; //запущен ли vlc?
 
-        $vlm = new cam_control_archive($this->uid,$cid[0],$pref[0]);
+        $vlm = new cam_control_archive($this->uid, new CamID($cid[0]), new CamPrefix($pref[0]));
         $vlm->stop();
         return 1;
     }
@@ -109,7 +109,7 @@ class vlc_rpc{
      * @param $pref
      */
     public function create_cam($cid,$pref){
-        $this->vlc->create_cam($cid[0],$pref[0], new YesNo(false));
+        $this->vlc->create_cam(new CamID($cid[0]), new CamPrefix($pref[0]), new YesNo(false));
     }
 
     /**
@@ -117,7 +117,7 @@ class vlc_rpc{
      * @param $pref
      */
     public function delete_cam($cid,$pref){
-        $this->vlc->delete_cam($cid[0],$pref[0], new YesNo(false));
+        $this->vlc->delete_cam(new CamID($cid[0]), new CamPrefix($pref[0]), new YesNo(false));
     }
 
     /**
@@ -125,7 +125,7 @@ class vlc_rpc{
      * @param $pref
      */
     public function play_cam($cid,$pref){
-        $this->vlc->play_cam($cid[0],$pref[0], new YesNo(false));
+        $this->vlc->play_cam( new CamID($cid[0]), new CamPrefix($pref[0]), new YesNo(false));
     }
 
     /**
@@ -133,7 +133,7 @@ class vlc_rpc{
      * @param $pref
      */
     public function stop_cam($cid,$pref){
-        $this->vlc->stop_cam($cid[0],$pref[0]);
+        $this->vlc->stop_cam(new CamID($cid[0]), new CamPrefix($pref[0]));
     }
 }
 
