@@ -9,12 +9,33 @@
 /**
  * Class BBException
  */
-class BBException extends Exception{}
+class BBException extends Exception{
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->putLog();
+    }
+
+    public function putLog(){
+        $this->getCode();
+        $this->getFile();
+        $this->getLine();
+        $this->getMessage();
+        $this->getPrevious();
+        $this->getTraceAsString();
+        $db = Database::getInstance()->getDB();
+        $q = "insert into exceptions values(0, now(), '{$this->getCode()}', '{$this->getFile()}', '{$this->getLine()}', '{$this->getMessage()}', '{$this->getTraceAsString()}')";
+        $db->query($q);
+    }
+}
 
 /**
  * Class MysqlException
  */
-class MysqlException extends BBException{}
+class MysqlException extends BBException{
+    public function putLog() {}
+}
 
 /**
  * Class MysqlQueryException
