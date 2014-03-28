@@ -121,6 +121,11 @@ class SetException extends TypeException{}
  * Class Integer
  */
 class Integer extends Type{
+    public function __construct($value)
+    {
+        parent::__construct((int)$value);
+    }
+
     /**
      * @return int
      * @throws IntegerException

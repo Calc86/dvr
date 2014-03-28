@@ -51,6 +51,7 @@ define('VLCD','-d');
 define('VLCNETCACHE',500);
 define('VLCSOUTCACHE',200);
 
+require_once BIN.'/class/Database.php';
 require_once BIN.'/class/exceptions.class.php';
 require_once BIN.'/class/types.class.php';
 require_once BIN.'/class/config.class.php';
@@ -71,4 +72,8 @@ function open_db($h,$u,$p,$n,$utf=1) {
     return $db;
 }
 
-
+function microtime_float()
+{
+    list($usec, $sec) = explode(" ", microtime());
+    return ((float)$usec + (float)$sec);
+}

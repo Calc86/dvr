@@ -112,12 +112,11 @@ class vlm extends vlc_http{
         if($io == null) $io = new YesNo(true);
         $direction = '';
         switch ($io) {
-            case 0:
+            case false:
                 $direction = 'input';
                 //$this->cmd("setup $cam input \"$cmd\"");
                 break;
-            case 1:
-            default:
+            case true:
                 $direction = 'output';
                 //$this->cmd("setup $cam output $cmd");
                 break;
@@ -171,7 +170,7 @@ class org_vlm extends vlm{
      * @param UserID $uid
      */
     public function __construct(UserID $uid) {
-        $port = HTSTART+$uid;
+        $port = HTSTART+$uid->get();
         parent::__construct(new Port($port));
         //$this->org = $org;
         $this->uid = $uid;
@@ -399,7 +398,7 @@ class cam_control_archive extends cam_control{
      * @throws MysqlQueryException
      */
     public function play(YesNo $new_file=null){
-        global $db;
+        $db = Database::getInstance()->getDB();
         if(is_null($new_file)) $new_file = new YesNo(true);
         parent::play($new_file);
 
@@ -421,7 +420,7 @@ class cam_control_archive extends cam_control{
      *
      */
     public function stop(){
-        global $db;
+        $db = Database::getInstance()->getDB();
         // узнать, велась ли запись по данному файлику или нет.
         parent::stop();
 

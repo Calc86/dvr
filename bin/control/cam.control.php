@@ -9,9 +9,9 @@ if ($argc < 5) {
     die(usage());
 }
 
-$uid=$argv[2];
-$cid=$argv[3];
-$pref=$argv[4];
+$uid=new UserID($argv[2]);
+$cid=new CamID($argv[3]);
+$pref=new CamPrefix($argv[4]);
 
 $cmd = $argv[1];
 
@@ -33,13 +33,13 @@ switch($cmd){
         $vlc->delete();
         break;
     default:
-        echo usage();
+        echo usage1();
 }
 echo $vlc->message();
 
 $db->close();
 
-function usage() {
+function usage1() {
     return 'Usage: play/stop/show/delete uid cid live/rec/mtn' . PHP_EOL;
 }
 

@@ -19,7 +19,7 @@ $path = DIR;
 
 //косяк в том, что при просмотре затирается дата файлика и подобная хрень уж очень не стабильно работает...
 $cmd = '/usr/bin/find {path}/{uid} -mtime +{days} -and -type f -and -name "*UID_{uid}__CID_{cid}*avi"';
-echo $cmd."\n";
+//echo $cmd."\n";
 
 while(($row = $r->fetch_assoc()) != 0){
     echo $row['uid'].' '.$row['cid'].' ';

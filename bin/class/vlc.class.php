@@ -400,7 +400,7 @@ class vlc{
 
 
     public function __construct(UserID $uid, YesNo $dyn=null) {
-        global $db;
+        $db = Database::getInstance()->getDB();
 
         if(is_null($dyn)) $dyn = new YesNo(true);
         if(!$uid) die($this->error(__LINE__, " пользователь не указан"));
@@ -483,13 +483,18 @@ class vlc{
     public function create_cam(CamID $cid, CamPrefix $pref, YesNo $debug){
 
         $cam = $this->cams[$cid->get()];
-        $cc = new cam_control_archive($this->uid,$cam->cam_id,$pref);
+        $cc = new cam_control_archive($this->uid,$cid,$pref);
 
         //todo: remove 9000
-        $stream_port = $cam->id+9000;
-        $input = $cc->gen_input_string($cam->live_proto, $cam->ip, $cam->live_port, $cam->live_path);
-        $output = $cc->gen_live_string($stream_port, $cam->stream_path);
-        $stream = $cc->get_stream_string($stream_port, $cam->stream_path);
+        $stream_port = new Port($cam->id+9000);
+        $input = $cc->gen_input_string(
+            new WebProto($cam->live_proto),
+            new IP($cam->ip),
+            new Port($cam->live_port),
+            new Path($cam->live_path)
+        );
+        $output = $cc->gen_live_string($stream_port, new Path($cam->stream_path));
+        $stream = $cc->get_stream_string($stream_port, new Path($cam->stream_path));
 
         switch($pref){
             case 'live':
@@ -523,7 +528,7 @@ class vlc{
      */
     public function play_cam(CamID $cid, CamPrefix $pref, YesNo $debug){
         $cam = $this->cams[$cid->get()];
-        $cc = new cam_control_archive($this->uid,$cam->cam_id,$pref);
+        $cc = new cam_control_archive($this->uid,new CamID($cam->cam_id),$pref);
 
         switch($pref){
             case 'live':
@@ -552,7 +557,7 @@ class vlc{
      */
     public function delete_cam(CamID $cid, CamPrefix $pref, YesNo $debug){
         $cam = $this->cams[$cid->get()];
-        $cc = new cam_control_archive($this->uid,$cam->cam_id,$pref);
+        $cc = new cam_control_archive($this->uid,new CamID($cam->cam_id),$pref);
 
         $cc->delete();
     }
@@ -565,7 +570,7 @@ class vlc{
     public function stop_cam(CamID $cid, CamPrefix $pref, YesNo $debug = null){
         if($debug==null) $debug = new YesNo(false);
         $cam = $this->cams[$cid->get()];
-        $cc = new cam_control_archive($this->uid,$cam->cam_id,$pref);
+        $cc = new cam_control_archive($this->uid, new CamID($cam->cam_id),$pref);
 
         $cc->stop();
     }
@@ -618,12 +623,12 @@ class vlc{
                 echo "Динамическое добавление\n";
                 foreach($this->cams as $cam)
                 {
-                    $this->create_cam($cam->cam_id, new CamPrefix('live'), new YesNo(true));
-                    $this->create_cam($cam->cam_id, new CamPrefix('rec'), new YesNo(true));
-                    $this->create_cam($cam->cam_id, new CamPrefix('mtn'), new YesNo(true));
+                    $this->create_cam(new CamID($cam->cam_id), new CamPrefix(CamPrefix::LIVE), new YesNo(true));
+                    $this->create_cam(new CamID($cam->cam_id), new CamPrefix(CamPrefix::RECORD), new YesNo(true));
+                    $this->create_cam(new CamID($cam->cam_id), new CamPrefix(CamPrefix::MOTION), new YesNo(true));
 
-                    $this->play_cam($cam->cam_id, new CamPrefix('live'), new YesNo(true));
-                    $this->play_cam($cam->cam_id,new CamPrefix('rec'), new YesNo(true));
+                    $this->play_cam(new CamID($cam->cam_id), new CamPrefix(CamPrefix::LIVE), new YesNo(true));
+                    $this->play_cam(new CamID($cam->cam_id),new CamPrefix(CamPrefix::RECORD), new YesNo(true));
                 }
             }
         }

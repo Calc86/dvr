@@ -16,7 +16,7 @@ if(!$r) throw new MysqlQueryException($q);
 
 $nas = new nas();
 if($nas->is_mount()){
-    while(($row=$r->fetch_assoc()) != 0){
+    while(($row=$r->fetch_row()) != 0){
         list($id,$file) = $row;
         echo "start #$id ";
         $time = time();
@@ -45,8 +45,4 @@ $db->close();
 `rm $file.avi 2>>/dev/null 1>>/dev/null`;
 */
 
-function microtime_float()
-{
-    list($usec, $sec) = explode(" ", microtime());
-    return ((float)$usec + (float)$sec);
-}
+

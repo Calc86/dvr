@@ -24,7 +24,7 @@ class config{
     }
     
     public function set_user_name($uid){
-        global $db;
+        $db = Database::getInstance()->getDB();
         $this->uid = $uid;
         $q = "select login from users where id=$uid";
         $r = $db->query($q);
@@ -54,7 +54,7 @@ class config{
     }
     
     public function vlm() {
-        global $db;
+        $db = Database::getInstance()->getDB();
         if(!$this->uid)  die($this->error(__LINE__, "Пользователь не указан"));
         $buf = '';
         
