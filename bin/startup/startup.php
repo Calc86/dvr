@@ -18,9 +18,9 @@ try{
         $vlc->start();
     }
 }
-catch (Exception $e){
+catch (PathException $e){
     echo $e->getMessage();
-    echo $e->getTraceAsString();
+    throw $e;
 }
 
 
