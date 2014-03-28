@@ -107,11 +107,11 @@ class vlm extends vlc_http{
      * @param VLMCommand $cmd
      * @param YesNo $io
      */
-    public function _setup(CamName $cam, VLMCommand $cmd, YesNo $io=null) {
+    public function _setup(CamName $cam, VLMCommand $cmd, YesNo $io = null) {
         //todo: io заменить на значения из VLC комманда?
         if($io == null) $io = new YesNo(true);
         $direction = '';
-        switch ($io) {
+        switch ($io->get()) {
             case false:
                 $direction = 'input';
                 //$this->cmd("setup $cam input \"$cmd\"");
@@ -121,8 +121,8 @@ class vlm extends vlc_http{
                 //$this->cmd("setup $cam output $cmd");
                 break;
         }
-
-        $this->cmd(new VLMCommand("setup $cam $direction $cmd"));
+        $vlm = new VLMCommand("setup $cam $direction $cmd");
+        $this->cmd($vlm);
     }
 
     /**

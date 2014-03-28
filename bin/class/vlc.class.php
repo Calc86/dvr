@@ -528,7 +528,7 @@ class vlc{
      */
     public function play_cam(CamID $cid, CamPrefix $pref, YesNo $debug){
         $cam = $this->cams[$cid->get()];
-        $cc = new cam_control_archive($this->uid,new CamID($cam->cam_id),$pref);
+        $cc = new cam_control_archive($this->uid, new CamID($cam->cam_id), $pref);
 
         switch($pref){
             case CamPrefix::LIVE:
@@ -628,7 +628,7 @@ class vlc{
                     $this->create_cam(new CamID($cam->cam_id), new CamPrefix(CamPrefix::MOTION), new YesNo(true));
 
                     $this->play_cam(new CamID($cam->cam_id), new CamPrefix(CamPrefix::LIVE), new YesNo(true));
-                    $this->play_cam(new CamID($cam->cam_id),new CamPrefix(CamPrefix::RECORD), new YesNo(true));
+                    $this->play_cam(new CamID($cam->cam_id), new CamPrefix(CamPrefix::RECORD), new YesNo(true));
                 }
             }
         }
