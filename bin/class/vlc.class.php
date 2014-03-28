@@ -597,12 +597,12 @@ class vlc{
         {
             if(!$this->dyn){
                 //перезапишем наш конфиг
-                $f = fopen($this->path_vlm, "w");
+                $f = fopen($this->path_vlm, "w+");
                 fwrite($f, $this->vlm);
                 fclose($f);
             }
             //запишем логротейт
-            $f = fopen($this->logrotate,"w");
+            $f = fopen($this->logrotate,"w+");
             fwrite($f, $this->config->logrotate());
             fclose($f);
         }
