@@ -6,7 +6,7 @@
 require_once dirname(__FILE__).'/../config.php';
 
 if ($argc < 5) {
-    die(usage());
+    die(usage1());
 }
 
 $uid=new UserID($argv[2]);
