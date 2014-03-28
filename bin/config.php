@@ -21,7 +21,7 @@ define('ETC',DIR.'/etc');
 define('PROC',DIR.'/proc');
 define('LOG',DIR.'/log');
 
-if(file_exists(BIN.'/devel')){
+if(file_exists(BIN.'/../devel')){
     define ('TARGET','_devel');
     define('LIVEHOST','10.154.28.203');
 }
