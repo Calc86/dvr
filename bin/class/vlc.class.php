@@ -757,7 +757,7 @@ class vlc{
         foreach($this->dirs as $dir){
             $path = DIR."/$dir/".$this->getUserID();
             if(!is_dir($path))
-                mkdir($path, 0775);
+                if(!mkdir($path, 0775)) throw PathException($path);
         }
     }
 

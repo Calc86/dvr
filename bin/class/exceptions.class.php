@@ -30,6 +30,8 @@ class BBException extends Exception{
     }
 }
 
+class PathException extends BBException{}
+
 /**
  * Class MysqlException
  */
