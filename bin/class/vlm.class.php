@@ -250,7 +250,8 @@ class cam_control extends cam_vlm{
      * @param CamID $cid
      * @param CamPrefix $pref
      */
-    public function __construct(UserID $uid, CamID $cid, CamPrefix $pref='live') {
+    public function __construct(UserID $uid, CamID $cid, CamPrefix $pref=null) {
+        if($pref == null) $pref = new CamPrefix(CamPrefix::LIVE);
         parent::__construct($uid, $cid, $pref);
     }
 
@@ -387,15 +388,18 @@ class cam_control_archive extends cam_control{
      * @param CamID $cid
      * @param CamPrefix $pref
      */
-    public function __construct(UserID $uid, CamID $cid, CamPrefix $pref='live') {
+    public function __construct(UserID $uid, CamID $cid, CamPrefix $pref=null) {
+        if($pref == null) $pref = new CamPrefix(CamPrefix::LIVE);
         parent::__construct($uid, $cid, $pref);
     }
 
 
     /**
      * @param YesNo $new_file
+     * @throws MysqlQueryException
      */
     public function play(YesNo $new_file=null){
+        global $db;
         if(is_null($new_file)) $new_file = new YesNo(true);
         parent::play($new_file);
 
@@ -406,10 +410,7 @@ class cam_control_archive extends cam_control{
                     // занести информацию о нашем файле в базу
                     $now = time();
                     $q_arc = "insert into archive values(0, $this->cid, '$this->pref', $now, 0, 0, 0, 'busy', 0, '$this->filename')";
-                    // если запусать vlc.control, то тут нет подключения к бд... нужно думать.
-                    $db = open_db(MYHOST, MYUSER, MYPASS, MYDB);
-                    mysql_query($q_arc);
-                    mysql_close($db);
+                    if(!$db->query($q_arc)) throw new MysqlQueryException($q_arc);
 
                     break;
             }
@@ -420,30 +421,23 @@ class cam_control_archive extends cam_control{
      *
      */
     public function stop(){
+        global $db;
         // узнать, велась ли запись по данному файлику или нет.
         parent::stop();
 
         if($this->pref==CamPrefix::RECORD){
-            $db = open_db(MYHOST, MYUSER, MYPASS, MYDB);
             //$q = "select max(id) from archive where cam_id=$this->cid and type='$this->pref'";
             $q = "select id,file from archive where cam_id=$this->cid and type='$this->pref' order by id desc limit 1";
-            $r = mysql_query($q);
+            $r = $db->query($q);
+            if(!$r) throw new MysqlQueryException($q);
 
-            if($r){
-                $now = time();
-                $row = mysql_fetch_row($r);
-                $id = $row[0];
-                $file = $row[1];
-                $qu = "update archive set date_end=$now, rebuilded='no' where id=$id limit 1";
-
-                $r = mysql_query($qu);
-                if(!$r){
-                    //todo: Какая то ошибка
-                }
-            }else{
-                //todo: Возникла какая то ошибка с запросом
-            }
-            mysql_close($db);
+            $now = time();
+            $row = $r->fetch_row();
+            $id = $row[0];
+            $file = $row[1];
+            $qu = "update archive set date_end=$now, rebuilded='no' where id=$id limit 1";
+            $r = $db->query($qu);
+            if(!$r) throw new MysqlQueryException($qu);
         }
 
     }
@@ -471,7 +465,8 @@ class org_status extends cam_vlm{
      * @param CamName $cam
      * @param CamPrefix $pref
      */
-    public function __construct(UserID $uid, OrgName $org, CamName $cam, CamPrefix $pref='') {
+    public function __construct(UserID $uid, OrgName $org, CamName $cam, CamPrefix $pref=null) {
+        if($pref == null) $pref = new CamPrefix(CamPrefix::LIVE);
         parent::__construct($uid, $org, $cam, $pref);
         $this->set_pref($pref);
         $this->set_url(new Url('requests/vlm.xml'));

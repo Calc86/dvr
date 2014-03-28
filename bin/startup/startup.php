@@ -6,9 +6,10 @@ require_once dirname(__FILE__).'/../config.php';
 
 $db = open_db(MYHOST, MYUSER, MYPASS, MYDB);
 $q = "select id,login from users where banned=0";
-$r = mysql_query($q);
+$r = $db->query($q);
+if(!$r) throw new MysqlQueryException($q);
 
-while(($row = mysql_fetch_row($r)) != 0){
+while(($row = $r->fetch_row()) != 0){
     list($uid,$name) = $row;
     $vlc = new vlc(new UserID($uid));
     echo "запускаем $name\n";
@@ -16,6 +17,6 @@ while(($row = mysql_fetch_row($r)) != 0){
     $vlc->start();
 }
 
-mysql_close($db);
+$db->close();
 
 

@@ -24,12 +24,14 @@ class config{
     }
     
     public function set_user_name($uid){
+        global $db;
         $this->uid = $uid;
         $q = "select login from users where id=$uid";
-        $r = mysql_query($q);
-        $n = mysql_num_rows($r);
+        $r = $db->query($q);
+        if(!$r) throw new MysqlQueryException($q);
+        $n = $r->num_rows;
         if(!$n) die($this->error(__LINE__, "пользователь с id:$uid не существует"));
-        list($this->user_name) = mysql_fetch_array($r);
+        list($this->user_name) = $r->fetch_row();
     }
     
     protected function error($line,$text) {
@@ -52,16 +54,21 @@ class config{
     }
     
     public function vlm() {
+        global $db;
         if(!$this->uid)  die($this->error(__LINE__, "Пользователь не указан"));
         $buf = '';
         
         //$search =  $this->get_search();
         
         $q = "select * from cam as c, cam_settings as cs where c.id=cs.user_id and c.user_id=$this->uid";
-        $r = mysql_query($q);
+        $r = $db->query($q);
+        if(!$r) throw new MysqlQueryException($q);
         
-        while(($row = mysql_fetch_assoc($r)) != 0){
+        while(($row = $r->fetch_assoc()) != 0){
             $dbv = $this->db_to_var($row);
+            /* @var $row_live */
+            /* @var $row_rec */
+            /* @var $row_mtn */
             foreach ($dbv as $k=>$v) $$k=$v;
             
             $ar = $this->db_to_replace_array($row, array(

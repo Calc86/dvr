@@ -7,6 +7,9 @@ require_once dirname(__FILE__).'/../config.php';
 
 $db = open_db(MYHOST, MYUSER, MYPASS, MYDB);
 
+if(!$db)
+    die('cant connect to mysql');
+
 /*
 require_once BIN.'/class/config.class.php';
 require_once BIN."/class/telnet.class.php";
@@ -19,12 +22,10 @@ if ($argc < 3) {
     die(usage());
 }
 
-$uid = $argv[2];
+$uid = (int)$argv[2];
 $cmd = $argv[1];
 
 $vlc = new vlc(new UserID($uid));
-
-mysql_close($db);
 
 switch($cmd){
     case 'start':
@@ -58,7 +59,8 @@ switch($cmd){
         echo usage();
 }
 
+$db->close();
+
 function usage() {
     return 'Usage: start/stop/status/is_run/restart/kill/ps_kill uid' . PHP_EOL;
 }
-

@@ -11,11 +11,12 @@ $db = open_db(MYHOST, MYUSER, MYPASS, MYDB);
 
 //делаем лимит, так как у нас сейчас оооочень много непроконверченных файликов
 $q = "select id,file from archive where rebuilded='no' and type='rec' order by id desc limit 50";
-$r = mysql_query($q);
+$r = $db->query($q);
+if(!$r) throw new MysqlQueryException($q);
 
 $nas = new nas();
 if($nas->is_mount()){
-    while(($row=mysql_fetch_row($r)) != 0){
+    while(($row=$r->fetch_assoc()) != 0){
         list($id,$file) = $row;
         echo "start #$id ";
         $time = time();
@@ -31,12 +32,12 @@ if($nas->is_mount()){
         $r_time = $end-$start;
 
         $qu = "update archive set rebuilded='yes', date_rebuild=$time, time_rebuild=$r_time where id=$id";
-        mysql_query($qu);
+        if(!$db->query($qu)) throw new MysqlQueryException($qu);
         echo "stop\n";
     }
 }
 
-mysql_close($db);
+$db->close();
 
 /*$file = $argv[1];
 

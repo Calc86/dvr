@@ -10,8 +10,10 @@ $db = open_db(MYHOST, MYUSER, MYPASS, MYDB);
 
 $q = "select o.id as uid,c.`id` as cid,c.`rec-holdtime` as rec,c.`mtn-holdtime` as mtn from org as o, cam as c where c.uid=o.id";
 $q = "select c.user_id as uid, c.id as cid, 30 as rec, 30 as mtn from cams as c";
-$r = mysql_query($q);
-$n = mysql_num_rows($r);
+$r = $db->query($q);
+
+if(!$r) throw new MysqlQueryException($q);
+$n = $r->num_rows;
 
 $path = DIR;
 
@@ -19,7 +21,7 @@ $path = DIR;
 $cmd = '/usr/bin/find {path}/{uid} -mtime +{days} -and -type f -and -name "*UID_{uid}__CID_{cid}*avi"';
 echo $cmd."\n";
 
-while(($row = mysql_fetch_assoc($r)) != 0){
+while(($row = $r->fetch_assoc()) != 0){
     echo $row['uid'].' '.$row['cid'].' ';
     //print_r($row);
     
@@ -45,3 +47,4 @@ while(($row = mysql_fetch_assoc($r)) != 0){
     echo "\n";
 }
 
+$db->close();

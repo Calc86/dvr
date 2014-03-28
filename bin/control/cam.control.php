@@ -19,8 +19,6 @@ $db = open_db(MYHOST, MYUSER, MYPASS, MYDB);
 
 $vlc = new cam_control_archive($uid,$cid,$pref);
 
-mysql_close($db);
-
 switch($cmd){
     case 'play':
         $vlc->play();
@@ -38,6 +36,8 @@ switch($cmd){
         echo usage();
 }
 echo $vlc->message();
+
+$db->close();
 
 function usage() {
     return 'Usage: play/stop/show/delete uid cid live/rec/mtn' . PHP_EOL;

@@ -64,25 +64,15 @@ function get_ar($array, $index, $def='') {
 }
 
 /**
- * @param $h string хост
- * @param $u string юзер
- * @param $p string пароль
- * @param $n string имя базы
+ * @param $h
+ * @param $u
+ * @param $p
+ * @param $n
  * @param int $utf
- * @return resource
+ * @return mysqli
+ * @throws MysqlQueryException
  */
-function open_db($h,$u,$p,$n,$utf=1) {
-    $db = mysql_connect($h,$u,$p);
-    mysql_select_db($n);
 
-    if($utf) {
-        mysql_query("SET character_set_client='utf8'",$db);
-        mysql_query("SET character_set_connection='utf8'",$db);
-        mysql_query("SET character_set_results='utf8'",$db);
-    }
-
-    return $db;
-}
 
 function db_insert($t,$v) {
     $q = "insert into $t values$v";

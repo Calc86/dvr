@@ -164,6 +164,10 @@ class vlc{
      */
     protected $vlm = '';
     /**
+     * @var Path
+     */
+    protected $path_vlm;
+    /**
      * @var Path proc файл
      */
     protected $proc;
@@ -193,43 +197,242 @@ class vlc{
      * @var YesNo динамические камеры или нет
      */
     protected $dyn;
+
+    /**
+     * @param array $cams
+     */
+    public function setCams($cams)
+    {
+        $this->cams = $cams;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCams()
+    {
+        return $this->cams;
+    }
+
+    /**
+     * @param \config $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * @return \config
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param array $dirs
+     */
+    public function setDirs($dirs)
+    {
+        $this->dirs = $dirs;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDirs()
+    {
+        return $this->dirs;
+    }
+
+    /**
+     * @param \YesNo $dyn
+     */
+    public function setDyn($dyn)
+    {
+        $this->dyn = $dyn;
+    }
+
+    /**
+     * @return \YesNo
+     */
+    public function getDyn()
+    {
+        return $this->dyn;
+    }
+
+    /**
+     * @param \Port $ht_port
+     */
+    public function setHtPort($ht_port)
+    {
+        $this->ht_port = $ht_port;
+    }
+
+    /**
+     * @return \Port
+     */
+    public function getHtPort()
+    {
+        return $this->ht_port;
+    }
+
+    /**
+     * @param \Path $log
+     */
+    public function setLog($log)
+    {
+        $this->log = $log;
+    }
+
+    /**
+     * @return \Path
+     */
+    public function getLog()
+    {
+        return $this->log;
+    }
+
+    /**
+     * @param \Path $logrotate
+     */
+    public function setLogrotate($logrotate)
+    {
+        $this->logrotate = $logrotate;
+    }
+
+    /**
+     * @return \Path
+     */
+    public function getLogrotate()
+    {
+        return $this->logrotate;
+    }
+
+    /**
+     * @param \Path $proc
+     */
+    public function setProc($proc)
+    {
+        $this->proc = $proc;
+    }
+
+    /**
+     * @return \Path
+     */
+    public function getProc()
+    {
+        return $this->proc;
+    }
+
+    /**
+     * @param \telnet $telnet
+     */
+    public function setTelnet($telnet)
+    {
+        $this->telnet = $telnet;
+    }
+
+    /**
+     * @return \telnet
+     */
+    public function getTelnet()
+    {
+        return $this->telnet;
+    }
+
+    /**
+     * @param \Port $tl_port
+     */
+    public function setTlPort($tl_port)
+    {
+        $this->tl_port = $tl_port;
+    }
+
+    /**
+     * @return \Port
+     */
+    public function getTlPort()
+    {
+        return $this->tl_port;
+    }
+
+    /**
+     * @param \UserID $uid
+     */
+    public function setUid($uid)
+    {
+        $this->uid = $uid;
+    }
+
+    /**
+     * @return \UserID
+     */
+    public function getUid()
+    {
+        return $this->uid;
+    }
+
+    /**
+     * @param string $vlm
+     */
+    public function setVlm($vlm)
+    {
+        $this->vlm = $vlm;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVlm()
+    {
+        return $this->vlm;
+    }
     //вообще мы выходим на полностью динамические камеры
 
     /**
-     * @param UserID $uid id пользователя в базе
-     * @param YesNo $dyn динамические камеры?
+     * @param UserID $uid
+     * @param YesNo $dyn
+     * @throws MysqlQueryException
      */
+
+
+
     public function __construct(UserID $uid, YesNo $dyn=null) {
+        global $db;
+
         if(is_null($dyn)) $dyn = new YesNo(true);
         if(!$uid) die($this->error(__LINE__, " пользователь не указан"));
-        $this->uid = $uid;
-        $this->dyn = $dyn;
+
+        $this->setUid($uid);
+        $this->setDyn($dyn);
         $this->dirs = array(
             //'bin',
             'etc', 'proc', 'rec', 'mtn', 'log', 'img', 'tmp'
             );
 
         if(!$this->dyn)
-            $this->vlm = $this->config->vlm();
+            $this->setVlm($this->config->vlm());
 
-        $this->path_vlm = ETC."/$this->uid/$this->uid.vlm";
-
-        $this->proc = PROC."/$this->uid/vlc.pid";
-        $this->log  =  LOG."/$this->uid/vlc.log";
-        $this->logrotate = ETC."/$this->uid/logrotate.conf";
-        $this->ht_port = HTSTART+$this->get_uid();
-        $this->tl_port = TLSTART+$this->get_uid();
+        $this->setPathVlm(new Path(ETC."/$this->uid/$this->uid.vlm"));
+        $this->setProc(new Path(PROC."/$this->uid/vlc.pid"));
+        $this->setLog(new Path(LOG."/$this->uid/vlc.log"));
+        $this->setLogrotate(new Path(ETC."/$this->uid/logrotate.conf"));
+        $this->setHtPort(new Port(HTSTART+$this->getUserID()->get()));
+        $this->setTlPort(new Port(TLSTART+$this->getUserID()->get()));
 
         $this->telnet = new telnet();
         $this->config = new config($this->uid);
 
         // если настроек нет, то и не будет камеры в нашем списке
         $q = "select * from cams as c,cam_settings as cs where c.id=cs.cam_id and user_id={$this->uid}";
-        $r = mysql_query($q);
-        $n = mysql_num_rows($r);
+        $r = $db->query($q);
+        if(!$r) throw new MysqlQueryException($q);
+        $n = $r->num_rows;
         
         for($i=0;$i<$n;$i++){
-            $cam = mysql_fetch_object($r);
+            $cam = $r->fetch_object();
             $this->cams[$cam->cam_id] = $cam;
         }
 
@@ -258,7 +461,7 @@ class vlc{
     /**
      * @return UserID
      */
-    public function get_uid() {
+    public function getUserID() {
         return $this->uid;
     }
 
@@ -359,7 +562,8 @@ class vlc{
      * @param CamPrefix $pref
      * @param YesNo $debug
      */
-    public function stop_cam(CamID $cid, CamPrefix $pref, YesNo $debug=0){
+    public function stop_cam(CamID $cid, CamPrefix $pref, YesNo $debug = null){
+        if($debug==null) $debug = new YesNo(false);
         $cam = $this->cams[$cid->get()];
         $cc = new cam_control_archive($this->uid,$cam->cam_id,$pref);
 
@@ -436,7 +640,7 @@ class vlc{
      * шутдаун процесса через telnet
      */
     public function stop() {
-        $f = $this->telnet->connect('localhost', $this->tl_port);
+        $f = $this->telnet->connect('localhost', $this->tl_port->get());
         if(!$f){
             echo "Порт закрыт \n";
         }else
@@ -546,7 +750,7 @@ class vlc{
      */
     public function create_user_dirs() {
         foreach($this->dirs as $dir){
-            $path = DIR."/$dir/".$this->get_uid();
+            $path = DIR."/$dir/".$this->getUserID();
             if(!is_dir($path))
                 mkdir($path, 0775);
         }
@@ -560,6 +764,22 @@ class vlc{
         // etc mtab
         //todo: организовать проверку
         return true;
+    }
+
+    /**
+     * @return \Path
+     */
+    public function getPathVlm()
+    {
+        return $this->path_vlm;
+    }
+
+    /**
+     * @param \Path $path_vlm
+     */
+    public function setPathVlm($path_vlm)
+    {
+        $this->path_vlm = $path_vlm;
     }
 }
 
