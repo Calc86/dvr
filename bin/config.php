@@ -15,15 +15,24 @@ function handleError($err_no, $err_str, $err_file, $err_line, array $err_context
 }
 set_error_handler('handleError');
 
-define ('TARGET','_devel');
-
 define('DIR',dirname(__FILE__).'/..');
 define('BIN',DIR.'/bin');
 define('ETC',DIR.'/etc');
 define('PROC',DIR.'/proc');
 define('LOG',DIR.'/log');
 
-define('LIVEHOST','10.154.28.203');
+if(file_exists(BIN.'/devel')){
+    define ('TARGET','_devel');
+    define('LIVEHOST','10.154.28.203');
+}
+else if(file_exists(DIR.'/../test')){
+    define ('TARGET','_test');
+    define('LIVEHOST','10.154.28.204');
+}
+else{
+    define ('TARGET','');
+    define('LIVEHOST','10.154.28.202');
+}
 
 
 define('MYHOST','10.154.28.207');
@@ -37,7 +46,7 @@ define('MYDB','bb'.TARGET);
 //in fstab
 // 10.154.28.40:/mnt/raid1/mx/video /home/vlc/vlc/mount nfs auto,users 0 0
 define('NAS_HOST','10.154.28.212');
-define('NAS_PATH','/mnt/raid1/mx/video');
+define('NAS_PATH','/mnt/raid1/mx/video'.TARGET);
 
 define("INDEX",1);
 require(BIN."/func.php");
