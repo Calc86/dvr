@@ -49,6 +49,17 @@ abstract class DVR implements IDVR {
     }
 
     /**
+     * @param \CamID $camID
+     * Отдать камеру по id
+     * @return ICam
+     */
+    public function getCam(\CamID $camID)
+    {
+        return $this->getCams()[$camID->get()];
+    }
+
+
+    /**
      * @return \UserID
      */
     public function getUid()
@@ -70,5 +81,9 @@ abstract class DVR implements IDVR {
         $this->kill();
         sleep(1);
         $this->start();
+    }
+
+    public function shutdown(){
+        $this->stop();
     }
 } 

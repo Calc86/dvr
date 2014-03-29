@@ -15,6 +15,7 @@ namespace system;
  */
 class Cam implements ICam{
     private $id;
+    // From mysql
     private $live;
     private $rec;
     private $mtn;
@@ -41,11 +42,22 @@ class Cam implements ICam{
         return $this->csc->getStreams();
     }
 
+    /**
+     * @param \CamPrefix $camPrefix
+     * @return ICamStream
+     */
+    public function getStream(\CamPrefix $camPrefix)
+    {
+        return $this->getStreams()[$camPrefix->get()];
+    }
+
+
     public function start()
     {
         foreach(\CamPrefix::getPrefixes() as $pref){
             $stream = $this->getStreams()[$pref];
             /** @var ICamStream $stream */
+            //Если поля $live, $rec, $mtn не ноль - старнуем
             if($this->$pref) $stream->start();
         }
     }
@@ -65,6 +77,8 @@ class Cam implements ICam{
             $stream = $this->getStreams()[$pref];
             /** @var ICamStream $stream */
             if($this->$pref){
+                //Так как логики еще нет, то пропускаем
+                if($pref == \CamPrefix::MOTION) continue;
                 //выполняем "магические функции"
                 if($pref != \CamPrefix::LIVE) $stream->update();
             }else{
@@ -98,6 +112,18 @@ class Cam implements ICam{
             /** @var ICamStream $stream */
             $stream->delete();
         }
+    }
+
+    /**
+     * @return \CamID
+     */
+    public function getID()
+    {
+        return $this->id;
+    }
+
+    public function getMysqlId(){
+        return $this->id;
     }
 
 

@@ -13,10 +13,5 @@ namespace system;
  * для создания камер
  * @package system
  */
-interface ICamCreator extends \Iterator {
-    /**
-     * @param \CamID $cid
-     * @return mixed
-     */
-    public function create(\CamID $cid);
+interface ICamCreator extends \Iterator, \ArrayAccess {
 } 

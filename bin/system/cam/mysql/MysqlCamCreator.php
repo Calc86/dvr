@@ -26,6 +26,7 @@ class MysqlCamCreator implements ICamCreator {
 
     private $count = 0;
     private $position = 0;
+    private $keys = array();
 
     /**
      * @param \UserID $dvr_id
@@ -42,17 +43,9 @@ class MysqlCamCreator implements ICamCreator {
 
         while(($row = $r->fetch_object('system\Cam',array($this->dvr_id))) != null){
             /** @var Cam $row */
-            $this->cams[] = $row;
+            $this->cams[$row->getMysqlId()] = $row;
+            $this->keys[] = $row->getMysqlId();
         }
-    }
-
-    /**
-     * @param \CamID $cid
-     * @return Cam
-     */
-    public function create(\CamID $cid)
-    {
-        // TODO: Implement create() method.
     }
 
     /**
@@ -63,7 +56,7 @@ class MysqlCamCreator implements ICamCreator {
      */
     public function current()
     {
-        return $this->cams[$this->position];
+        return $this->cams[$this->keys[$this->position]];
     }
 
     /**
@@ -85,7 +78,7 @@ class MysqlCamCreator implements ICamCreator {
      */
     public function key()
     {
-        return $this->position;
+        return $this->keys[$this->position];
     }
 
     /**
@@ -97,7 +90,7 @@ class MysqlCamCreator implements ICamCreator {
      */
     public function valid()
     {
-        return isset($this->cams[$this->position]);
+        return isset($this->keys[$this->position]);
     }
 
     /**
@@ -110,4 +103,73 @@ class MysqlCamCreator implements ICamCreator {
     {
         $this->position = 0;
     }
+
+    ////ARRAY
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Whether a offset exists
+     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
+     * @param mixed $offset <p>
+     * An offset to check for.
+     * </p>
+     * @return boolean true on success or false on failure.
+     * </p>
+     * <p>
+     * The return value will be casted to boolean if non-boolean was returned.
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->cams[$offset]);
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Offset to retrieve
+     * @link http://php.net/manual/en/arrayaccess.offsetget.php
+     * @param mixed $offset <p>
+     * The offset to retrieve.
+     * </p>
+     * @return Cam Can return all value types.
+     */
+    public function offsetGet($offset)
+    {
+        return isset($this->cams[$offset]) ? $this->cams[$offset] : null;
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Offset to set
+     * @link http://php.net/manual/en/arrayaccess.offsetset.php
+     * @param mixed $offset <p>
+     * The offset to assign the value to.
+     * </p>
+     * @param mixed $value <p>
+     * The value to set.
+     * </p>
+     * @return void
+     */
+    public function offsetSet($offset, $value)
+    {
+        if (is_null($offset)) {
+            $this->cams[] = $value;
+        } else {
+            $this->cams[$offset] = $value;
+        }
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Offset to unset
+     * @link http://php.net/manual/en/arrayaccess.offsetunset.php
+     * @param mixed $offset <p>
+     * The offset to unset.
+     * </p>
+     * @return void
+     */
+    public function offsetUnset($offset)
+    {
+        unset($this->cams[$offset]);
+    }
+
+
 }

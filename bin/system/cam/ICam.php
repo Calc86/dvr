@@ -32,4 +32,15 @@ interface ICam {
     public function start();
     public function stop();
     public function update();
+
+    /**
+     * @param \CamPrefix $camPrefix
+     * @return ICamStream
+     */
+    public function getStream(\CamPrefix $camPrefix);
+
+    /**
+     * @return \CamID
+     */
+    public function getID();
 }

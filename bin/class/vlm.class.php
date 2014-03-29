@@ -72,12 +72,18 @@ class vlc_http{
         $this->msg = '';
         $path = $this->full_url.rawurlencode(trim($cmd));
         if($this->debug) echo $path;
-        $f = fopen($path,"r");
-        if($f){
-            while (($buf=fread($f, 1024)) != 0){
-                $this->msg.=$buf;
+
+        try{
+            $f = fopen($path,"r");
+            if($f){
+                while (($buf=fread($f, 1024)) != 0){
+                    $this->msg.=$buf;
+                }
+                fclose($f);
             }
-            fclose($f);
+        }catch (Exception $e){
+            echo $e->getMessage()."\n";
+            echo $e->getFile()." ".$e->getLine()."\n";
         }
     }
 }

@@ -4,6 +4,15 @@
 ini_set('display_errors',1);
 ini_set('register_globals','Off');
 
+/**
+ * @param $err_no
+ * @param $err_str
+ * @param $err_file
+ * @param $err_line
+ * @param array $err_context
+ * @return bool
+ * @throws ErrorException
+ */
 function handleError($err_no, $err_str, $err_file, $err_line, array $err_context)
 {
     // error was suppressed with the @-operator
@@ -13,7 +22,7 @@ function handleError($err_no, $err_str, $err_file, $err_line, array $err_context
 
     throw new ErrorException($err_str, 0, $err_no, $err_file, $err_line);
 }
-set_error_handler('handleError');
+set_error_handler('handleError', E_ALL);
 
 define('DIR',dirname(__FILE__).'/..');
 define('BIN',DIR.'/bin');

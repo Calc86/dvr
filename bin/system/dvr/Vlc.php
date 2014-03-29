@@ -180,6 +180,20 @@ class Vlc extends DVR{
             $cam->stop();
             $cam->delete();
         }
+
+        $telnet = new \telnet();
+
+        $f = $telnet->connect('localhost', $this->getTelnetPort()->get());
+        if(!$f){
+            echo "Порт закрыт \n";
+        }else
+        {
+            echo "Успешное подключение \n";
+            $telnet->auth(TLPWD);
+            $telnet->write('shutdown');
+            echo $telnet->read();
+            sleep(3);
+        }
     }
 
     /**
@@ -187,12 +201,28 @@ class Vlc extends DVR{
      */
     public function isStarted()
     {
+        // TODO проверять на открытость портов и возвращать результат (телнет и хттп)
         return false;
     }
 
     public function kill()
     {
-        // TODO: Implement kill() method.
+        $pid = `cat {$this->getPidFile()}`;
+        if($pid != 0 && $pid != '')
+            (new \BashCommand("kill $pid"))->exec();
+        $pid = $this->getProcess();
+        if($pid != 0 && $pid != '')
+            (new \BashCommand("kill $pid"))->exec();
+        if(is_file($this->getPidFile())) unlink($this->getPidFile());
+    }
+
+    /**
+     * @return int proc
+     */
+    private function getProcess() {
+        $ps = "ps -aef | grep vlc | grep /proc/{$this->getUid()} | grep -v grep | awk ' {print $2} '";
+        $proc = (int)shell_exec($ps);
+        return $proc;
     }
 
     /**

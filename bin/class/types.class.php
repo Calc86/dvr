@@ -118,9 +118,17 @@ class BooleanException extends TypeException{}
 class SetException extends TypeException{}
 
 /**
+ * Class NullIDException
+ */
+class NullIDException extends TypeException{}
+
+/**
  * Class Integer
  */
 class Integer extends Type{
+    /**
+     * @param mixed $value
+     */
     public function __construct($value)
     {
         parent::__construct((int)$value);
@@ -151,7 +159,19 @@ class Integer extends Type{
 /**
  * Class IDType
  */
-class IDType extends Integer{}
+class IDType extends Integer{
+    public function get()
+    {
+        if($this->getValue() <= 0) throw new NullIDException($this->getValue());
+        return parent::get();
+    }
+
+    public function set($v)
+    {
+        if($v <=0)  throw new NullIDException($this->getValue());
+        parent::set($v);
+    }
+}
 
 /**
  * Class UserID

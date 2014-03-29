@@ -23,10 +23,18 @@ interface IDVR {
     public function isStarted();
     public function kill();
     public function startup();
+    public function shutdown();
 
     /**
      * time routine
      * @return void
      */
     public function update();
+
+    /**
+     * @param \CamID $camID
+     * Отдать камеру по id
+     * @return Cam
+     */
+    public function getCam(\CamID $camID);
 } 
