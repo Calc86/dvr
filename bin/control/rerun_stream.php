@@ -15,15 +15,17 @@ while(($row = $r->fetch_row()) != 0){
 
     $cc_live = new cam_control(new UserID($uid), new CamID($cid), new CamPrefix(CamPrefix::LIVE));
     $cc_rec = new cam_control_archive(new UserID($uid), new CamID($cid), new CamPrefix(CamPrefix::RECORD));
+
     if($live){
-        $cc_live->play(null);
+        $cc_live->play();
     }else
     {
         $cc_live->stop();
     }
     
     if($rec && $live){
-        $cc_rec->play(null);
+        //do not start play, he is rewrite date in archive
+        //$cc_rec->play();
     }else
     {
         $cc_rec->stop();

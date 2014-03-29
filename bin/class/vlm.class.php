@@ -130,7 +130,8 @@ class vlm extends vlc_http{
      * @param VLMCommand $cmd
      */
     public function _control(CamName $cam, VLMCommand $cmd) {
-        $this->cmd(new VLMCommand("control $cam $cmd"));
+        $vlm = new VLMCommand("control $cam $cmd");
+        $this->cmd($vlm);
     }
 
     /**
@@ -364,7 +365,7 @@ class cam_control extends cam_vlm{
      *
      */
     public function stop() {
-        //echo "STOP: $this->full\n";   !!! не должно быть ни каких echo!!!
+        //echo "STOP: $this->full\n";  // !!! не должно быть ни каких echo!!!
         $this->_control($this->full, new VLMCommand('stop'));
     }
 
