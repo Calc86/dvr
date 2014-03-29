@@ -140,7 +140,7 @@ class vlc_rpc{
 
 /**
  * Class vlc
- * @property
+ * @deprecated
  */
 class vlc{
     /**

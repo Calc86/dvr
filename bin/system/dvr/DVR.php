@@ -76,9 +76,7 @@ abstract class DVR implements IDVR {
 
     public function startup()
     {
-        $this->stop();
-        sleep(1);
-        $this->kill();
+        $this->shutdown();
         sleep(1);
         $this->start();
     }

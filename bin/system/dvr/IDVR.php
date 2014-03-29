@@ -37,4 +37,9 @@ interface IDVR {
      * @return Cam
      */
     public function getCam(\CamID $camID);
+
+    /**
+     * @return array of ICam
+     */
+    public function getCams();
 } 

@@ -72,7 +72,18 @@ class MysqlCamStream implements ICamStream {
 
     public function start()
     {
-        $this->cc->play();
+        //play возможен только если внешний поток отдает данные
+        try{
+            $err = '';
+            $connection = fsockopen($this->ip, $this->live_port,$err_no, $err_str, 1);
+            if($connection){
+                $this->cc->play();
+            }
+            fclose($connection);
+        }
+        catch(\Exception $e){
+            echo "port $this->ip:$this->live_port closed\n";
+        }
     }
 
     public function stop()
@@ -86,21 +97,48 @@ class MysqlCamStream implements ICamStream {
 
     public function update()
     {
-        $this->cc->stop();
-        $this->cc->play();
+        $this->stop();
+        $this->start();
     }
 
-    public function create()
-    {
-        $stream_port = new \Port($this->dvr_id->get()+9000);
-        $input = $this->cc->gen_input_string(
+    /**
+     * @return \VLMInput
+     */
+    public function getInputString(){
+        return $this->cc->gen_input_string(
             new \WebProto($this->live_proto),
             new \IP($this->ip),
             new \Port($this->live_port),
             new \Path($this->live_path)
         );
-        $output = $this->cc->gen_live_string($stream_port, new \Path($this->stream_path));
-        $stream = $this->cc->get_stream_string($stream_port, new \Path($this->stream_path));
+    }
+
+    /**
+     * @return \Port
+     */
+    public function getStreamPort(){
+        return new \Port($this->cam_id->get()+9000);
+    }
+
+    /**
+     * @return \VLMOutput
+     */
+    public function getOutputString(){
+        return $this->cc->gen_live_string($this->getStreamPort(), new \Path($this->stream_path));
+    }
+
+    /**
+     * @return \VLMOutput
+     */
+    public function getStreamString(){
+        return $this->cc->get_stream_string($this->getStreamPort(), new \Path($this->stream_path));
+    }
+
+    public function create()
+    {
+        $input = $this->getInputString();
+        $output = $this->getOutputString();
+        $stream = $this->getStreamString();
 
         switch($this->prefix){
             case \CamPrefix::LIVE:

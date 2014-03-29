@@ -73,6 +73,6 @@ switch($cmd){
  * @return string
  */
 function usage(){
-    return "startup/shutdown/u_start(u)/u_stop(u)/c_start(p,c,p)/u_stop(u,c,p)\n";
+    return "startup/shutdown/start(u)/stop(u)/c_start(p,c,p)/u_stop(u,c,p)/c_update(u,c)/update\n";
 }
 

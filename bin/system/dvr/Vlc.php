@@ -192,7 +192,6 @@ class Vlc extends DVR{
             $telnet->auth(TLPWD);
             $telnet->write('shutdown');
             echo $telnet->read();
-            sleep(3);
         }
     }
 
