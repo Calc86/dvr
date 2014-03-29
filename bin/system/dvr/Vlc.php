@@ -58,7 +58,7 @@ class Vlc extends DVR{
         $this->setLogFile(new \FilePath(LOG."/{$this->getUid()}/vlc.log"));
         $this->setLogrotateFile(new \FilePath(ETC."/{$this->getUid()}/logrotate.conf"));
         $this->setPidFile(new \FilePath(PROC."/{$this->getUid()}/vlc.pid"));
-        $this->setVlmFile(new \FilePath(ETC."/{$this->getUid()}/{$this->getUid()}.vlm"));
+        $this->setVlmFile(new \FilePath(ETC."/{$this->getUid()}/config.vlm"));
 
         $this->setCams(new MysqlCamCreator($this->getUid()));
 
@@ -68,7 +68,7 @@ class Vlc extends DVR{
     /**
      * @param \Port $httpPort
      */
-    public function setHttpPort(\Port $httpPort)
+    private function setHttpPort(\Port $httpPort)
     {
         $this->httpPort = $httpPort;
     }
@@ -76,7 +76,7 @@ class Vlc extends DVR{
     /**
      * @return \Port
      */
-    public function getHttpPort()
+    private function getHttpPort()
     {
         return $this->httpPort;
     }
@@ -84,7 +84,7 @@ class Vlc extends DVR{
     /**
      * @param \FilePath $logFile
      */
-    public function setLogFile(\FilePath $logFile)
+    private function setLogFile(\FilePath $logFile)
     {
         $this->logFile = $logFile;
     }
@@ -92,7 +92,7 @@ class Vlc extends DVR{
     /**
      * @return \FilePath
      */
-    public function getLogFile()
+    private function getLogFile()
     {
         return $this->logFile;
     }
@@ -100,7 +100,7 @@ class Vlc extends DVR{
     /**
      * @param \FilePath $logrotateFile
      */
-    public function setLogrotateFile(\FilePath $logrotateFile)
+    private function setLogrotateFile(\FilePath $logrotateFile)
     {
         $this->logrotateFile = $logrotateFile;
     }
@@ -108,7 +108,7 @@ class Vlc extends DVR{
     /**
      * @return \FilePath
      */
-    public function getLogrotateFile()
+    private function getLogrotateFile()
     {
         return $this->logrotateFile;
     }
@@ -116,7 +116,7 @@ class Vlc extends DVR{
     /**
      * @param \FilePath $pidFile
      */
-    public function setPidFile(\FilePath $pidFile)
+    private function setPidFile(\FilePath $pidFile)
     {
         $this->pidFile = $pidFile;
     }
@@ -124,7 +124,7 @@ class Vlc extends DVR{
     /**
      * @return \FilePath
      */
-    public function getPidFile()
+    private function getPidFile()
     {
         return $this->pidFile;
     }
@@ -132,7 +132,7 @@ class Vlc extends DVR{
     /**
      * @param \Port $telnetPort
      */
-    public function setTelnetPort(\Port $telnetPort)
+    private function setTelnetPort(\Port $telnetPort)
     {
         $this->telnetPort = $telnetPort;
     }
@@ -140,7 +140,7 @@ class Vlc extends DVR{
     /**
      * @return \Port
      */
-    public function getTelnetPort()
+    private function getTelnetPort()
     {
         return $this->telnetPort;
     }
@@ -148,7 +148,7 @@ class Vlc extends DVR{
     /**
      * @param \FilePath $vlmFile
      */
-    public function setVlmFile(\FilePath $vlmFile)
+    private function setVlmFile(\FilePath $vlmFile)
     {
         $this->vlmFile = $vlmFile;
     }
@@ -156,13 +156,14 @@ class Vlc extends DVR{
     /**
      * @return \FilePath
      */
-    public function getVlmFile()
+    private function getVlmFile()
     {
         return $this->vlmFile;
     }
 
     public function start()
     {
+        $this->mount();
         if(!$this->start_vlc())
             return;
 
@@ -228,20 +229,22 @@ class Vlc extends DVR{
     /**
      * примонтировать наш nas
      */
-    public function mount(){
+    private function mount(){
         $nas = new \nas();
-        $nas->mount();
+        if(!$nas->is_mount()->get());
+            $nas->mount();
     }
 
     /**
      * размонтировать наш nas
      */
-    public function un_mount(){
+    private function un_mount(){
         $nas = new \nas();
-        $nas->un_mount();
+        if($nas->is_mount()->get());
+            $nas->un_mount();
     }
 
-    public function create_user_dirs() {
+    private function create_user_dirs() {
         foreach($this->dirs as $dir){
             $path = DIR."/$dir/".$this->getUid();
             if(!is_dir($path)){

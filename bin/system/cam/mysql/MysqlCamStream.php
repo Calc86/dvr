@@ -74,7 +74,6 @@ class MysqlCamStream implements ICamStream {
     {
         //play возможен только если внешний поток отдает данные
         try{
-            $err = '';
             $connection = fsockopen($this->ip, $this->live_port,$err_no, $err_str, 1);
             if($connection){
                 $this->cc->play();
@@ -104,7 +103,7 @@ class MysqlCamStream implements ICamStream {
     /**
      * @return \VLMInput
      */
-    public function getInputString(){
+    private function getInputString(){
         return $this->cc->gen_input_string(
             new \WebProto($this->live_proto),
             new \IP($this->ip),
@@ -116,21 +115,21 @@ class MysqlCamStream implements ICamStream {
     /**
      * @return \Port
      */
-    public function getStreamPort(){
+    private function getStreamPort(){
         return new \Port($this->cam_id->get()+9000);
     }
 
     /**
      * @return \VLMOutput
      */
-    public function getOutputString(){
+    private function getOutputString(){
         return $this->cc->gen_live_string($this->getStreamPort(), new \Path($this->stream_path));
     }
 
     /**
      * @return \VLMOutput
      */
-    public function getStreamString(){
+    private function getStreamString(){
         return $this->cc->get_stream_string($this->getStreamPort(), new \Path($this->stream_path));
     }
 
