@@ -109,7 +109,7 @@ class vlc_rpc{
      * @param $pref
      */
     public function create_cam($cid,$pref){
-        $this->vlc->create_cam(new CamID($cid[0]), new CamPrefix($pref[0]), new YesNo(false));
+        $this->vlc->create_cam(new CamID($cid), new CamPrefix($pref), new YesNo(false));
     }
 
     /**
@@ -117,7 +117,7 @@ class vlc_rpc{
      * @param $pref
      */
     public function delete_cam($cid,$pref){
-        $this->vlc->delete_cam(new CamID($cid[0]), new CamPrefix($pref[0]), new YesNo(false));
+        $this->vlc->delete_cam(new CamID($cid), new CamPrefix($pref), new YesNo(false));
     }
 
     /**
@@ -125,7 +125,7 @@ class vlc_rpc{
      * @param $pref
      */
     public function play_cam($cid,$pref){
-        $this->vlc->play_cam( new CamID($cid[0]), new CamPrefix($pref[0]), new YesNo(false));
+        $this->vlc->play_cam( new CamID($cid), new CamPrefix($pref), new YesNo(false));
     }
 
     /**
@@ -133,7 +133,7 @@ class vlc_rpc{
      * @param $pref
      */
     public function stop_cam($cid,$pref){
-        $this->vlc->stop_cam(new CamID($cid[0]), new CamPrefix($pref[0]));
+        $this->vlc->stop_cam(new CamID($cid), new CamPrefix($pref));
     }
 }
 
@@ -510,7 +510,8 @@ class vlc{
                 break;
         }
 
-        if($debug){
+        if($debug->get()){
+            var_dump($debug);
             echo "$cam->cam_id $pref\n";
             //входные данные
             echo "Данные камеры\n";
@@ -532,18 +533,18 @@ class vlc{
 
         switch($pref){
             case CamPrefix::LIVE:
-                if($debug)  echo "$cam->cam_id live\n";
+                if($debug->get())  echo "$cam->cam_id live\n";
                 if($cam->live) $cc->play();
                 break;
             case CamPrefix::RECORD:
                 if($cam->live && $cam->rec){
-                    if($debug) echo "$cam->cam_id rec\n";
+                    if($debug->get()) echo "$cam->cam_id rec\n";
                     $cc->play();
                 }
                 break;
             case CamPrefix::MOTION:
                 if($cam->live && $cam->mtn){
-                    if($debug) echo "$cam->cam_id mtn\n";
+                    if($debug->get()) echo "$cam->cam_id mtn\n";
                     $cc->play();
                 }
                 break;
