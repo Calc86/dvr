@@ -213,6 +213,19 @@ class CamPrefix extends NameType{
     const LIVE = 'live';
     const RECORD = "rec";
     const MOTION = 'mtn';
+
+    private static $prefixes = array(
+        CamPrefix::LIVE,
+        CamPrefix::RECORD,
+        CamPrefix::MOTION);
+
+    /**
+     * @return array
+     */
+    public static function getPrefixes()
+    {
+        return self::prefixes;
+    }
 };
 /**
  * Class Url

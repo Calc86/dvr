@@ -1,0 +1,16 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: calc
+ * Date: 29.03.14
+ * Time: 18:51
+ */
+
+namespace system;
+
+/**
+ * Interface ICamStreamCreator
+ * @package system
+ */
+interface ICamStreamCreator extends \Iterator{
+} 

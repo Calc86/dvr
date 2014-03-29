@@ -7,9 +7,15 @@
  */
 
 class Database {
+    /**
+     * @var mysqli
+     */
     private $db;
     private static $instance = null;
 
+    /**
+     *
+     */
     private function __construct(){
         $this->db = open_db(MYHOST, MYUSER, MYPASS, MYDB);
     }
@@ -18,6 +24,9 @@ class Database {
     {
     }
 
+    /**
+     * @return Database
+     */
     public static function getInstance(){
         if(self::$instance === null) self::$instance = new self();
         return self::$instance;
@@ -30,4 +39,14 @@ class Database {
         return $this->db;
     }
 
+    /**
+     * @param $query
+     * @return mysqli_result
+     * @throws MysqlQueryException
+     */
+    public function query($query){
+        $r = $this->db->query($query);
+        if(!$r) throw new MysqlQueryException($query);
+        return $r;
+    }
 } 
