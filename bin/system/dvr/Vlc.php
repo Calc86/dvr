@@ -108,6 +108,7 @@ class Vlc extends DVR{
     /**
      * @return \FilePath
      */
+    /** @noinspection PhpUnusedPrivateMethodInspection */
     private function getLogrotateFile()
     {
         return $this->logrotateFile;
@@ -156,6 +157,7 @@ class Vlc extends DVR{
     /**
      * @return \FilePath
      */
+    /** @noinspection PhpUnusedPrivateMethodInspection */
     private function getVlmFile()
     {
         return $this->vlmFile;
@@ -238,6 +240,7 @@ class Vlc extends DVR{
     /**
      * размонтировать наш nas
      */
+    /** @noinspection PhpUnusedPrivateMethodInspection */
     private function un_mount(){
         $nas = new \nas();
         if($nas->is_mount()->get());

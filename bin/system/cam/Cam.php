@@ -17,8 +17,11 @@ class Cam implements ICam{
     private $id;
     // From mysql
     private $live;
-    private $rec;
-    private $mtn;
+
+    private /** @noinspection PhpUnusedPrivateFieldInspection */
+        $rec;
+    private /** @noinspection PhpUnusedPrivateFieldInspection */
+        $mtn;
 
     private $dvr_id;
     /**
