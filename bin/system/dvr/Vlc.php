@@ -50,6 +50,8 @@ class Vlc extends DVR{
      */
     function __construct(\UserID $uid)
     {
+        parent::__construct($uid);
+
         $this->setHttpPort(new \Port(HTSTART + $this->getUid()->get()));
         $this->setTelnetPort(new \Port(TLSTART + $this->getUid()->get()));
 
@@ -161,7 +163,8 @@ class Vlc extends DVR{
 
     public function start()
     {
-        $this->start_vlc();
+        if(!$this->start_vlc())
+            return;
 
         foreach($this->getCams() as $cam){
             /** @var Cam $cam */
@@ -233,6 +236,9 @@ class Vlc extends DVR{
         }
     }
 
+    /**
+     * @return bool
+     */
     private function start_vlc(){
         $vlc_vlm = '';
 
@@ -242,11 +248,12 @@ class Vlc extends DVR{
 
         if(is_file($this->getPidFile())){
             echo $this->error(__LINE__, "VLC для пользователя {$this->getUid()} уже запущен или мертв");
-            return;
+            return false;
         }
         echo $vlc_shell;
         (new \BashCommand($vlc_shell))->exec();
         $this->wait_for_unix_proc_start();
+        return true;
     }
 
     /**

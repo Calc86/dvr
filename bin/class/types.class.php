@@ -224,7 +224,7 @@ class CamPrefix extends NameType{
      */
     public static function getPrefixes()
     {
-        return self::prefixes;
+        return self::$prefixes;
     }
 };
 /**

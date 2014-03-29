@@ -13,4 +13,8 @@ namespace system;
  * @package system
  */
 interface ICamStreamCreator extends \Iterator{
+    /**
+     * @return array of ICamStream
+     */
+    public function getStreams();
 } 

@@ -36,11 +36,11 @@ class MysqlCamCreator implements ICamCreator {
 
         $db = \Database::getInstance();
 
-        $q = "select id from cams where user_id = $this->dvr_id()";
+        $q = "select id, live, rec, mtn from cams where user_id = $this->dvr_id";
         $r = $db->query($q);
         $this->count = $r->num_rows;
 
-        while(($row = $r->fetch_object('Cam')) != null){
+        while(($row = $r->fetch_object('system\Cam',array($this->dvr_id))) != null){
             /** @var Cam $row */
             $this->cams[] = $row;
         }

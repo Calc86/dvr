@@ -9,7 +9,7 @@
 namespace system;
 
 /**
- * Class MysqlSqlCamStreamCreatorExceprion
+ * Class MysqlSqlCamStreamCreatorException
  * @package system
  */
 class MysqlSqlCamStreamCreatorException extends \BBException{};
@@ -19,6 +19,7 @@ class MysqlSqlCamStreamCreatorException extends \BBException{};
  * @package system
  */
 class MysqlCamStreamCreator implements ICamStreamCreator{
+    private $dvr_id;
     private $cam_id;
 
     /**
@@ -29,11 +30,13 @@ class MysqlCamStreamCreator implements ICamStreamCreator{
     private $position = 0;
 
     /**
-     * @param $cam_id
-     * @throws MysqlSqlCamStreamCreatorException
+     * @param \UserID $dvr_id
+     * @param \CamID $cam_id
+     * @throws
      */
-    function __construct($cam_id)
+    function __construct(\UserID $dvr_id, \CamID $cam_id)
     {
+        $this->dvr_id = $dvr_id;
         $this->cam_id = $cam_id;
 
         $db = \Database::getInstance();
@@ -51,10 +54,14 @@ class MysqlCamStreamCreator implements ICamStreamCreator{
             throw new MysqlSqlCamStreamCreatorException($q);
         }
 
-        $csTemp = $r->fetch_object("MysqlCamStream");
-
-
-
+        $csTemp = $r->fetch_object("system\MysqlCamStream");
+        foreach(\CamPrefix::getPrefixes() as $pref){
+            /** @var MysqlCamStream $csTemp */
+            $csTemp->setDvrId($this->dvr_id);
+            $csTemp->setCamId($this->cam_id);
+            $csTemp->setPrefix(new \CamPrefix($pref));
+            $this->streams[$pref] = clone $csTemp;
+        }
     }
 
 
@@ -114,4 +121,11 @@ class MysqlCamStreamCreator implements ICamStreamCreator{
         $this->position = 0;
     }
 
-} 
+    /**
+     * @return array of ICamStream
+     */
+    public function getStreams()
+    {
+        return $this->streams;
+    }
+}
