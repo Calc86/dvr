@@ -59,7 +59,7 @@ class Cam implements ICam{
             /** @var ICamStream $stream */
             //Если поля $live, $rec, $mtn не ноль - старнуем
             // live && live = live
-            if($this->canPlay($pref)) $stream->start();
+            if($this->canPlay(new \CamPrefix($pref))) $stream->start();
         }
     }
 
@@ -86,7 +86,7 @@ class Cam implements ICam{
             $stream = $this->getStreams()[$pref];
             // всё зависит от live)
             /** @var ICamStream $stream */
-            if($this->canPlay($pref)){
+            if($this->canPlay(new \CamPrefix($pref))){
                 //Так как логики еще нет, то пропускаем
                 if($pref == \CamPrefix::MOTION) continue;
                 //выполняем "магические функции"
