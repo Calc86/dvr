@@ -46,7 +46,7 @@ class Cam implements ICam{
         foreach(\CamPrefix::getPrefixes() as $pref){
             $stream = $this->getStreams()[$pref];
             /** @var ICamStream $stream */
-            $stream->start();
+            if($this->$pref) $stream->start();
         }
     }
 
@@ -64,7 +64,13 @@ class Cam implements ICam{
         foreach(\CamPrefix::getPrefixes() as $pref){
             $stream = $this->getStreams()[$pref];
             /** @var ICamStream $stream */
-            if($pref != \CamPrefix::LIVE) $stream->update();
+            if($this->$pref){
+                //выполняем "магические функции"
+                if($pref != \CamPrefix::LIVE) $stream->update();
+            }else{
+                //Если в БД 0 => Стопим камеру
+                $stream->stop();
+            }
         }
     }
 
