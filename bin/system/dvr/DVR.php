@@ -86,4 +86,18 @@ abstract class DVR implements IDVR {
     public function shutdown(){
         $this->stop();
     }
+
+    /**
+     * time routine
+     * @return void
+     */
+    public function update()
+    {
+        foreach($this->getCams() as $cam){
+            /** @var Cam $cam */
+            $cam->update();
+        }
+    }
+
+
 } 

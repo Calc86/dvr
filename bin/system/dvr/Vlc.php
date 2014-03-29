@@ -225,15 +225,6 @@ class Vlc extends DVR{
         return $proc;
     }
 
-    /**
-     * time routine
-     * @return void
-     */
-    public function update()
-    {
-        // TODO: Implement update() method.
-    }
-
     ////////// VLC Function
     /**
      * примонтировать наш nas

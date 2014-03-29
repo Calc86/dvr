@@ -24,7 +24,8 @@ echo $DATE" Загрузка системы" >> $LOG;
 #    echo $DATE" Не могу примонтировать FreeNAS" >> $LOG;
 #fi
 
-echo $DATE" Запуск стартового скрипта видеосервера" >> $LOG;
-su vlc -c "/bin/php ~/vlc/bin/startup/startup.php" >> $LOG 2>> $LOG
+#echo $DATE" Запуск стартового скрипта видеосервера" >> $LOG;
+#su vlc -c "/bin/php ~/vlc/bin/startup/startup.php" >> $LOG 2>> $LOG
+su vlc -c "/bin/php ~/vlc/bin/system/Main.php startup" >> $LOG 2>> $LOG
 
 #/bin/php ~/vlc/bin/startup/startup.php >> $LOG 2>> $LOG

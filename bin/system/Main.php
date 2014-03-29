@@ -62,6 +62,9 @@ switch($cmd){
         if($argc<4) {echo usage(); break;};
         $s->cam_update(new UserID($argv[2]), new CamID($argv[3]));
         break;
+    case 'update':
+        $s->update();
+        break;
     default:
         die(usage());
 }
