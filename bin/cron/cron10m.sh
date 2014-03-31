@@ -4,7 +4,7 @@ source `dirname $0`/../config.sh
 DIR=$VLCDIR
 BIN=$DIR/bin
 ETC=$DIR/etc
-
+ 
 #php $BIN/control/restart_record.php
 php $BIN/system/Main.php update
 
