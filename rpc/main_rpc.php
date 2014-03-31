@@ -22,7 +22,7 @@ class rpc{
     public function __construct($uid)
     {
         $this->uid = $uid;
-        $system = new \system\System();
+        $this->system = new \system\System();
     }
 
     /*
