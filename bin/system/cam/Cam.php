@@ -80,7 +80,7 @@ class Cam implements ICam{
      * @return bool
      */
     private function canPlay(\CamPrefix $prefix){
-        return ($prefix && $this->live);
+        return ($prefix && $this->live && $prefix != 'mtn');
     }
 
     public function update()
