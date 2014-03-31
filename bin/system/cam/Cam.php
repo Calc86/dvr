@@ -80,7 +80,8 @@ class Cam implements ICam{
      * @return bool
      */
     private function canPlay(\CamPrefix $prefix){
-        return ($prefix && $this->live && $prefix != 'mtn');
+        //нужно вытянуть одну из переменных $this->live, $this->mtn, $this->rec
+        return ($this->$prefix && $this->live && $prefix != 'mtn');
     }
 
     public function update()
@@ -90,8 +91,7 @@ class Cam implements ICam{
             // всё зависит от live)
             /** @var ICamStream $stream */
             if($this->canPlay(new \CamPrefix($pref))){
-                //Так как логики еще нет, то пропускаем
-                if($pref == \CamPrefix::MOTION) continue;
+                if($pref == \CamPrefix::MOTION) continue; //Так как логики еще нет, то пропускаем
                 //выполняем "магические функции"
                 if($pref != \CamPrefix::LIVE) $stream->update();
             }else{

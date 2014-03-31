@@ -29,6 +29,7 @@ define('BIN',DIR.'/bin');
 define('ETC',DIR.'/etc');
 define('PROC',DIR.'/proc');
 define('LOG',DIR.'/log');
+define('TMP',DIR.'/tmp');
 
 if(file_exists(DIR.'/../devel')){
     define ('TARGET','_devel');
