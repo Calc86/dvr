@@ -23,12 +23,12 @@ class MotionConfig {
         /**
          * Array
         (
-        [0] => Array
-        (
-        [0] => {log_level:6}
-        [1] => log_level
-        [2] => 6
-        )
+            [0] => Array
+            (
+                [0] => {log_level:6}
+                [1] => log_level
+                [2] => 6
+            )
          */
         $pattern = "/[{]([a-z_]*)[:]?([a-z0-9]*)[}]/";
         $matches = array();
