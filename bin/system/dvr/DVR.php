@@ -13,11 +13,7 @@ namespace system;
  * Система управления камерами
  * @package system
  */
-abstract class DVR implements IDVR {
-    /**
-     * @var \UserID
-     */
-    private $uid;
+abstract class DVR extends Daemon implements IDVR {
 
     /**
      * @var ICamCreator
@@ -29,7 +25,7 @@ abstract class DVR implements IDVR {
      */
     function __construct(\UserID $uid)
     {
-        $this->uid = $uid;
+        parent::__construct($uid, 'dvr');
     }
 
     /**
@@ -58,31 +54,6 @@ abstract class DVR implements IDVR {
         return $this->getCams()[$camID->get()];
     }
 
-
-    /**
-     * @return \UserID
-     */
-    public function getUid()
-    {
-        return $this->uid;
-    }
-
-    public function restart()
-    {
-        $this->stop();
-        $this->start();
-    }
-
-    public function startup()
-    {
-        $this->shutdown();
-        $this->start();
-    }
-
-    public function shutdown(){
-        $this->stop();
-    }
-
     /**
      * time routine
      * @return void
@@ -94,6 +65,4 @@ abstract class DVR implements IDVR {
             $cam->update();
         }
     }
-
-
 } 

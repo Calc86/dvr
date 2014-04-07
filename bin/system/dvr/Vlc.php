@@ -14,23 +14,6 @@ namespace system;
  * @package system
  */
 class Vlc extends DVR{
-    private $dirs = array(
-        //'bin',
-        'etc', 'proc', 'rec', 'mtn', 'log', 'img', 'tmp'
-    );
-
-    /**
-     * @var \FilePath
-     */
-    private $pidFile;
-    /**
-     * @var \FilePath
-     */
-    private $vlmFile;
-    /**
-     * @var \FilePath
-     */
-    private $logFile;
     /**
      * @var \FilePath
      */
@@ -46,6 +29,11 @@ class Vlc extends DVR{
     private $telnetPort;
 
     /**
+     * @var Motion
+     */
+    private $motion;
+
+    /**
      * @param \UserID $uid
      */
     function __construct(\UserID $uid)
@@ -54,15 +42,10 @@ class Vlc extends DVR{
 
         $this->setHttpPort(new \Port(HTSTART + $this->getUid()->get()));
         $this->setTelnetPort(new \Port(TLSTART + $this->getUid()->get()));
-
-        $this->setLogFile(new \FilePath(LOG."/{$this->getUid()}/vlc.log"));
         $this->setLogrotateFile(new \FilePath(ETC."/{$this->getUid()}/logrotate.conf"));
-        $this->setPidFile(new \FilePath(PROC."/{$this->getUid()}/vlc.pid"));
-        $this->setVlmFile(new \FilePath(ETC."/{$this->getUid()}/config.vlm"));
-
         $this->setCams(new MysqlCamCreator($this->getUid()));
 
-        $this->create_user_dirs();
+        $this->motion = new Motion($this->getUid());
     }
 
     /**
@@ -79,22 +62,6 @@ class Vlc extends DVR{
     private function getHttpPort()
     {
         return $this->httpPort;
-    }
-
-    /**
-     * @param \FilePath $logFile
-     */
-    private function setLogFile(\FilePath $logFile)
-    {
-        $this->logFile = $logFile;
-    }
-
-    /**
-     * @return \FilePath
-     */
-    private function getLogFile()
-    {
-        return $this->logFile;
     }
 
     /**
@@ -115,22 +82,6 @@ class Vlc extends DVR{
     }
 
     /**
-     * @param \FilePath $pidFile
-     */
-    private function setPidFile(\FilePath $pidFile)
-    {
-        $this->pidFile = $pidFile;
-    }
-
-    /**
-     * @return \FilePath
-     */
-    private function getPidFile()
-    {
-        return $this->pidFile;
-    }
-
-    /**
      * @param \Port $telnetPort
      */
     private function setTelnetPort(\Port $telnetPort)
@@ -146,23 +97,6 @@ class Vlc extends DVR{
         return $this->telnetPort;
     }
 
-    /**
-     * @param \FilePath $vlmFile
-     */
-    private function setVlmFile(\FilePath $vlmFile)
-    {
-        $this->vlmFile = $vlmFile;
-    }
-
-    /**
-     * @return \FilePath
-     */
-    /** @noinspection PhpUnusedPrivateMethodInspection */
-    private function getVlmFile()
-    {
-        return $this->vlmFile;
-    }
-
     public function start()
     {
         $this->mount();
@@ -173,11 +107,18 @@ class Vlc extends DVR{
             /** @var Cam $cam */
             $cam->create();
             $cam->start();
+
+            $camMotion = $cam->getCamMotion();
+            if($camMotion != null ) $this->motion->addThread($camMotion);
         }
+
+        $this->motion->start();
     }
 
     public function stop()
     {
+        $this->motion->stop();
+
         foreach($this->getCams() as $cam){
             /** @var Cam $cam */
             $cam->stop();
@@ -196,15 +137,6 @@ class Vlc extends DVR{
             $telnet->write('shutdown');
             echo $telnet->read();
         }
-    }
-
-    /**
-     * @return bool
-     */
-    public function isStarted()
-    {
-        // TODO проверять на открытость портов и возвращать результат (телнет и хттп)
-        return false;
     }
 
     public function kill()
@@ -247,23 +179,8 @@ class Vlc extends DVR{
             $nas->un_mount();
     }
 
-    private function create_user_dirs() {
-        foreach($this->dirs as $dir){
-            $path = DIR."/$dir/".$this->getUid();
-            if(!is_dir($path)){
-                try{
-                    mkdir($path, 0775);
-                }
-                catch (\Exception $e)
-                {
-                    throw new \PathException($path);
-                }
-            }
-        }
-    }
-
     /**
-     * @return bool
+     * @return boolean
      */
     private function start_vlc(){
         $vlc_vlm = '';
@@ -272,7 +189,7 @@ class Vlc extends DVR{
         $vlc_logs = "--extraintf=http:logger --file-logging --log-verbose 0 --logfile {$this->getLogFile()}";
         $vlc_shell = VLCBIN." --ffmpeg-hw --http-reconnect --http-continuous --sout-keep ".VLCD." $vlc_ifs  --repeat --loop --network-caching ".VLCNETCACHE." --sout-mux-caching ".VLCSOUTCACHE." $vlc_vlm --pidfile {$this->getPidFile()} $vlc_logs \n";
 
-        if(is_file($this->getPidFile())){
+        if($this->isStarted()){
             echo $this->error(__LINE__, "VLC для пользователя {$this->getUid()} уже запущен или мертв");
             return false;
         }
@@ -282,14 +199,7 @@ class Vlc extends DVR{
         return true;
     }
 
-    /**
-     * @param $line
-     * @param $text
-     * @return string
-     */
-    private function error($line,$text) {
-        return 'ERROR: ('.__FILE__.' line:'.$line.') '.$text."\n";
-    }
+
 
     private function wait_for_unix_proc_start(){
         sleep(1);

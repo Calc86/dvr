@@ -15,6 +15,7 @@ namespace system;
  */
 class Cam implements ICam{
     private $id;
+    private $ip;
     // From mysql
     private $live;
 
@@ -22,6 +23,11 @@ class Cam implements ICam{
         $rec;
     private /** @noinspection PhpUnusedPrivateFieldInspection */
         $mtn;
+
+    /**
+     * @var CamMotion
+     */
+    private $camMotion;
 
     private $dvr_id;
     /**
@@ -36,6 +42,36 @@ class Cam implements ICam{
     {
         $this->dvr_id = $dvr_id;
         $this->csc = new MysqlCamStreamCreator($dvr_id, new \CamID($this->id));
+    }
+
+    /**
+     * @return \system\CamMotion
+     */
+    public function getCamMotion()
+    {
+        return $this->camMotion;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIp()
+    {
+        return $this->ip;
+    }
+
+    /**
+     * @param CamMotion
+     * @return CamMotion
+     */
+    public function setCamMotion(CamMotion $camMotion){
+        if($this->mtn){
+            $this->camMotion = $camMotion;
+        }
+        else
+        {
+            $this->camMotion = null;
+        }
     }
 
     /**

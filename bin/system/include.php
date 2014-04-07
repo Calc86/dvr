@@ -9,6 +9,13 @@
 require_once dirname(__FILE__).'/System.php';
 require_once dirname(__FILE__).'/User.php';
 
+require_once dirname(__FILE__).'/Daemon.php';
+
+require_once dirname(__FILE__).'/cam/CamMotion.php';
+
+require_once dirname(__FILE__).'/cam/mysql/MysqlCamMotion.php';
+require_once dirname(__FILE__).'/motion/Motion.php';
+require_once dirname(__FILE__).'/motion/MotionConfig.php';
 require_once dirname(__FILE__).'/dvr/IDVR.php';
 require_once dirname(__FILE__).'/dvr/DVR.php';
 require_once dirname(__FILE__).'/dvr/Vlc.php';

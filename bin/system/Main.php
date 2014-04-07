@@ -29,6 +29,12 @@ switch($cmd){
         if($argc<3) {echo usage(); break;};
         $s->user_stop(new UserID($argv[2]));
         break;
+    case 'restart':
+        if($argc<3) {echo usage(); break;};
+        $s->user_stop(new UserID($argv[2]));
+        sleep(1);
+        $s->user_start(new UserID($argv[2]));
+        break;
     case 'c_start':
         if($argc<5) {echo usage(); break;};
         $s->cam_play(new UserID($argv[2]), new CamID($argv[3]), new CamPrefix($argv[4]));
@@ -52,6 +58,6 @@ switch($cmd){
  * @return string
  */
 function usage(){
-    return "startup/shutdown/start(u)/stop(u)/c_start(p,c,p)/u_stop(u,c,p)/c_update(u,c)/update\n";
+    return "startup/shutdown/start(u)/stop(u)/restart(u)/c_start(p,c,p)/u_stop(u,c,p)/c_update(u,c)/update\n";
 }
 
