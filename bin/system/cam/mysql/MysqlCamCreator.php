@@ -44,7 +44,7 @@ class MysqlCamCreator implements ICamCreator {
         while(($row = $r->fetch_object('system\Cam',array($this->dvr_id))) != null){
             /** @var Cam $row */
             //залить параметры
-            $camMotion = new MysqlCamMotion(new \CamID($row->getID()), $row->getIp());
+            $camMotion = new MysqlCamMotion($this->dvr_id, new \CamID($row->getID()), $row->getIp());
             $row->setCamMotion($camMotion);
 
             $this->cams[$row->getMysqlId()] = $row;

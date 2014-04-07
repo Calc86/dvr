@@ -119,6 +119,8 @@ class Vlc extends DVR{
     {
         $this->motion->stop();
 
+        if(!$this->isStarted()) return;
+
         foreach($this->getCams() as $cam){
             /** @var Cam $cam */
             $cam->stop();
@@ -137,26 +139,6 @@ class Vlc extends DVR{
             $telnet->write('shutdown');
             echo $telnet->read();
         }
-    }
-
-    public function kill()
-    {
-        $pid = `cat {$this->getPidFile()}`;
-        if($pid != 0 && $pid != '')
-            (new \BashCommand("kill $pid"))->exec();
-        $pid = $this->getProcess();
-        if($pid != 0 && $pid != '')
-            (new \BashCommand("kill $pid"))->exec();
-        if(is_file($this->getPidFile())) unlink($this->getPidFile());
-    }
-
-    /**
-     * @return int proc
-     */
-    private function getProcess() {
-        $ps = "ps -aef | grep vlc | grep /proc/{$this->getUid()} | grep -v grep | awk ' {print $2} '";
-        $proc = (int)shell_exec($ps);
-        return $proc;
     }
 
     ////////// VLC Function

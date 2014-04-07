@@ -16,28 +16,65 @@ namespace system;
 class CamMotion {
 
     /**
+     * @var \UserID
+     */
+    private $dvrID;
+
+    /**
      * @var  \CamID
      */
-    private $id;
+    private $camID;
+
     /**
      * @var array key=>value
      */
     private $config;
 
+    private $targetDir;
+
     /**
-     * @param \CamID $id
+     * @param \UserID $dvrID
+     * @param \CamID $camID
      */
-    function __construct($id)
+    function __construct(\UserID $dvrID, \CamID $camID)
     {
-        $this->id = $id;
+        $this->dvrID = $dvrID;
+        $this->camID = $camID;
+        $this->targetDir = IMG."/".$this->getDvrID()."/".$this->getCamID();
+
+        if(!is_dir($this->targetDir)){
+            mkdir($this->targetDir);
+        }
+        $this->setDefaultValues();
+    }
+
+    protected function setDefaultValues(){
+        $this->addConfig('target_dir', $this->getTargetDir());
+        $this->addConfig('snapshot_filename', '%Y-%m-%d/%v-%H_%M_%S-snapshot');
+    }
+
+    /**
+     * @return string
+     */
+    public function getTargetDir()
+    {
+        return $this->targetDir;
     }
 
     /**
      * @return \CamID
      */
-    public function getId()
+    public function getCamID()
     {
-        return $this->id;
+        return $this->camID;
+    }
+
+    /**
+     * @return \UserID
+     */
+    public function getDvrID()
+    {
+        return $this->dvrID;
     }
 
     /**
@@ -45,7 +82,9 @@ class CamMotion {
      */
     public function setConfig($config)
     {
-        $this->config = $config;
+        foreach($config as $k=>$v){
+            $this->addConfig($k,$v);
+        }
     }
 
     /**

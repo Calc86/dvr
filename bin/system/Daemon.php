@@ -142,7 +142,7 @@ abstract class Daemon {
     public abstract function stop();
 
     public function restart(){
-        $this->stop();
+        if($this->isStarted()) $this->stop();
         $this->start();
     }
 
@@ -160,9 +160,10 @@ abstract class Daemon {
      * @return boolean
      */
     public function isStarted(){
-        if(is_file($this->getPidFile())){
+        if(is_file($this->getPidFile()))
             return true;
-        }
+        if($this->getProcess() != "")
+            return true;
         return false;
     }
 

@@ -14,15 +14,16 @@ namespace system;
  */
 class MysqlCamMotion extends CamMotion {
     /**
-     * @param \CamID $id
+     * @param \UserID $dvrID
+     * @param \CamID $camID
      * @param $ip
      */
-    function __construct(\CamID $id, $ip)
+    function __construct(\UserID $dvrID, \CamID $camID, $ip)
     {
-        parent::__construct($id);
+        parent::__construct($dvrID, $camID);
 
         $db = \Database::getInstance();
-        $q = "select name,value from motion where cam_id = {$this->getID()}";
+        $q = "select name,value from motion where cam_id = {$this->getCamID()}";
         $r = $db->query($q);
 
         $config = array();
@@ -31,7 +32,7 @@ class MysqlCamMotion extends CamMotion {
         }
         $this->setConfig($config);
 
-        $q = "select stop_user, stop_pass, stop_proto, stop_port, stop_path from cam_settings where cam_id=$id";
+        $q = "select stop_user, stop_pass, stop_proto, stop_port, stop_path from cam_settings where cam_id=$camID";
         $r = $db->query($q);
         //Ошибки быть не должно, так как по дереву выше делаем выборку на id
         $s = $r->fetch_assoc();

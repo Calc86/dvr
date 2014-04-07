@@ -30,6 +30,7 @@ define('ETC', realpath(DIR.'/etc'));
 define('PROC', realpath(DIR.'/proc'));
 define('LOG', realpath(DIR.'/log'));
 define('TMP', realpath(DIR.'/tmp'));
+define('IMG', realpath(DIR.'/img'));
 
 if(file_exists(DIR.'/../devel')){
     define ('TARGET','_devel');
@@ -70,6 +71,13 @@ define('VLCD','-d');
 define('VLCNETCACHE',500);
 define('VLCSOUTCACHE',200);
 
+//FOR MOTION
+define('MOTION_HTTP_PORT', 33300);
+define('MOTION_HTTP_USER', 'motion');
+define('MOTION_HTTP_PASS', '12345');
+define('MOTION_HTTP_LOCALHOST', 'off');
+define('MOTION_HTTP_HTML', 'on');
+
 require_once BIN.'/class/Database.php';
 require_once BIN.'/class/exceptions.class.php';
 require_once BIN.'/class/types.class.php';
@@ -79,7 +87,15 @@ require_once BIN."/class/vlm.class.php";
 require_once BIN.'/class/nas.class.php';
 require_once BIN.'/class/vlc.class.php';
 
-
+/**
+ * @param $h
+ * @param $u
+ * @param $p
+ * @param $n
+ * @param int $utf
+ * @return mysqli
+ * @throws MysqlQueryException
+ */
 function open_db($h,$u,$p,$n,$utf=1) {
     $db = new mysqli($h,$u,$p,$n);
     if($utf){
@@ -91,6 +107,9 @@ function open_db($h,$u,$p,$n,$utf=1) {
     return $db;
 }
 
+/**
+ * @return float
+ */
 function microtime_float()
 {
     list($usec, $sec) = explode(" ", microtime());
