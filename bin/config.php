@@ -24,12 +24,12 @@ function handleError($err_no, $err_str, $err_file, $err_line, array $err_context
 }
 set_error_handler('handleError', E_ALL);
 
-define('DIR',dirname(__FILE__).'/..');
-define('BIN',DIR.'/bin');
-define('ETC',DIR.'/etc');
-define('PROC',DIR.'/proc');
-define('LOG',DIR.'/log');
-define('TMP',DIR.'/tmp');
+define('DIR', realpath(dirname(__FILE__).'/..'));
+define('BIN', realpath(DIR.'/bin'));
+define('ETC', realpath(DIR.'/etc'));
+define('PROC', realpath(DIR.'/proc'));
+define('LOG', realpath(DIR.'/log'));
+define('TMP', realpath(DIR.'/tmp'));
 
 if(file_exists(DIR.'/../devel')){
     define ('TARGET','_devel');

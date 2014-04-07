@@ -118,4 +118,16 @@ class System {
     public function cam_update(\UserID $userID, \CamID $camID){
         (new User($userID, new Vlc($userID)))->getDvr()->getCam($camID)->update();
     }
+
+    /**
+     * @param \UserID $userID
+     * @param \CamID $camID
+     */
+    public function cam_reload(\UserID $userID, \CamID $camID){
+        $cam = (new User($userID, new Vlc($userID)))->getDvr()->getCam($camID);
+        $cam->stop();
+        $cam->delete();
+        $cam->create();
+        $cam->start();
+    }
 }
