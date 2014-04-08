@@ -42,7 +42,6 @@ class MysqlCamMotion extends CamMotion {
 
         $config = array();
         while(($row = $r->fetch_row()) != null){
-            print_r($row);
             $config[$row[0]] = $row[1];
         }
         $this->setConfig($config);
