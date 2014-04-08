@@ -32,6 +32,12 @@ interface IDVR {
     public function update();
 
     /**
+     * rerun live stream (to avoid disconnect and broken pipe
+     * @return void
+     */
+    public function live();
+
+    /**
      * @param \CamID $camID
      * Отдать камеру по id
      * @return Cam

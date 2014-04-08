@@ -59,6 +59,26 @@ class System {
         }
     }
 
+    public function live(){
+        $db = \Database::getInstance();
+        $q = "select id from users where banned=0";
+        $r = $db->query($q);
+        while(($row = $r->fetch_row())){
+            try{
+                $dvr = new Vlc(new \UserID($row[0]));
+                $user = new User(new \UserID($row[0]), $dvr);
+
+                $user->getDvr()->live();
+            }
+            catch(\Exception $e){
+                echo "==========\n";
+                echo $e->getCode().' '.$e->getMessage()."\n";
+                echo $e->getTraceAsString()."\n";
+                echo "\n\n";
+            }
+        }
+    }
+
     public function update(){
         $db = \Database::getInstance();
         $q = "select id from users where banned=0";

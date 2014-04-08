@@ -120,6 +120,18 @@ class Cam implements ICam{
         return ($this->$prefix && $this->live && $prefix != 'mtn');
     }
 
+    public function live(){
+        $stream = $this->getStreams()[\CamPrefix::LIVE];
+        /** @var ICamStream $stream */
+
+        if($this->canPlay(new \CamPrefix(\CamPrefix::LIVE))){
+            $stream->start();
+        }else{
+            //Если в БД 0 => Стопим камеру
+            $stream->stop();
+        }
+    }
+
     public function update()
     {
         foreach(\CamPrefix::getPrefixes() as $pref){

@@ -54,6 +54,13 @@ abstract class DVR extends Daemon implements IDVR {
         return $this->getCams()[$camID->get()];
     }
 
+    public function live(){
+        foreach($this->getCams() as $cam){
+            /** @var Cam $cam */
+            $cam->live();
+        }
+    }
+
     /**
      * time routine
      * @return void

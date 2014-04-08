@@ -47,6 +47,16 @@ switch($cmd){
         if($argc<4) {echo usage(); break;};
         $s->cam_update(new UserID($argv[2]), new CamID($argv[3]));
         break;
+    case 'live':
+        /**
+         * заглушка для восстановления связи раз в 10 секунд на канале live
+         */
+        $start = time();
+        while((time() - $start) < 40){
+            $s->live();
+            sleep(10);
+        }
+        break;
     case 'update':
         $s->update();
         break;
@@ -58,6 +68,6 @@ switch($cmd){
  * @return string
  */
 function usage(){
-    return "startup/shutdown/start(u)/stop(u)/restart(u)/c_start(p,c,p)/u_stop(u,c,p)/c_update(u,c)/update\n";
+    return "startup/shutdown/start(u)/stop(u)/restart(u)/c_start(p,c,p)/u_stop(u,c,p)/c_update(u,c)/update/live\n";
 }
 
