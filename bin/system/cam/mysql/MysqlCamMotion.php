@@ -23,14 +23,6 @@ class MysqlCamMotion extends CamMotion {
         parent::__construct($dvrID, $camID);
 
         $db = \Database::getInstance();
-        $q = "select name,value from motion where cam_id = {$this->getCamID()}";
-        $r = $db->query($q);
-
-        $config = array();
-        while(($row = $r->fetch_row()) != null){
-            $config[$row[0]] = $row[1];
-        }
-        $this->setConfig($config);
 
         $q = "select stop_user, stop_pass, stop_proto, stop_port, stop_path from cam_settings where cam_id=$camID";
         $r = $db->query($q);
@@ -44,5 +36,15 @@ class MysqlCamMotion extends CamMotion {
             $userPass = $s['stop_user'].":".$s['stop_pass'];
             $this->addConfig('netcam_userpass', $userPass);
         }
+
+        $q = "select name,value from motion where cam_id = {$this->getCamID()}";
+        $r = $db->query($q);
+
+        $config = array();
+        while(($row = $r->fetch_row()) != null){
+            print_r($row);
+            $config[$row[0]] = $row[1];
+        }
+        $this->setConfig($config);
     }
 }

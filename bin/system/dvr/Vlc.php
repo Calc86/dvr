@@ -139,6 +139,10 @@ class Vlc extends DVR{
             $telnet->write('shutdown');
             echo $telnet->read();
         }
+        while($this->isStarted()){
+            var_dump($this->isStarted());
+            sleep(1);
+        }
     }
 
     ////////// VLC Function

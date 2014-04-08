@@ -63,6 +63,7 @@ abstract class Daemon {
     private function getProcess() {
         $ps = "ps -aef | grep /proc/{$this->getUid()}/{$this->getName()} | grep -v grep | awk ' {print $2} '";
         $proc = (int)shell_exec($ps);
+        var_dump($proc);
         return $proc;
     }
 
@@ -160,9 +161,9 @@ abstract class Daemon {
      * @return boolean
      */
     public function isStarted(){
-        if(is_file($this->getPidFile()))
+        if(file_exists($this->getPidFile()))
             return true;
-        if($this->getProcess() != "")
+        if($this->getProcess())
             return true;
         return false;
     }
