@@ -13,15 +13,15 @@ namespace system;
  * Просто контейнет для камеры
  * @package system
  */
-class Cam implements ICam{
-    private $id;
-    private $ip;
+abstract class Cam implements ICam{
+    protected $id;
+    protected $ip;
     // From mysql
-    private $live;
+    protected $live;
 
-    private /** @noinspection PhpUnusedPrivateFieldInspection */
+    protected /** @noinspection PhpUnusedPrivateFieldInspection */
         $rec;
-    private /** @noinspection PhpUnusedPrivateFieldInspection */
+    protected /** @noinspection PhpUnusedPrivateFieldInspection */
         $mtn;
 
     /**
@@ -41,7 +41,6 @@ class Cam implements ICam{
     function __construct(\UserID $dvr_id)
     {
         $this->dvr_id = $dvr_id;
-        $this->csc = new MysqlCamStreamCreator($dvr_id, new \CamID($this->id));
     }
 
     /**
@@ -188,5 +187,51 @@ class Cam implements ICam{
         return $this->id;
     }
 
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 
+    /**
+     * @param mixed $ip
+     */
+    public function setIp($ip)
+    {
+        $this->ip = $ip;
+    }
+
+    /**
+     * @param mixed $live
+     */
+    public function setLive($live)
+    {
+        $this->live = $live;
+    }
+
+    /**
+     * @param mixed $mtn
+     */
+    public function setMtn($mtn)
+    {
+        $this->mtn = $mtn;
+    }
+
+    /**
+     * @param mixed $rec
+     */
+    public function setRec($rec)
+    {
+        $this->rec = $rec;
+    }
+
+    /**
+     * @param \system\ICamStreamCreator $csc
+     */
+    public function setCamStreamCreator($csc)
+    {
+        $this->csc = $csc;
+    }
 } 

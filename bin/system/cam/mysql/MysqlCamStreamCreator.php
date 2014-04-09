@@ -18,17 +18,7 @@ class MysqlSqlCamStreamCreatorException extends \BBException{};
  * Class MysqlCamStreamCreator
  * @package system
  */
-class MysqlCamStreamCreator implements ICamStreamCreator{
-    private $dvr_id;
-    private $cam_id;
-
-    /**
-     * @var array of [stream]ICamStream
-     */
-    private $streams;
-
-    private $position = 0;
-
+class MysqlCamStreamCreator extends CamStreamCreator{
     /**
      * @param \UserID $dvr_id
      * @param \CamID $cam_id
@@ -36,8 +26,7 @@ class MysqlCamStreamCreator implements ICamStreamCreator{
      */
     function __construct(\UserID $dvr_id, \CamID $cam_id)
     {
-        $this->dvr_id = $dvr_id;
-        $this->cam_id = $cam_id;
+        parent::__construct($dvr_id, $cam_id);
 
         $db = \Database::getInstance();
         $q = "select c.id as cam_id, ip, user, c.pass as pass, live, rec, mtn, live_auth, live_user, live_pass, live_proto, live_port, live_path, live_width, live_height, live_audio, stream_port, stream_path  from cams as c, cam_settings as cs where c.id=cs.cam_id and c.id=$this->cam_id";
@@ -54,7 +43,8 @@ class MysqlCamStreamCreator implements ICamStreamCreator{
             throw new MysqlSqlCamStreamCreatorException($q);
         }
 
-        $csTemp = $r->fetch_object("system\MysqlCamStream");
+        //$csTemp = $r->fetch_object("system\MysqlCamStream");
+        $csTemp = $r->fetch_object("system\CamStream");
         foreach(\CamPrefix::getPrefixes() as $pref){
             /** @var MysqlCamStream $csTemp */
             $csTemp->setDvrId($this->dvr_id);
@@ -62,70 +52,5 @@ class MysqlCamStreamCreator implements ICamStreamCreator{
             $csTemp->setPrefix(new \CamPrefix($pref));
             $this->streams[$pref] = clone $csTemp;
         }
-    }
-
-
-    /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Return the current element
-     * @link http://php.net/manual/en/iterator.current.php
-     * @return ICamStream.
-     */
-    public function current()
-    {
-        return $this->streams[\CamPrefix::getPrefixes()[$this->position]];
-    }
-
-    /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Move forward to next element
-     * @link http://php.net/manual/en/iterator.next.php
-     * @return void Any returned value is ignored.
-     */
-    public function next()
-    {
-        ++$this->position;
-    }
-
-    /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Return the key of the current element
-     * @link http://php.net/manual/en/iterator.key.php
-     * @return mixed scalar on success, or null on failure.
-     */
-    public function key()
-    {
-        $this->position;
-    }
-
-    /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Checks if current position is valid
-     * @link http://php.net/manual/en/iterator.valid.php
-     * @return boolean The return value will be casted to boolean and then evaluated.
-     * Returns true on success or false on failure.
-     */
-    public function valid()
-    {
-        return isset($this->streams[\CamPrefix::getPrefixes()[$this->position]]);
-    }
-
-    /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Rewind the Iterator to the first element
-     * @link http://php.net/manual/en/iterator.rewind.php
-     * @return void Any returned value is ignored.
-     */
-    public function rewind()
-    {
-        $this->position = 0;
-    }
-
-    /**
-     * @return array of ICamStream
-     */
-    public function getStreams()
-    {
-        return $this->streams;
     }
 }

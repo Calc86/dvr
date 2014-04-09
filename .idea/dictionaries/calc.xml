@@ -2,6 +2,7 @@
   <dictionary name="calc">
     <words>
       <w>devel</w>
+      <w>dirname</w>
       <w>fstab</w>
       <w>idvr</w>
       <w>mtab</w>

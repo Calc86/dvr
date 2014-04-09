@@ -29,23 +29,17 @@ class Vlc extends DVR{
     private $telnetPort;
 
     /**
-     * @var Motion
-     */
-    private $motion;
-
-    /**
      * @param \UserID $uid
+     * @param CamCreator $camCreator
      */
-    function __construct(\UserID $uid)
+    function __construct(\UserID $uid, CamCreator $camCreator)
     {
         parent::__construct($uid);
 
         $this->setHttpPort(new \Port(HTSTART + $this->getUid()->get()));
         $this->setTelnetPort(new \Port(TLSTART + $this->getUid()->get()));
         $this->setLogrotateFile(new \FilePath(ETC."/{$this->getUid()}/logrotate.conf"));
-        $this->setCams(new MysqlCamCreator($this->getUid()));
-
-        $this->motion = new Motion($this->getUid());
+        $this->setCams($camCreator);
     }
 
     /**
@@ -107,18 +101,11 @@ class Vlc extends DVR{
             /** @var Cam $cam */
             $cam->create();
             $cam->start();
-
-            $camMotion = $cam->getCamMotion();
-            if($camMotion != null ) $this->motion->addThread($camMotion);
         }
-
-        $this->motion->start();
     }
 
     public function stop()
     {
-        $this->motion->stop();
-
         if(!$this->isStarted()) return;
 
         foreach($this->getCams() as $cam){
@@ -190,4 +177,4 @@ class Vlc extends DVR{
     private function wait_for_unix_proc_start(){
         sleep(1);
     }
-} 
+}

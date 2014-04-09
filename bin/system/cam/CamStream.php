@@ -2,19 +2,18 @@
 /**
  * Created by PhpStorm.
  * User: calc
- * Date: 29.03.14
- * Time: 19:13
+ * Date: 09.04.14
+ * Time: 14:45
  */
 
 namespace system;
 
 /**
- * Class MysqlCamStream
+ * Class CamStream
  * @package system
- * @deprecated Use CamStream instead
  */
-class MysqlCamStream implements ICamStream {
-    //from MysqlCamStreamConstructor
+class CamStream implements ICamStream{
+    //from *CamStreamConstructor
     private $live_proto;
     private $ip;
     private $live_path;
@@ -51,13 +50,6 @@ class MysqlCamStream implements ICamStream {
                 $this->cc = new \cam_control($this->dvr_id, $this->cam_id, $prefix);
         }
 
-    }
-
-    /**
-     * @return \Port
-     */
-    protected function getStreamPort(){
-        return new \Port($this->cam_id->get()+9000);
     }
 
     /**
@@ -120,6 +112,13 @@ class MysqlCamStream implements ICamStream {
     }
 
     /**
+     * @return \Port
+     */
+    protected function getStreamPort(){
+        return new \Port($this->cam_id->get()+9000);
+    }
+
+    /**
      * @return \VLMOutput
      */
     private function getOutputString(){
@@ -164,4 +163,86 @@ class MysqlCamStream implements ICamStream {
     {
         return $this->prefix;
     }
-}
+
+    /**
+     * @param mixed $ip
+     */
+    public function setIp($ip)
+    {
+        $this->ip = $ip;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIp()
+    {
+        return $this->ip;
+    }
+
+    /**
+     * @param mixed $live_path
+     */
+    public function setLivePath($live_path)
+    {
+        $this->live_path = $live_path;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLivePath()
+    {
+        return $this->live_path;
+    }
+
+    /**
+     * @param mixed $live_port
+     */
+    public function setLivePort($live_port)
+    {
+        $this->live_port = $live_port;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLivePort()
+    {
+        return $this->live_port;
+    }
+
+    /**
+     * @param mixed $live_proto
+     */
+    public function setLiveProto($live_proto)
+    {
+        $this->live_proto = $live_proto;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLiveProto()
+    {
+        return $this->live_proto;
+    }
+
+    /**
+     * @param mixed $stream_path
+     */
+    public function setStreamPath($stream_path)
+    {
+        $this->stream_path = $stream_path;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStreamPath()
+    {
+        return $this->stream_path;
+    }
+
+
+} 
