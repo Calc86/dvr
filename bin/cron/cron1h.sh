@@ -6,5 +6,6 @@ DIR=$VLCDIR
 BIN=$DIR/bin
 ETC=$DIR/etc
 
-php $BIN/system/Main.php update
-php $BIN/util/rec-pts.php &
+## очень большие проблемы с load average, скорее всего связано с количеством оперативки и NFS
+#php $BIN/system/Main.php update
+#php $BIN/util/rec-pts.php &
