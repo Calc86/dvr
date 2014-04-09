@@ -42,7 +42,7 @@ else if(file_exists(DIR.'/../test')){
 }
 else{
     define ('TARGET','');
-    define('LIVEHOST','10.154.28.191');
+    define('LIVEHOST','10.154.28.202');
 }
 
 
@@ -68,8 +68,8 @@ define('TLPWD','12345');
 define('HTSTART',8100);
 define('VLCBIN','cvlc');
 define('VLCD','-d');
-define('VLCNETCACHE', 5000);
-define('VLCSOUTCACHE',5000);
+define('VLCNETCACHE', 500);
+define('VLCSOUTCACHE',200);
 
 //FOR MOTION
 define('MOTION_HTTP_PORT', 33300);
