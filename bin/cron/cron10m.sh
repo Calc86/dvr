@@ -6,8 +6,8 @@ DIR=$VLCDIR
 BIN=$DIR/bin
 ETC=$DIR/etc
  
-#php $BIN/control/restart_record.php
-#php $BIN/system/Main.php update
+php $BIN/control/restart_record.php
+php $BIN/system/Main.php update
 
 # очистим ненужные записи
 # php $BIN/util/rec-clear.php

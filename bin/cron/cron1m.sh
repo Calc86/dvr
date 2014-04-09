@@ -6,5 +6,5 @@ BIN=$DIR/bin
 
 # php $BIN/system/Main.php live >>/dev/null &
 
-php $BIN/system/Main.php update
-php $BIN/util/rec-pts.php &
+#php $BIN/system/Main.php update
+#php $BIN/util/rec-pts.php &
