@@ -10,7 +10,7 @@ require_once dirname(__FILE__).'/../config.php';
 require_once dirname(__FILE__).'/include.php';
 
 //$s = new \system\System();
-$s = new \system\FileSystem("./tv.m3u");
+$s = new \system\FileSystem("/home/vlc/vlc/bin/system/tv.m3u");
 if($argc<2) die(usage());
 
 $cmd = $argv[1];
