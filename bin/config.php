@@ -42,7 +42,7 @@ else if(file_exists(DIR.'/../test')){
 }
 else{
     define ('TARGET','');
-    define('LIVEHOST','10.154.28.202');
+    define('LIVEHOST','10.154.28.191');
 }
 
 
