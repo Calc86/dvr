@@ -6,7 +6,7 @@ DIR=$VLCDIR
 BIN=$DIR/bin
 ETC=$DIR/etc
  
-php $BIN/control/restart_record.php
+#php $BIN/control/restart_record.php
 php $BIN/system/Main.php update
 
 # очистим ненужные записи
@@ -23,4 +23,4 @@ find $DIR/mtn -empty -mtime +1 -delete
 #  /sbin/logrotate -s /dev/null $i >> /dev/null
 #done
 
-#php $BIN/util/rec-pts.php &
+php $BIN/util/rec-pts.php &
