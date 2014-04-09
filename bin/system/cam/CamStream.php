@@ -43,8 +43,8 @@ class CamStream implements ICamStream{
         switch($prefix){
             case \CamPrefix::RECORD:
             case \CamPrefix::MOTION:
-                $this->cc = new \cam_control_archive($this->dvr_id, $this->cam_id, $this->prefix);
-                break;
+                //$this->cc = new \cam_control_archive($this->dvr_id, $this->cam_id, $this->prefix);
+                //break;
             case \CamPrefix::LIVE:
             default:
                 $this->cc = new \cam_control($this->dvr_id, $this->cam_id, $prefix);
