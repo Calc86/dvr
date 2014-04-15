@@ -12,7 +12,7 @@ namespace system;
 abstract class Daemon {
     private $dirs = array(
         //'bin',
-        'etc', 'proc', 'rec', 'mtn', 'log', 'img', 'tmp'
+        'etc', 'proc', 'rec', 'pre_rec', 'mtn', 'log', 'img', 'tmp'
     );
     /**
      * @var String Daemon name
@@ -44,6 +44,10 @@ abstract class Daemon {
 
     private function createUserDirs() {
         foreach($this->dirs as $dir){
+            $path = DIR."/$dir/";
+            if(!is_dir($path)){
+                mkdir($path, 0775);
+            }
             $path = DIR."/$dir/".$this->getUid();
             if(!is_dir($path)){
                 try{

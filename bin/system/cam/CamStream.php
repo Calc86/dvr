@@ -81,7 +81,7 @@ class CamStream implements ICamStream{
         }
         catch(\Exception $e){
             echo "port $this->ip:$this->live_port closed\n";
-            echo $e->getMessage();
+            echo $e->getMessage()."\n";
         }
     }
 

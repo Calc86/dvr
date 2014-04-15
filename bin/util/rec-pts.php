@@ -22,12 +22,32 @@ if($nas->is_mount()){
         $time = time();
         $start = microtime_float();
         //ребилдим pts
-        if(file_exists($file.'.avi'))
+        /*if(file_exists($file.'.avi'))
             `ffmpeg -y -fflags +genpts -i $file.avi -codec copy $file.mp4 1>> /dev/null 2>>/dev/null`;
         //удаляем старый файл
         //todo: нужна проверка на примонтированность
         if(file_exists($file.'.mp4'))
-            `rm $file.avi 2>>/dev/null 1>>/dev/null`;
+            `rm $file.avi 2>>/dev/null 1>>/dev/null`;*/
+
+        //перемещаем файл
+        $path = str_replace('/rec/','/pre_rec/',$file);
+        $newPath = $file;
+        if(!is_dir(dirname($newPath))){
+            mkdir(dirname($newPath));
+        }
+        $ffmpeg = new BashCommand("ffmpeg -y -i $path.avi -codec copy $newPath.mp4\n");
+        echo $ffmpeg;
+        $ffmpeg->exec();
+        //если это какой либо мжпег поток
+        if(file_exists($newPath.'.mp4') && filesize($newPath.".mp4") == 0){
+            unlink($newPath.".mp4");
+            `mv $path.avi $newPath.avi`;
+        }
+        else{
+            if(file_exists($path.'.avi'))
+                unlink($path.".avi");
+        }
+
         $end = microtime_float();
         $r_time = $end-$start;
 

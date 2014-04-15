@@ -303,7 +303,7 @@ class cam_control extends cam_vlm{
         //$ret = "#std{access=http{mime=video/mp4},mux=ts{dts-delay=100},dst=*:$port/$path.mp4}";
         //$ret = "#std{access=http{mime=video/mp4},mux=ts,dst=*:$port/$path.mp4}";
         //return $ret;
-        return new VLMOutput("#std{access=http{mime=video/mp4},mux=ts{use-key-frame,pcr=100,dts-delay=100},dst=*:$port/$path.mp4}");
+        return new VLMOutput("#std{access=http{mime=video/mp4},mux=ts{use-key-frames},dst=*:$port/$path.mp4}");
     }
 
     /**
@@ -312,7 +312,7 @@ class cam_control extends cam_vlm{
      * @return VLMOutput
      */
     public function gen_rtmp_string(Port $port, Path $path){
-        return new VLMOutput("#transcode{venc=ffmpeg{keyint=1}}:std{access=http{mime=video/mp4},mux=ts,dst=*:$port/1$path");
+        return new VLMOutput("#transcode{venc=ffmpeg{keyint=1}}:std{access=http{mime=video/mp4},mux=ts{use-key-frames},dst=*:$port/1$path");
     }
 
     /**
@@ -320,7 +320,7 @@ class cam_control extends cam_vlm{
      * @return VLMOutput
      */
     public function gen_rec_string($path) {
-        return new VLMOutput("#std{access=file,mux=ts,dst=$path/rec.avi}");
+        return new VLMOutput("#std{access=file,mux=ts{use-key-frames},dst=$path/rec.avi}");
     }
 
     /**
@@ -347,14 +347,15 @@ class cam_control extends cam_vlm{
                 
                 //$path = "/home/calc/vlc/$this->pref/$this->org/$date";
                 //создаем папочку с сегодняшним числом
-                $path = DIR."/$this->pref/$this->uid/$date";
+                //пишеи в pre папку
+                $path = DIR."/pre_$this->pref/$this->uid/$date";
                 if(!file_exists($path)){
                     mkdir($path);
                 }
                 
                 //используем время в имени файла
                 $this->filename = $path.'/'.$time.'_'.$this->full;
-                $cmd = "#std{access=file,mux=ts,dst=$this->filename.avi}";
+                $cmd = "#std{access=file,mux=ts{use-key-frames},dst=$this->filename.avi}";
                 //echo $cmd;
                 if($new_file) $this->_setup($this->full, new VLMCommand($cmd));
                 $this->_control($this->full, new VLMCommand('play'));
@@ -374,7 +375,6 @@ class cam_control extends cam_vlm{
         //echo "STOP: $this->full\n";  // !!! не должно быть ни каких echo!!!
         $this->_control($this->full, new VLMCommand('stop'));
     }
-
     /**
      * @return string
      */
@@ -415,7 +415,23 @@ class cam_control_archive extends cam_control{
                 case CamPrefix::MOTION:
                     // занести информацию о нашем файле в базу
                     $now = time();
-                    $q_arc = "insert into archive values(0, $this->cid, '$this->pref', $now, 0, 0, 0, 'busy', 0, '$this->filename')";
+                    $path = $this->filename;
+                    $newPath = str_replace("pre_$this->pref", $this->pref, $this->filename);
+
+                    /*//перемещаем файл
+                    if(!is_dir(dirname($newPath))){
+                        mkdir(dirname($newPath));
+                    }
+                    $ffmpeg = new BashCommand("sleep 1; ffmpeg -y -i $path.avi -codec copy $newPath.mp4\n");
+                    echo $ffmpeg;
+                    $ffmpeg->exec();
+                    //если это какой либо мжпег поток
+                    if(filesize($newPath.".mp4") == 0){
+                        `mv $path.avi $newPath.avi`;
+                    }
+                    unlink($path.".avi");*/
+                    //$q_arc = "insert into archive values(0, $this->cid, '$this->pref', $now, 0, 0, 0, 'busy', 0, '$this->filename')";
+                    $q_arc = "insert into archive values(0, $this->cid, '$this->pref', $now, 0, 0, 0, 'busy', 0, '$newPath')";
                     if(!$db->query($q_arc)) throw new MysqlQueryException($q_arc);
 
                     break;
