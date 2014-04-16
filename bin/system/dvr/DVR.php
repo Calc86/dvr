@@ -67,9 +67,12 @@ abstract class DVR extends Daemon implements IDVR {
      */
     public function update()
     {
-        foreach($this->getCams() as $cam){
-            /** @var Cam $cam */
-            $cam->update();
+        //апдейт нужно делать только если запущен процесс, иначе будет много маленьких записей в архиве.... ы
+        if($this->isStarted()){
+            foreach($this->getCams() as $cam){
+                /** @var Cam $cam */
+                $cam->update();
+            }
         }
     }
 } 
