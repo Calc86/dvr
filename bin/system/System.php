@@ -62,7 +62,9 @@ class System {
                 echo "\n\n";
             }
         }
-        (new \BashCommand('php '.BIN.'util/rec-pts.php'))->exec();
+
+        $this->recPts();
+        //(new \BashCommand('php '.BIN.'util/rec-pts.php'))->exec();
     }
 
     public function live(){

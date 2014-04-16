@@ -23,4 +23,4 @@ find $DIR/mtn -empty -mtime +1 -delete
 #  /sbin/logrotate -s /dev/null $i >> /dev/null
 #done
 
-php $BIN/util/rec-pts.php &
+#php $BIN/util/rec-pts.php &
