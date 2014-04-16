@@ -12,7 +12,7 @@ namespace system;
 abstract class Daemon {
     private $dirs = array(
         //'bin',
-        'etc', 'proc', 'rec', 'pre_rec', 'mtn', 'log', 'img', 'tmp'
+        'etc', 'proc', 'rec', 'pre_rec', 'mtn', 'log', 'img', 'tmp', 'lhttp'
     );
     /**
      * @var String Daemon name
@@ -164,8 +164,8 @@ abstract class Daemon {
      * @return boolean
      */
     public function isStarted(){
-        if(file_exists($this->getPidFile()))
-            return true;
+        /*if(file_exists($this->getPidFile()))
+            return true;*/
         if($this->getProcess())
             return true;
         return false;
