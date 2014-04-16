@@ -143,7 +143,17 @@ abstract class Cam implements ICam{
                 if($pref == \CamPrefix::MOTION) continue; //Так как логики еще нет, то пропускаем
                 //выполняем "магические функции"
                 if($pref != \CamPrefix::LIVE && $pref != \CamPrefix::LHTTP) $stream->update();
-                if($pref == \CamPrefix::LIVE) $stream->start();
+                if($pref == \CamPrefix::LIVE){
+                    if($this->rec){
+                        try{
+                            $connection = fsockopen('localhost', $stream->getStreamPort(),$err_no, $err_str, 1);
+                            fclose($connection);
+                        }catch (\Exception $e){
+                            $stream->update();
+                        }
+                    }
+                    $stream->start();
+                }
                 if($pref == \CamPrefix::LHTTP) $stream->start();
             }else{
                 //Если в БД 0 => Стопим камеру

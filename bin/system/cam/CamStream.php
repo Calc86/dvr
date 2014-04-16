@@ -116,7 +116,7 @@ class CamStream implements ICamStream{
     /**
      * @return \Port
      */
-    protected function getStreamPort(){
+    public function getStreamPort(){
         return new \Port($this->cam_id->get()+9000);
     }
 
