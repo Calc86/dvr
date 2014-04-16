@@ -142,7 +142,7 @@ abstract class Cam implements ICam{
             if($this->canPlay(new \CamPrefix($pref))){
                 if($pref == \CamPrefix::MOTION) continue; //Так как логики еще нет, то пропускаем
                 //выполняем "магические функции"
-                if($pref != \CamPrefix::LIVE) $stream->update();
+                if($pref != \CamPrefix::LIVE && $pref != \CamPrefix::LHTTP) $stream->update();
                 if($pref == \CamPrefix::LIVE) $stream->start();
                 if($pref == \CamPrefix::LHTTP) $stream->start();
             }else{
