@@ -311,6 +311,15 @@ class cam_control extends cam_vlm{
      * @param Path $path
      * @return VLMOutput
      */
+    public function gen_lhttp_string(Port $port, Path $path, UserID $userID, CamID $camID){
+        return new VLMOutput("#std{access=livehttp{seglen=5,delsegs=true,numsegs=5,index=$path/stream-$camID.m3u8,index-url=http://10.154.28.203/lhttp/$userID/stream-$camID-########.ts},mux=ts{use-key-frames},dst=$path/stream-$camID-########.ts}");
+    }
+
+    /**
+     * @param Port $port
+     * @param Path $path
+     * @return VLMOutput
+     */
     public function gen_rtmp_string(Port $port, Path $path){
         return new VLMOutput("#transcode{venc=ffmpeg{keyint=1}}:std{access=http{mime=video/mp4},mux=ts{use-key-frames},dst=*:$port/1$path");
     }
@@ -361,6 +370,7 @@ class cam_control extends cam_vlm{
                 $this->_control($this->full, new VLMCommand('play'));
 
                 break;
+            case CamPrefix::LHTTP:
             case CamPrefix::LIVE:
             default:
                 $this->_control($this->full, new VLMCommand('play'));

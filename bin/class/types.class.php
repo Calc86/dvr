@@ -233,11 +233,14 @@ class CamPrefix extends NameType{
     const LIVE = 'live';
     const RECORD = "rec";
     const MOTION = 'mtn';
+    const LHTTP = 'lhttp';
 
     private static $prefixes = array(
         CamPrefix::LIVE,
         CamPrefix::RECORD,
-        CamPrefix::MOTION);
+        CamPrefix::MOTION,
+        CamPrefix::LHTTP,
+    );
 
     /**
      * @return array

@@ -40,14 +40,15 @@ class CamStream implements ICamStream{
     public function setPrefix(\CamPrefix $prefix)
     {
         $this->prefix = $prefix;
-        switch($prefix){
+        switch($this->prefix){
             case \CamPrefix::RECORD:
             case \CamPrefix::MOTION:
                 $this->cc = new \cam_control_archive($this->dvr_id, $this->cam_id, $this->prefix);
                 break;
+            case \CamPrefix::LHTTP:
             case \CamPrefix::LIVE:
             default:
-                $this->cc = new \cam_control($this->dvr_id, $this->cam_id, $prefix);
+                $this->cc = new \cam_control($this->dvr_id, $this->cam_id, $this->prefix);
         }
 
     }
@@ -151,6 +152,10 @@ class CamStream implements ICamStream{
                 $path = DIR."/mtn/$this->dvr_id";
                 $this->cc->create(new \VLMInput($stream), $this->cc->gen_rec_string($path));
                 break;
+            case \CamPrefix::LHTTP:
+                $path = new \Path(DIR."/{$this->prefix}/$this->dvr_id");
+                $port = new \Port(18000+$this->dvr_id->get());
+                $this->cc->create(new \VLMInput($stream), $this->cc->gen_lhttp_string($port, $path, $this->dvr_id, $this->cam_id));
         }
     }
 

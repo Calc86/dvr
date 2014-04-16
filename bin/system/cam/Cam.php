@@ -24,6 +24,8 @@ abstract class Cam implements ICam{
     protected /** @noinspection PhpUnusedPrivateFieldInspection */
         $mtn;
 
+    protected $lhttp = 1;
+
     /**
      * @var CamMotion
      */
@@ -142,6 +144,7 @@ abstract class Cam implements ICam{
                 //выполняем "магические функции"
                 if($pref != \CamPrefix::LIVE) $stream->update();
                 if($pref == \CamPrefix::LIVE) $stream->start();
+                if($pref == \CamPrefix::LHTTP) $stream->start();
             }else{
                 //Если в БД 0 => Стопим камеру
                 $stream->stop();
