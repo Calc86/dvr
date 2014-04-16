@@ -12,7 +12,7 @@ namespace system;
 abstract class Daemon {
     private $dirs = array(
         //'bin',
-        'etc', 'proc', 'rec', 'pre_rec', 'mtn', 'log', 'img', 'tmp', 'lhttp'
+        'etc', 'proc', 'rec', 'pre_rec', 'pre_mtn', 'mtn', 'log', 'img', 'tmp', 'lhttp'
     );
     /**
      * @var String Daemon name
