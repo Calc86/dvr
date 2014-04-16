@@ -45,15 +45,15 @@ class vlcRpc extends PHPUnit_Framework_TestCase {
     }
 
     public function testPlayCam(){
-        $this->getVlcRpc()->play_cam(array(self::CID), array(CamPrefix::LIVE));
-        $this->getVlcRpc()->play_cam(array(self::CID), array(CamPrefix::RECORD));
-        $this->getVlcRpc()->play_cam(array(self::CID), array(CamPrefix::MOTION));
+        $this->getVlcRpc()->play_cam(self::CID, CamPrefix::LIVE);
+        $this->getVlcRpc()->play_cam(self::CID, CamPrefix::RECORD);
+        $this->getVlcRpc()->play_cam(self::CID, CamPrefix::MOTION);
     }
 
     public function testStopCam(){
-        $this->getVlcRpc()->stop_cam(array(self::CID), array(CamPrefix::LIVE));
-        $this->getVlcRpc()->stop_cam(array(self::CID), array(CamPrefix::RECORD));
-        $this->getVlcRpc()->stop_cam(array(self::CID), array(CamPrefix::MOTION));
+        $this->getVlcRpc()->stop_cam(self::CID, CamPrefix::LIVE);
+        $this->getVlcRpc()->stop_cam(self::CID, CamPrefix::RECORD);
+        $this->getVlcRpc()->stop_cam(self::CID, CamPrefix::MOTION);
     }
 
     public function testStop(){

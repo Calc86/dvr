@@ -172,8 +172,6 @@ class Vlc extends DVR{
         return true;
     }
 
-
-
     private function wait_for_unix_proc_start(){
         sleep(1);
     }

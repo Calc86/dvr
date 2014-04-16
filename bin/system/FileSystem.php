@@ -36,8 +36,9 @@ class FileSystem extends System{
      * @param \UserID $id
      * @return User
      */
-    protected function buildSystem($id){
-        $userId = new \UserID($id);
+    protected function buildSystem(\UserID $id){
+        //$userId = new \UserID($id);
+        $userId = $id;
         $dvr = new Vlc($userId, new FileCamCreator($userId, $this->file));
         return new User($userId, $dvr);
     }
@@ -48,7 +49,7 @@ class FileSystem extends System{
         while(($row = each($r)) != FALSE){
             $row[0] = $row[1];
             try{
-                $this->buildSystem($row[0])->getDvr()->startup();
+                $this->buildSystem(new \UserID($row[0]))->getDvr()->startup();
             }
             catch(\Exception $e){
                 echo "==========\n";

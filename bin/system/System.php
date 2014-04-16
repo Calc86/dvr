@@ -19,8 +19,9 @@ class System {
      * @param \UserID $id
      * @return User
      */
-    protected function buildSystem($id){
-        $userId = new \UserID($id);
+    protected function buildSystem(\UserID $id){
+        //$userId = new \UserID($id);
+        $userId = $id;
         $dvr = new MotionVlc($userId, new MysqlCamCreator($userId));
         return new User($userId, $dvr);
     }
@@ -31,7 +32,7 @@ class System {
         $r = $db->query($q);
         while(($row = $r->fetch_row())){
             try{
-                $this->buildSystem($row[0])->getDvr()->startup();
+                $this->buildSystem(new \UserID($row[0]))->getDvr()->startup();
             }
             catch(\Exception $e){
                 echo "==========\n";
@@ -52,7 +53,7 @@ class System {
         $r = $db->query($q);
         while(($row = $r->fetch_row())){
             try{
-                $this->buildSystem($row[0])->getDvr()->shutdown();
+                $this->buildSystem(new \UserID($row[0]))->getDvr()->shutdown();
             }
             catch(\Exception $e){
                 echo "==========\n";
@@ -61,6 +62,7 @@ class System {
                 echo "\n\n";
             }
         }
+        (new \BashCommand('php '.BIN.'util/rec-pts.php'))->exec();
     }
 
     public function live(){
@@ -69,7 +71,7 @@ class System {
         $r = $db->query($q);
         while(($row = $r->fetch_row())){
             try{
-                $this->buildSystem($row[0])->getDvr()->live();
+                $this->buildSystem(new \UserID($row[0]))->getDvr()->live();
             }
             catch(\Exception $e){
                 echo "==========\n";
@@ -86,7 +88,7 @@ class System {
         $r = $db->query($q);
         while(($row = $r->fetch_row())){
             try{
-                $this->buildSystem($row[0])->getDvr()->update();
+                $this->buildSystem(new \UserID($row[0]))->getDvr()->update();
             }
             catch(\Exception $e){
                 echo "==========\n";

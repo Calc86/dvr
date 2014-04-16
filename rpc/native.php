@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: calc
- * Date: 31.03.14
- * Time: 12:29
+ * Date: 16.04.14
+ * Time: 16:59
  */
 
 require_once dirname(__FILE__).'/../bin/config.php';    //все классы указаны в конфиге
@@ -12,7 +12,7 @@ require_once dirname(__FILE__).'/../bin/system/include.php';
 /**
  * Class rpc
  */
-class rpc{
+class native_rpc{
     /**
      * @var \system\System
      */
@@ -90,26 +90,29 @@ class rpc{
 
 
 $token = get_var('token');
+$uid = (int)$token;
 $cid = get_var('cid');
-$pref = get_var('pref',CamPrefix::LIVE);
-
-/** @noinspection PhpIncludeInspection */
-require_once 'Zend/XmlRpc/Server.php';
-
-//проверка на авторизацию отложена на следующие реализации
-$uid = $token;
-
-$server = new Zend_XmlRpc_Server();
+$pref = get_var('pref', CamPrefix::LIVE);
+$func = get_var('func', '');
 
 if($uid){
-    //создаем экземпляр для сервера RPC
-    $server->setClass('rpc','rpc',$uid);
-    //echo '<pre>';
-    //print_r($server);
-    /*if($cid){
-        //construct($oid,$cid,$pref='live')
-        $server->setClass('cam_control','cam',$uid,$cid,$pref);
-    }*/
+    $rpc = new native_rpc($uid);
+    if($func != ''){
+        try{
+            switch($func){
+                case 'cam_reload':
+                    $rpc->$func($cid);
+                default:
+                    $rpc->$func($cid , $pref);
+            }
+            echo 'OK';
+        }catch (Exception $e){
+            echo '<pre>';
+            echo $e->getMessage();
+            echo $e->getFile();
+            echo $e->getLine();
+            echo $e->getTraceAsString();
+            echo '</pre>';
+        }
+    }
 }
-
-echo $server->handle();
