@@ -68,6 +68,8 @@ abstract class DVR extends Daemon implements IDVR {
     public function update()
     {
         Log::getInstance()->put(__FUNCTION__, __CLASS__);
+        //Кладем в файлик логов строку с датой
+        file_put_contents($this->getLogFile(), date("[ Y-m-d H:i:s ]")."  update\n", FILE_APPEND);
         //апдейт нужно делать только если запущен процесс, иначе будет много маленьких записей в архиве.... ы
         if($this->isStarted()){
             foreach($this->getCams() as $cam){
