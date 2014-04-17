@@ -239,7 +239,7 @@ class CamPrefix extends NameType{
         CamPrefix::LIVE,
         CamPrefix::RECORD,
         CamPrefix::MOTION,
-        CamPrefix::LHTTP,
+        //CamPrefix::LHTTP, //stop livehttp
     );
 
     /**
