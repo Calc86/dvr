@@ -55,6 +55,7 @@ abstract class Daemon {
                 }
                 catch (\Exception $e)
                 {
+                    Log::getInstance()->put($e->getMessage(), __CLASS__, Log::ERROR);
                     throw new \PathException($path);
                 }
             }
@@ -182,11 +183,13 @@ abstract class Daemon {
 
 
     public function startup(){
+        Log::getInstance()->put(__FUNCTION__, __CLASS__);
         $this->shutdown();
         $this->start();
     }
 
     public function shutdown(){
+        Log::getInstance()->put(__FUNCTION__, __CLASS__);
         $this->stop();
         $this->kill();
     }

@@ -6,6 +6,8 @@
  * Time: 12:35
  */
 
+require_once dirname(__FILE__).'/Log.php';
+require_once dirname(__FILE__).'/log/EchoLog.php';
 require_once dirname(__FILE__).'/System.php';
 require_once dirname(__FILE__).'/FileSystem.php';
 require_once dirname(__FILE__).'/User.php';

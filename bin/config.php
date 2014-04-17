@@ -78,6 +78,8 @@ define('MOTION_HTTP_PASS', '12345');
 define('MOTION_HTTP_LOCALHOST', 'off');
 define('MOTION_HTTP_HTML', 'on');
 
+define('SOCKET_TIMEOUT', 3);
+
 require_once BIN.'/class/Database.php';
 require_once BIN.'/class/exceptions.class.php';
 require_once BIN.'/class/types.class.php';

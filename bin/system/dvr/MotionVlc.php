@@ -32,6 +32,7 @@ class MotionVlc extends Vlc {
 
     public function start()
     {
+        Log::getInstance()->put(__FUNCTION__, __CLASS__);
         parent::start();
 
         foreach($this->getCams() as $cam){
@@ -45,6 +46,7 @@ class MotionVlc extends Vlc {
 
     public function stop()
     {
+        Log::getInstance()->put(__FUNCTION__, __CLASS__);
         $this->motion->stop();
 
         parent::stop();

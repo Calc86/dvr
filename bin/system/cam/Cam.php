@@ -135,6 +135,7 @@ abstract class Cam implements ICam{
 
     public function update()
     {
+        Log::getInstance()->put(__FUNCTION__, __CLASS__);
         foreach(\CamPrefix::getPrefixes() as $pref){
             $stream = $this->getStreams()[$pref];
             // всё зависит от live)
@@ -144,11 +145,13 @@ abstract class Cam implements ICam{
                 //выполняем "магические функции"
                 if($pref != \CamPrefix::LIVE && $pref != \CamPrefix::LHTTP) $stream->update();
                 if($pref == \CamPrefix::LIVE){
+                    //попытаемся проверить, закрыл ли порт vlc или нет
                     if($this->rec){
                         try{
-                            $connection = fsockopen('localhost', $stream->getStreamPort(),$err_no, $err_str, 1);
+                            $connection = fsockopen('localhost', $stream->getStreamPort()->get(),$err_no, $err_str, SOCKET_TIMEOUT);
                             fclose($connection);
                         }catch (\Exception $e){
+                            Log::getInstance()->put($e->getMessage(), __CLASS__, Log::ERROR);
                             $stream->update();
                         }
                     }

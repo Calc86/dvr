@@ -72,22 +72,23 @@ class CamStream implements ICamStream{
 
     public function start()
     {
+        Log::getInstance()->put(__FUNCTION__." {$this->cam_id} {$this->ip} {$this->prefix}", __CLASS__);
         //play возможен только если внешний поток отдает данные
         try{
-            $connection = fsockopen($this->ip, $this->live_port,$err_no, $err_str, 1);
+            $connection = fsockopen($this->ip, $this->live_port,$err_no, $err_str, SOCKET_TIMEOUT);
             if($connection){
                 $this->cc->play();
             }
             fclose($connection);
         }
         catch(\Exception $e){
-            echo "port $this->ip:$this->live_port closed\n";
-            echo $e->getMessage()."\n";
+            Log::getInstance()->put($e->getMessage(), __CLASS__, Log::ERROR);
         }
     }
 
     public function stop()
     {
+        Log::getInstance()->put(__FUNCTION__." {$this->cam_id} {$this->ip} {$this->prefix}", __CLASS__);
         $this->cc->stop();
     }
 
@@ -97,6 +98,7 @@ class CamStream implements ICamStream{
 
     public function update()
     {
+        Log::getInstance()->put(__FUNCTION__." {$this->cam_id} {$this->ip} {$this->prefix}", __CLASS__);
         $this->stop();
         $this->start();
     }

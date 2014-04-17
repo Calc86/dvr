@@ -14,6 +14,14 @@ namespace system;
  * @package system
  */
 class System {
+    /**
+     *
+     */
+    function __construct()
+    {
+        Log::getInstance()->put(__FUNCTION__, __CLASS__);
+    }
+
 
     /**
      * @param \UserID $id
@@ -21,6 +29,9 @@ class System {
      */
     protected function buildSystem(\UserID $id){
         //$userId = new \UserID($id);
+        //Log::getInstance($id)->setUserID(0);
+        Log::getInstance($id)->put(__FUNCTION__, __CLASS__);
+
         $userId = $id;
         $dvr = new MotionVlc($userId, new MysqlCamCreator($userId));
         return new User($userId, $dvr);
@@ -35,16 +46,9 @@ class System {
                 $this->buildSystem(new \UserID($row[0]))->getDvr()->startup();
             }
             catch(\Exception $e){
-                echo "==========\n";
-                echo $e->getCode().' '.$e->getMessage()."\n";
-                echo $e->getTraceAsString()."\n";
-                echo "\n\n";
+                Log::getInstance()->put($e->getCode().' '.$e->getMessage()."\n".$e->getTraceAsString()."\n", __CLASS__, Log::ERROR);
             }
         }
-        /*catch(\ErrorException $e){
-            echo $e->getCode().' '.$e->getMessage();
-            echo $e->getTraceAsString();
-        }*/
     }
 
     public function shutdown(){
@@ -56,10 +60,7 @@ class System {
                 $this->buildSystem(new \UserID($row[0]))->getDvr()->shutdown();
             }
             catch(\Exception $e){
-                echo "==========\n";
-                echo $e->getCode().' '.$e->getMessage()."\n";
-                echo $e->getTraceAsString()."\n";
-                echo "\n\n";
+                Log::getInstance()->put($e->getCode().' '.$e->getMessage()."\n".$e->getTraceAsString()."\n", __CLASS__, Log::ERROR);
             }
         }
 
@@ -76,10 +77,7 @@ class System {
                 $this->buildSystem(new \UserID($row[0]))->getDvr()->live();
             }
             catch(\Exception $e){
-                echo "==========\n";
-                echo $e->getCode().' '.$e->getMessage()."\n";
-                echo $e->getTraceAsString()."\n";
-                echo "\n\n";
+                Log::getInstance()->put($e->getCode().' '.$e->getMessage()."\n".$e->getTraceAsString()."\n", __CLASS__, Log::ERROR);
             }
         }
     }
@@ -87,7 +85,10 @@ class System {
     public function update(){
         $lock_path = TMP.'/update.lock';
 
-        if(file_exists($lock_path)) return; //кто то делает апдейт
+        if(file_exists($lock_path)){
+            Log::getInstance()->put('update.lock');
+            return;
+        }  //кто то делает апдейт
         //создаем lock
         $f = fopen($lock_path, "w+");
         fclose($f);
@@ -100,10 +101,7 @@ class System {
                 $this->buildSystem(new \UserID($row[0]))->getDvr()->update();
             }
             catch(\Exception $e){
-                echo "==========\n";
-                echo $e->getCode().' '.$e->getMessage()."\n";
-                echo $e->getTraceAsString()."\n";
-                echo "\n\n";
+                Log::getInstance()->put($e->getCode().' '.$e->getMessage()."\n".$e->getTraceAsString()."\n", __CLASS__, Log::ERROR);
             }
         }
         //делаем перенос из pre папок
@@ -115,6 +113,8 @@ class System {
     }
 
     private function recPts(){
+        Log::getInstance()->setUserID(0);
+        Log::getInstance()->put(__FUNCTION__, __CLASS__);
         //$db = open_db(MYHOST, MYUSER, MYPASS, MYDB);
         $db = \Database::getInstance();
         //делаем лимит, так как у нас сейчас оооочень много непроконверченных файликов
@@ -126,7 +126,7 @@ class System {
         if($nas->is_mount()){
             while(($row=$r->fetch_row()) != 0){
                 list($id,$file) = $row;
-                echo "start #$id ";
+                Log::getInstance()->put("start #$id", __CLASS__);
                 $time = time();
                 $start = microtime_float();
 
@@ -137,7 +137,7 @@ class System {
                     mkdir(dirname($newPath));
                 }
                 $ffmpeg = new \BashCommand("ffmpeg -y -i $path.avi -codec copy $newPath.mp4\n");
-                echo $ffmpeg;
+                Log::getInstance()->put($ffmpeg, __CLASS__);
                 $ffmpeg->exec();
                 //если это какой либо мжпег поток
                 if(file_exists($newPath.'.mp4') && (filesize($newPath.".mp4") == 0)){
@@ -146,7 +146,7 @@ class System {
 
                 if(!file_exists($newPath.'.mp4')){
                     $mv = new \BashCommand("mv $path.avi $newPath.avi\n");
-                    echo $mv;
+                    Log::getInstance()->put($mv, __CLASS__);
                     $mv->exec();
                 }
                 else{
@@ -159,7 +159,7 @@ class System {
 
                 $qu = "update archive set rebuilded='yes', date_rebuild=$time, time_rebuild=$r_time where id=$id";
                 if(!$db->query($qu)) throw new \MysqlQueryException($qu);
-                echo "stop\n";
+                Log::getInstance()->put("stop", __CLASS__);
             }
         }
     }

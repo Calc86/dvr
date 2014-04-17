@@ -86,11 +86,11 @@ class Motion extends Daemon {
 
     private function startMotion(){
         if($this->isStarted()){
-            echo $this->error(__LINE__, "VLC для пользователя {$this->getUid()} уже запущен или мертв");
+            Log::getInstance()->put($this->error(__LINE__, "VLC для пользователя {$this->getUid()} уже запущен или мертв"), __CLASS__);
             return;
         }
         $shell = "motion -c {$this->getConfigFile()} -p {$this->getPidFile()} -l {$this->getLogFile()}";
-        echo $shell."\n";
+        Log::getInstance()->put($shell, __CLASS__);
         (new \BashCommand($shell))->exec();
     }
 

@@ -11,6 +11,7 @@ require_once dirname(__FILE__).'/include.php';
 
 date_default_timezone_set('Europe/Moscow');
 
+\system\EchoLog::getInstance()->put(__FILE__);
 $s = new \system\System();
 //$s = new \system\FileSystem("/home/vlc/vlc/bin/system/tv.m3u");
 if($argc<2) die(usage());

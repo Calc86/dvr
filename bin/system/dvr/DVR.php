@@ -67,6 +67,7 @@ abstract class DVR extends Daemon implements IDVR {
      */
     public function update()
     {
+        Log::getInstance()->put(__FUNCTION__, __CLASS__);
         //апдейт нужно делать только если запущен процесс, иначе будет много маленьких записей в архиве.... ы
         if($this->isStarted()){
             foreach($this->getCams() as $cam){

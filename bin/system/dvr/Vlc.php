@@ -93,6 +93,7 @@ class Vlc extends DVR{
 
     public function start()
     {
+        Log::getInstance()->put(__FUNCTION__, __CLASS__);
         $this->mount();
         if(!$this->start_vlc())
             return;
@@ -106,6 +107,7 @@ class Vlc extends DVR{
 
     public function stop()
     {
+        Log::getInstance()->put(__FUNCTION__, __CLASS__);
         if(!$this->isStarted()) return;
 
         foreach($this->getCams() as $cam){
@@ -118,13 +120,13 @@ class Vlc extends DVR{
 
         $f = $telnet->connect('localhost', $this->getTelnetPort()->get());
         if(!$f){
-            echo "Порт закрыт \n";
+            Log::getInstance()->put("Порт закрыт", __CLASS__);
         }else
         {
-            echo "Успешное подключение \n";
+            Log::getInstance()->put("Успешное подключение", __CLASS__);
             $telnet->auth(TLPWD);
             $telnet->write('shutdown');
-            echo $telnet->read();
+            Log::getInstance()->put($telnet->read(), __CLASS__);
         }
         while($this->isStarted()){
             sleep(1);
@@ -163,10 +165,12 @@ class Vlc extends DVR{
         $vlc_shell = VLCBIN." --rtsp-tcp --ffmpeg-hw ".VLCD." $vlc_ifs --repeat --loop --network-caching ".VLCNETCACHE." --sout-mux-caching ".VLCSOUTCACHE."  --sout-ts-dts-delay 400 $vlc_vlm --pidfile {$this->getPidFile()} $vlc_logs \n";
 
         if($this->isStarted()){
-            echo $this->error(__LINE__, "VLC для пользователя {$this->getUid()} уже запущен или мертв");
+            Log::getInstance()->put($this->error(__LINE__, "VLC для пользователя {$this->getUid()} уже запущен или мертв"), __CLASS__);
+
             return false;
         }
-        echo $vlc_shell;
+        Log::getInstance()->put($vlc_shell, __CLASS__);
+
         (new \BashCommand($vlc_shell))->exec();
         $this->wait_for_unix_proc_start();
         return true;

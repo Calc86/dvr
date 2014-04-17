@@ -88,7 +88,7 @@ class MysqlCamStream implements ICamStream {
             fclose($connection);
         }
         catch(\Exception $e){
-            echo "port $this->ip:$this->live_port closed\n";
+            Log::getInstance()->put($e->getMessage(), __CLASS__, Log::ERROR);
         }
     }
 
