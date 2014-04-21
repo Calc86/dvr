@@ -46,7 +46,7 @@ class Database {
      */
     public function query($query){
         $r = $this->db->query($query);
-        if(!$r) throw new MysqlQueryException($query);
+        if(!$r) throw new MysqlQueryException($query."; ".$this->db->error);
         return $r;
     }
 } 
