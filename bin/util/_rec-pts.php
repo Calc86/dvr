@@ -52,7 +52,7 @@ if($nas->is_mount()){
         $r_time = $end-$start;
 
         $qu = "update archive set rebuilded='yes', date_rebuild=$time, time_rebuild=$r_time where id=$id";
-        if(!$db->query($qu)) throw new MysqlQueryException($qu);
+        if(!$db->query($qu)) throw new MysqlQueryException($qu.";".$db->error);
         echo "stop\n";
     }
 }

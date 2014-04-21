@@ -41,7 +41,7 @@ class System {
     }
 
     public function startup(){
-        unlink(TMP.System::UPDATE_LOCK);
+        if(file_exists(TMP.System::UPDATE_LOCK)) unlink(TMP.System::UPDATE_LOCK);
         $db = \Database::getInstance();
         $q = "select id from users where banned=0";
         $r = $db->query($q);

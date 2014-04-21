@@ -183,10 +183,6 @@ abstract class Daemon {
 
 
     public function startup(){
-        //удаляем логфайл
-        if(file_exists($this->logFile))
-            unlink($this->logFile);
-
         Log::getInstance()->put(__FUNCTION__, __CLASS__);
         $this->shutdown();
         $this->start();
@@ -194,6 +190,11 @@ abstract class Daemon {
 
     public function shutdown(){
         Log::getInstance()->put(__FUNCTION__, __CLASS__);
+
+        //удаляем логфайл
+        if(file_exists($this->logFile))
+            unlink($this->logFile);
+
         $this->stop();
         $this->kill();
     }
