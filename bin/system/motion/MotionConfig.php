@@ -30,7 +30,7 @@ class MotionConfig {
         [2] => 6
         )
          */
-        $pattern = "/[{]([a-z_]*)[:]?([a-z0-9]*)[}]/";
+        $pattern = "/[{]([a-z_]*)[:]?([a-zA-Z0-9]*)[}]/";
         $matches = array();
         preg_match_all($pattern, $config, $matches, PREG_SET_ORDER);
         //подготовим масив с дефолными значениями
