@@ -73,10 +73,14 @@ define('VLCSOUTCACHE',200);
 
 //FOR MOTION
 define('MOTION_HTTP_PORT', 33300);
+define('MOTION_HTTP_HOST', 'localhost');
 define('MOTION_HTTP_USER', 'motion');
 define('MOTION_HTTP_PASS', '12345');
 define('MOTION_HTTP_LOCALHOST', 'off');
 define('MOTION_HTTP_HTML', 'on');
+
+define('MOTION_STREAM_PORT', 55500);
+define('MOTION_STREAM_LOCALHOST', 'off');
 
 define('SOCKET_TIMEOUT', 3);
 
