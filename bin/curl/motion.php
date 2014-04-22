@@ -56,8 +56,7 @@ switch ($cam->mode){
         $cmd = "curl -LH 'Expect:' -b $ck http://$ip:$port/snapshot.cgi";
         $data = shell_exec($cmd);
 
-        header('Content-type: image/jpeg');
-        if($data[0] == "<" || $data == ""){
+        if($data[0] == "<" || strlen($data) == 0 || strlen($data) < 1500){
             if(file_exists($jpg))
                 unlink($jpg);
             $cmd = "curl -c $ck $url && curl -o $jpg -LH 'Expect:' -b $ck -F username=$user -F password=$pass -F uri=$path $url";
@@ -65,29 +64,37 @@ switch ($cam->mode){
             $data = file_get_contents($jpg);
         }
 
-        //$log = $tmp."/log_$cid.txt";
-        //file_put_contents($log, date("Y-m-d H:i:s = ").$cmd."\n", FILE_APPEND);
-        //file_put_contents($log, $data."\n", FILE_APPEND);
+        if($cid==8){
+            $log = $tmp."/log_$cid.txt";
+            file_put_contents($log, date("Y-m-d H:i:s = ").$cmd."\n", FILE_APPEND);
+            file_put_contents($log, strlen($data)."\n", FILE_APPEND);
+        }
 
-        echo $data;
+        header('Content-type: image/jpeg');
+        //php-gd лечит кривые jpeg, но всё равно нужно будет делать restart on_camera_lost, или делать рестарт при update?
+        $im = imagecreatefromstring($data);
+        imagejpeg($im);
 
         break;
 
     //еще не реализовано
     case 'http':
-        /*$url = "http://www.example.com/protected/";
-        $ch = curl_init();       
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);    
-        curl_setopt($ch, CURLOPT_URL, $url);    
-        curl_setopt($ch, CURLOPT_USERPWD, "myusername:mypassword");    
-        $result = curl_exec($ch);    
-        curl_close($ch);    
-        echo $result; */
+        //echo 1; exit;
+        $url = "http://".$cam->ip.":".$cam->port."/".$cam->path;
+        //echo $url;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_USERPWD, $cam->user.":".$cam->pass);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        header('Content-type: image/jpeg');
+        echo $result;
         break;
     case 'noauth':
     default:
         header('Content-type: image/jpeg');
-        echo file_get_contents("http://".$cam->ip.":".$cam->port.$cam->path);
+        echo file_get_contents("http://".$cam->ip.":".$cam->port."/".$cam->path);
         break;
 }
 
