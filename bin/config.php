@@ -70,6 +70,7 @@ define('VLCBIN','cvlc');
 define('VLCD','-d');
 define('VLCNETCACHE', 500);
 define('VLCSOUTCACHE',200);
+define('VLC_USE_LOG', false);       //можно отключить лог для vlc
 
 //FOR MOTION
 define('MOTION_HTTP_PORT', 33300);
@@ -79,7 +80,7 @@ define('MOTION_HTTP_PASS', '12345');
 define('MOTION_HTTP_LOCALHOST', 'off');
 define('MOTION_HTTP_HTML', 'on');
 
-define('MOTION_STREAM_PORT', 55500);
+define('MOTION_STREAM_PORT', 55300);
 define('MOTION_STREAM_LOCALHOST', 'off');
 
 define('SOCKET_TIMEOUT', 3);
