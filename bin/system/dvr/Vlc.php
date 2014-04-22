@@ -108,7 +108,11 @@ class Vlc extends DVR{
     public function stop()
     {
         Log::getInstance()->put(__FUNCTION__, __CLASS__);
-        if(!$this->isStarted()) return;
+        if(!$this->isStarted()){
+            Log::getInstance()->put($this->getName()." not started", __CLASS__);
+            return;
+        }
+
 
         foreach($this->getCams() as $cam){
             /** @var Cam $cam */
@@ -168,7 +172,7 @@ class Vlc extends DVR{
         $vlc_shell = VLCBIN." --rtsp-tcp --ffmpeg-hw ".VLCD." $vlc_ifs --repeat --loop --network-caching ".VLCNETCACHE." --sout-mux-caching ".VLCSOUTCACHE."  --sout-ts-dts-delay 400 $vlc_vlm --pidfile {$this->getPidFile()} $vlc_logs \n";
 
         if($this->isStarted()){
-            Log::getInstance()->put($this->error(__LINE__, "VLC для пользователя {$this->getUid()} уже запущен или мертв"), __CLASS__);
+            Log::getInstance()->put($this->error(__LINE__, $this->getName()." для пользователя {$this->getUid()} уже запущен или мертв"), __CLASS__);
 
             return false;
         }
