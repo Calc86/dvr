@@ -47,7 +47,8 @@ class MotionVlc extends Vlc {
     public function stop()
     {
         Log::getInstance()->put(__FUNCTION__, __CLASS__);
-        $this->motion->stop();
+        //$this->motion->stop();
+        $this->motion->shutdown();
 
         parent::stop();
     }
