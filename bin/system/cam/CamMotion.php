@@ -40,6 +40,11 @@ class CamMotion {
     {
         $this->dvrID = $dvrID;
         $this->camID = $camID;
+
+        if(!is_dir(IMG."/".$this->getDvrID())){
+            mkdir(IMG."/".$this->getDvrID());
+        }
+
         $this->targetDir = IMG."/".$this->getDvrID()."/".$this->getCamID();
 
         if(!is_dir($this->targetDir)){
