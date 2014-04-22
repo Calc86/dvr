@@ -12,16 +12,16 @@ $cid = get_var('cid',0);
 if(!$cid) die("Не указана камера");
 
 $db = Database::getInstance();
-$q = "select c.ip as ip, cs.stop_auth as mode, cs.stop_port as port, c.user as user, c.pass as pass from cams as c, cam_settings as cs where c.id=$cid";
+$q = "select c.ip as ip, cs.stop_auth as mode, cs.stop_port as port, c.user as user, c.pass as pass, cs.stop_path as path from cams as c, cam_settings as cs where c.id=$cid and c.id=cs.cam_id limit 1" ;
 $r = $db->query($q);
 if(!$r->num_rows) die("Камера не найдена");
 $cam = $r->fetch_object();
-//print_r($cam); exit();
+//echo $q; print_r($cam); exit();
 
 switch ($cam->mode){
     //HTTP авторизация, обычно на камерах DLink
     case 'dlink':
-        $url = "http://$ip:$port/$path";
+        /*$url = "http://$ip:$port/$path";
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -33,14 +33,13 @@ switch ($cam->mode){
         $imc = imagecreatefromstring($result);
         imagecopy($im,$imc,0,0,0,0,640,360);
         header('Content-type: image/jpeg');
-        imagejpeg($im);
+        imagejpeg($im);*/
 
 
         //echo $result;
 
         break;
     case 'ubqt':
-        $cid = 1;
         $ip = $cam->ip;
         $port = $cam->port;
         $user = $cam->user;
@@ -58,28 +57,37 @@ switch ($cam->mode){
         $data = shell_exec($cmd);
 
         header('Content-type: image/jpeg');
-        if($data[0] == "<"){
+        if($data[0] == "<" || $data == ""){
+            if(file_exists($jpg))
+                unlink($jpg);
             $cmd = "curl -c $ck $url && curl -o $jpg -LH 'Expect:' -b $ck -F username=$user -F password=$pass -F uri=$path $url";
             exec($cmd);
-            echo file_get_contents($jpg);
+            $data = file_get_contents($jpg);
         }
-        else
-        {
-            echo $data;
-        }
+
+        //$log = $tmp."/log_$cid.txt";
+        //file_put_contents($log, date("Y-m-d H:i:s = ").$cmd."\n", FILE_APPEND);
+        //file_put_contents($log, $data."\n", FILE_APPEND);
+
+        echo $data;
+
         break;
 
     //еще не реализовано
     case 'http':
-    default:
-        $url = "http://www.example.com/protected/";   
+        /*$url = "http://www.example.com/protected/";
         $ch = curl_init();       
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);    
         curl_setopt($ch, CURLOPT_URL, $url);    
         curl_setopt($ch, CURLOPT_USERPWD, "myusername:mypassword");    
         $result = curl_exec($ch);    
         curl_close($ch);    
-        echo $result;   
+        echo $result; */
+        break;
+    case 'noauth':
+    default:
+        header('Content-type: image/jpeg');
+        echo file_get_contents("http://".$cam->ip.":".$cam->port.$cam->path);
         break;
 }
 
