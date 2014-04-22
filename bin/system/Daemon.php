@@ -191,11 +191,11 @@ abstract class Daemon {
     public function shutdown(){
         Log::getInstance()->put(__FUNCTION__, __CLASS__);
 
+        $this->stop();
+        $this->kill();
+
         //удаляем логфайл
         if(file_exists($this->logFile))
             unlink($this->logFile);
-
-        $this->stop();
-        $this->kill();
     }
 } 
