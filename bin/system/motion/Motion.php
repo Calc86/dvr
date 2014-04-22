@@ -53,13 +53,19 @@ class Motion extends Daemon {
             //$targetDir = realpath(TMP."/".$this->getUid()."/".$this->ge);
             //$cam->addConfig('target_dir',$targetDir);
 
-            $settings[MotionHttpConfigCmd::P_STREAM_PORT] = MOTION_STREAM_PORT + $cam->getCamID()->get();
-            $settings[MotionHttpConfigCmd::P_STREAM_LOCALHOST] = MOTION_STREAM_LOCALHOST;
-
             $threadPath = dirname($this->getConfigFile())."/thread_".$cam->getCamID().".conf";
             $threads.= "thread ".$threadPath."\n";
             $f = fopen($threadPath, "w+");
-            fwrite($f, MotionConfig::parseConfig($thread, $cam->getConfig()));
+            fwrite($f, MotionConfig::parseConfig(
+                $thread,
+                array_merge(
+                    $cam->getConfig(),
+                    array(
+                        MotionHttpConfigCmd::P_STREAM_PORT => MOTION_STREAM_PORT + $cam->getCamID()->get(),
+                        MotionHttpConfigCmd::P_STREAM_LOCALHOST => MOTION_STREAM_LOCALHOST
+                    )
+                )
+            ));
             fclose($f);
         }
 
