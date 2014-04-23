@@ -32,7 +32,7 @@ class MysqlCamMotion extends CamMotion {
         $motionUrl = $s['stop_proto']."://".$ip.":".$s['stop_port']."/".$s['stop_path'];
         $this->addConfig('netcam_url',$motionUrl);
 
-        $proxyUrl = "http://localhost/motion/proxy.php?cid=$camID";
+        $proxyUrl = "http://localhost/out/snap.php?cid=$camID";
         $this->addConfig('netcam_proxy',$proxyUrl);
 
         if($s['stop_user'] != ''){

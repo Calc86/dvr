@@ -87,6 +87,9 @@ define('MOTION_STREAM_LOCALHOST', 'off');
 
 define('SOCKET_TIMEOUT', 3);
 
+//nginx
+define('NGINX_MOTION_SECURE_LINK_HASH','motion{expire}{motion_stream_port}');
+
 require_once BIN.'/class/Database.php';
 require_once BIN.'/class/exceptions.class.php';
 require_once BIN.'/class/types.class.php';
