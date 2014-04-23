@@ -66,6 +66,7 @@ require(BIN."/func.php");
 define('TLSTART',44300);
 define('TLPWD','12345');
 define('HTSTART',8100);
+define('VLC_STREAM_PORT_START', 9000);
 define('VLCBIN','cvlc');
 define('VLCD','-d');
 define('VLCNETCACHE', 500);
@@ -73,6 +74,7 @@ define('VLCSOUTCACHE',200);
 define('VLC_USE_LOG', false);       //можно отключить лог для vlc
 
 //FOR MOTION
+define('MOTION_USE_LOG', false);     //вкл, выкл лог motion
 define('MOTION_HTTP_PORT', 33300);
 define('MOTION_HTTP_HOST', 'localhost');
 define('MOTION_HTTP_USER', 'motion');

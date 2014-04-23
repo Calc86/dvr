@@ -119,7 +119,7 @@ class CamStream implements ICamStream{
      * @return \Port
      */
     public function getStreamPort(){
-        return new \Port($this->cam_id->get()+9000);
+        return new \Port($this->cam_id->get()+VLC_STREAM_PORT_START);
     }
 
     /**
