@@ -53,6 +53,8 @@ class System {
                 Log::getInstance()->put($e->getCode().' '.$e->getMessage()."\n".$e->getTraceAsString()."\n", __CLASS__, Log::ERROR);
             }
         }
+
+        $this->recPts();
     }
 
     public function shutdown(){
@@ -130,7 +132,7 @@ class System {
         if($nas->is_mount()){
             while(($row=$r->fetch_row()) != 0){
                 list($id,$file) = $row;
-                Log::getInstance()->put("start #$id", __CLASS__);
+                Log::getInstance()->put(__FUNCTION__." start #$id", __CLASS__);
                 $time = time();
                 $start = microtime_float();
 
@@ -163,8 +165,11 @@ class System {
 
                 $qu = "update archive set rebuilded='yes', date_rebuild=$time, time_rebuild=$r_time where id=$id";
                 if(!$db->query($qu)) throw new \MysqlQueryException($qu);
-                Log::getInstance()->put("stop", __CLASS__);
+                Log::getInstance()->put(__FUNCTION__." stop #$id", __CLASS__);
             }
+        }
+        else{
+            Log::getInstance()->put("not mounted", __CLASS__);
         }
     }
 
