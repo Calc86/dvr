@@ -7,38 +7,30 @@
  */
 require("/home/vlc/vlc/bin/config.php");
 
+set_time_limit(10);
+
 $cid = get_var('cid',0);
 
 if(!$cid) die("Не указана камера");
 
-$db = Database::getInstance();
-$q = "select c.ip as ip, cs.stop_auth as mode, cs.stop_port as port, c.user as user, c.pass as pass, cs.stop_path as path from cams as c, cam_settings as cs where c.id=$cid and c.id=cs.cam_id limit 1" ;
-$r = $db->query($q);
-if(!$r->num_rows) die("Камера не найдена");
-$cam = $r->fetch_object();
+$key = "cam_$cid";
+
+$cam = apc_fetch($key);
+
+if($cam == FALSE){
+    $db = Database::getInstance();
+    $q = "select c.ip as ip, cs.stop_auth as mode, cs.stop_port as port, c.user as user, c.pass as pass, cs.stop_path as path from cams as c, cam_settings as cs where c.id=$cid and c.id=cs.cam_id limit 1" ;
+    $r = $db->query($q);
+    if(!$r->num_rows) die("Камера не найдена");
+    $cam = $r->fetch_object();
+    $r->free();
+    $db->getDB()->close();
 //echo $q; print_r($cam); exit();
 
+    apc_store($key, $cam, 10);
+}
+
 switch ($cam->mode){
-    //HTTP авторизация, обычно на камерах DLink
-    case 'dlink':
-        /*$url = "http://$ip:$port/$path";
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_USERPWD, "$user:$pass");
-        $result = curl_exec($ch);
-        curl_close($ch);
-
-        $im = imagecreatetruecolor(640,368);
-        $imc = imagecreatefromstring($result);
-        imagecopy($im,$imc,0,0,0,0,640,360);
-        header('Content-type: image/jpeg');
-        imagejpeg($im);*/
-
-
-        //echo $result;
-
-        break;
     case 'ubqt':
         $ip = $cam->ip;
         $port = $cam->port;
@@ -64,11 +56,11 @@ switch ($cam->mode){
             $data = file_get_contents($jpg);
         }
 
-        if($cid==8){
+        /*if($cid==8){
             $log = $tmp."/log_$cid.txt";
             file_put_contents($log, date("Y-m-d H:i:s = ").$cmd."\n", FILE_APPEND);
             file_put_contents($log, strlen($data)."\n", FILE_APPEND);
-        }
+        }*/
 
         header('Content-type: image/jpeg');
         //php-gd лечит кривые jpeg, но всё равно нужно будет делать restart on_camera_lost, или делать рестарт при update?
@@ -89,8 +81,9 @@ switch ($cam->mode){
         $data = curl_exec($ch);
         curl_close($ch);
         header('Content-type: image/jpeg');
-        $im = imagecreatefromstring($data);
-        imagejpeg($im);
+        echo $data;
+        /*$im = imagecreatefromstring($data);
+        imagejpeg($im);*/
         break;
     case 'noauth':
     default:
@@ -101,4 +94,4 @@ switch ($cam->mode){
         break;
 }
 
-
+exit;
