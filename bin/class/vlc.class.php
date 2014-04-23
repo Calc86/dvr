@@ -486,7 +486,7 @@ class vlc{
         $cc = new cam_control_archive($this->uid,$cid,$pref);
 
         //todo: remove 9000
-        $stream_port = new Port($cam->id+9000);
+        $stream_port = new Port($cam->id+VLC_STREAM_PORT_START);
         $input = $cc->gen_input_string(
             new WebProto($cam->live_proto),
             new IP($cam->ip),
