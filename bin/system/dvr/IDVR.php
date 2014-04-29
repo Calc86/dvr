@@ -48,4 +48,10 @@ interface IDVR {
      * @return array of ICam
      */
     public function getCams();
+
+    /**
+     * create timelaps file
+     * @return mixed
+     */
+    public function timelaps();
 } 

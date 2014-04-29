@@ -78,4 +78,15 @@ abstract class DVR extends Daemon implements IDVR {
             }
         }
     }
+
+    /**
+     * create timelaps file
+     * @return mixed
+     */
+    public function timelaps()
+    {
+        //do nothing
+    }
+
+
 } 

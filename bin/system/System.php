@@ -15,7 +15,8 @@ namespace system;
  */
 class System {
 
-    const UPDATE_LOCK = '/update.lock';
+    const UPDATE_LOCK = 'update.lock';
+    const TIMELAPS_LOCK = 'timelaps.lock';
 
     /**
      *
@@ -41,7 +42,8 @@ class System {
     }
 
     public function startup(){
-        if(file_exists(TMP.System::UPDATE_LOCK)) unlink(TMP.System::UPDATE_LOCK);
+        Lock::resetAll();
+
         $db = \Database::getInstance();
         $q = "select id from users where banned=0";
         $r = $db->query($q);
@@ -70,7 +72,8 @@ class System {
             }
         }
 
-        $this->recPts();
+        //$this->recPts();
+        $this->update();
         //(new \BashCommand('php '.BIN.'util/rec-pts.php'))->exec();
     }
 
@@ -89,15 +92,10 @@ class System {
     }
 
     public function update(){
-        $lock_path = TMP.System::UPDATE_LOCK;
+        Log::getInstance()->put(__FUNCTION__, __CLASS__);
 
-        if(file_exists($lock_path)){
-            Log::getInstance()->put('update.lock');
-            return;
-        }  //кто то делает апдейт
-        //создаем lock
-        $f = fopen($lock_path, "w+");
-        fclose($f);
+        $lock = new Lock(__FUNCTION__);
+        if(!$lock->create()) return;        //кто товыполняет эту функцию
 
         $db = \Database::getInstance();
         $q = "select id from users where banned=0";
@@ -110,12 +108,38 @@ class System {
                 Log::getInstance()->put($e->getCode().' '.$e->getMessage()."\n".$e->getTraceAsString()."\n", __CLASS__, Log::ERROR);
             }
         }
+
+        //test timelaps !!!
+        $this->timelaps();
+
         //делаем перенос из pre папок
         //делаем синхронно, чтобы не забивать канал сети. Так же ждем выполнения, чтобы не перезаписать файлы пир долгом переносе.
         $this->recPts();
 
         //убиваем lock
-        unlink($lock_path);
+        $lock->delete();
+    }
+
+    public function timelaps(){
+        Log::getInstance()->put(__FUNCTION__, __CLASS__);
+
+        $lock = new Lock(__FUNCTION__);
+        if(!$lock->create()) return;    //кто то уже выполняет эту функцию
+
+        $db = \Database::getInstance();
+        $q = "select id from users where banned=0";
+        $r = $db->query($q);
+        while(($row = $r->fetch_row())){
+            try{
+                $this->buildSystem(new \UserID($row[0]))->getDvr()->timelaps();
+            }
+            catch(\Exception $e){
+                Log::getInstance()->put($e->getCode().' '.$e->getMessage()."\n".$e->getTraceAsString()."\n", __CLASS__, Log::ERROR);
+            }
+        }
+
+        //убиваем lock
+        $lock->delete();
     }
 
     private function recPts(){

@@ -56,7 +56,7 @@ class CamMotion {
     protected function setDefaultValues(){
         $this->addConfig('target_dir', $this->getTargetDir());
         //$this->addConfig('snapshot_filename', '%Y-%m-%d/%v-%H_%M_%S-snapshot');
-        $this->addConfig('snapshot_filename', '%Y-%m-%d/%H_%M_%S-snapshot');
+        //$this->addConfig('snapshot_filename', '%Y-%m-%d/%H_%M_%S-snapshot');
     }
 
     /**

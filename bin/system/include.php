@@ -23,6 +23,7 @@ require_once dirname(__FILE__).'/motion/MotionConfig.php';
 require_once dirname(__FILE__).'/motion/MotionHttp.php';
 
 require_once dirname(__FILE__).'/dvr/IDVR.php';
+require_once dirname(__FILE__).'/dvr/Lock.php';
 require_once dirname(__FILE__).'/dvr/DVR.php';
 require_once dirname(__FILE__).'/dvr/Vlc.php';
 require_once dirname(__FILE__).'/dvr/MotionVlc.php';

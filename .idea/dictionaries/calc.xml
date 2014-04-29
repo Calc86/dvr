@@ -5,10 +5,15 @@
       <w>dirname</w>
       <w>fstab</w>
       <w>idvr</w>
+      <w>libx</w>
+      <w>mjpeg</w>
       <w>mtab</w>
       <w>nginx</w>
       <w>rebuilded</w>
+      <w>timelaps</w>
       <w>umount</w>
+      <w>vcodec</w>
+      <w>xargs</w>
     </words>
   </dictionary>
 </component>
