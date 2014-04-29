@@ -6,7 +6,7 @@
  * Time: 15:37
  *
  * забирает с motion stream порта и отдает в браузер (img)
- * Необходимо для раздачи каждому свое ссылки.
+ * Необходимо для раздачи каждому своей ссылки.
  * Жизнь ссылки сделаем 10 секунд... :)
  * $motion_stream_key => CamID
  */
@@ -15,44 +15,72 @@ define('MOTION_STREAM_KEY', 'msk');
 
 require("/home/vlc/vlc/bin/config.php");
 
-$set = get_var('set',0);
-if($set == 1){
-    $cid = get_var('cid', 0);
-    $secure = md5(time().rand());
-    $secure=1;
-    $msk = MOTION_STREAM_KEY.'_'.$secure;
+$port = get_var('p',0);
+if($port == 0) die('не указан параметр');
 
+/*$key = "snap_$port";
 
-    apc_store($msk, $cid, 100);
-    echo $secure;
-    exit;
+$img = apc_fetch($key);
+
+if($img != false){
+    echo $img;
+    flush();
+    apc_delete($key);
+    apc_store($key, getJpeg($port),5);
 }
+else{
+    $img = getJpeg($port);
+    echo $img;
+    flush();
+    apc_store($key, $img,5);
+}*/
 
-$secure = get_var('s');
-if($secure === 0) die('не указан параметр');
+echo getJpeg($port);
 
-$msk = MOTION_STREAM_KEY.'_'.$secure;
-$cid = apc_fetch($msk);
-if($cid == FALSE) die('неверная ссылка');
-if(!$cid) die("Не указана камера");
 
-//отдать картинку
-$fp = false;
+/**
+ * @param $port
+ * @return string
+ */
+function getJpeg($port){
+    $fp = false;
 
-try{
-    $fp = fsockopen ("localhost", MOTION_STREAM_PORT+$cid, $errno, $errstr, 100);
-}
-catch (Exception $e){
-    //тут может быть лог, но мы его не будем выводить
-    echo "Ошибка открытия потока\n";
-}
-if (!$fp) {
-    //echo "$errstr ($errno)<br>\n";
-    echo "поток не доступен\n";
-} else {
-    fputs ($fp, "GET / HTTP/1.0\r\n\r\n");
-    while (($str = trim(fgets($fp, 4096))) != false)
-        header($str);
-    fpassthru($fp);
-    fclose($fp);
+    try{
+        $fp = fsockopen ("localhost", $port, $errno, $errstr, 10);
+    }
+    catch (Exception $e){
+        //тут может быть лог, но мы его не будем выводить
+        return "Ошибка открытия потока\n $errstr";
+    }
+    if (!$fp) {
+        echo "поток не доступен\n";
+    } else {
+        fputs ($fp, "GET / HTTP/1.0\r\n\r\n");
+
+        $param = 'header'; $time[$param] = microtime(true);
+        $header = '';
+        while (($str = trim(fgets($fp, 4096))) != false)
+            $header.= $str;
+        //header($header);
+
+        $a = fgets($fp);
+        $a = fgets($fp);    //Content type
+        header($a);
+        $l = fgets($fp);
+        $a = fgets($fp);
+        $a = explode(':',$l);
+
+        $length = (int)trim($a[1]);
+        //echo $length;
+        //echo "\n=========\n";
+        $buf = '';
+
+        for($i=0; $i < ceil($length/8192); $i++){
+            $buf.= fread($fp, 8192);
+        }
+
+        fclose($fp);
+        return substr($buf, 0, $length);
+    }
+    return "";
 }
