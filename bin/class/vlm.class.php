@@ -304,11 +304,15 @@ class cam_control extends cam_vlm{
         //$ret = "#std{access=http{mime=video/mp4},mux=ts,dst=*:$port/$path.mp4}";
         //return $ret;
         return new VLMOutput("#std{access=http{mime=video/mp4},mux=ts{use-key-frames},dst=*:$port/$path.mp4}");
+        //return new VLMOutput("#std{access=http{mime=video/mp2t},mux=ts{use-key-frames},dst=*:$port/$path.mp4}");
+        //return new VLMOutput("#transcode{fflags=genpts,codec=copy}:std{access=http{mime=video/mp4},mux=ts,dst=*:$port/$path.mp4}");
     }
 
     /**
      * @param Port $port
      * @param Path $path
+     * @param UserID $userID
+     * @param CamID $camID
      * @return VLMOutput
      */
     public function gen_lhttp_string(Port $port, Path $path, UserID $userID, CamID $camID){
@@ -364,7 +368,8 @@ class cam_control extends cam_vlm{
                 
                 //используем время в имени файла
                 $this->filename = $path.'/'.$time.'_'.$this->full;
-                $cmd = "#std{access=file,mux=ts{use-key-frames},dst=$this->filename.avi}";
+                //$cmd = "#std{access=file,mux=ts{use-key-frames},dst=$this->filename.avi}";
+                $cmd = "#std{access=file,mux=mp4,dst=$this->filename.avi}";
                 //echo $cmd;
                 if($new_file) $this->_setup($this->full, new VLMCommand($cmd));
                 $this->_control($this->full, new VLMCommand('play'));
