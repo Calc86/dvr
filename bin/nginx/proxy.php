@@ -18,6 +18,9 @@ require("/home/vlc/vlc/bin/config.php");
 $port = get_var('p',0);
 if($port == 0) die('не указан параметр');
 
+$host = get_var('h', 'localhost');
+$path = get_var('path','/');
+
 /*$key = "snap_$port";
 
 $img = apc_fetch($key);
@@ -35,18 +38,20 @@ else{
     apc_store($key, $img,5);
 }*/
 
-echo getJpeg($port);
+echo getJpeg($port, $host, $path);
 
 
 /**
  * @param $port
+ * @param $host
+ * @param $path
  * @return string
  */
-function getJpeg($port){
+function getJpeg($port, $host, $path){
     $fp = false;
 
     try{
-        $fp = fsockopen ("localhost", $port, $errno, $errstr, 10);
+        $fp = fsockopen ($host, $port, $errno, $errstr, 10);
     }
     catch (Exception $e){
         //тут может быть лог, но мы его не будем выводить
@@ -55,7 +60,7 @@ function getJpeg($port){
     if (!$fp) {
         echo "поток не доступен\n";
     } else {
-        fputs ($fp, "GET / HTTP/1.0\r\n\r\n");
+        fputs ($fp, "GET $path HTTP/1.0\r\n\r\n");
 
         $param = 'header'; $time[$param] = microtime(true);
         $header = '';
@@ -74,9 +79,10 @@ function getJpeg($port){
         //echo $length;
         //echo "\n=========\n";
         $buf = '';
+        $bufLength = 1024;
 
-        for($i=0; $i < ceil($length/8192); $i++){
-            $buf.= fread($fp, 8192);
+        for($i=0; $i < ceil($length/$bufLength); $i++){
+            $buf.= fread($fp, $bufLength);
         }
 
         fclose($fp);
