@@ -316,7 +316,10 @@ class cam_control extends cam_vlm{
      * @return VLMOutput
      */
     public function gen_lhttp_string(Port $port, Path $path, UserID $userID, CamID $camID){
-        return new VLMOutput("#std{access=livehttp{seglen=5,delsegs=true,numsegs=5,index=$path/stream-$camID.m3u8,index-url=http://10.154.28.203/lhttp/$userID/stream-$camID-########.ts},mux=ts{use-key-frames},dst=$path/stream-$camID-########.ts}");
+        $transcode = "";
+        //$transcode = "transcode{width=320,height=240,fps=25,vcodec=h264,vb=256,venc=x264{aud,profile=baseline,level=30,keyint=30,ref=1},acodec=mp3,ab=96}:";
+        //$transcode = "transcode{width=320,height=240,fps=25,vcodec=h264,vb=256,venc=x264{aud,profile=baseline,level=30,keyint=30,ref=1},acodec=mp3,ab=96}:";
+        return new VLMOutput("#{$transcode}std{access=livehttp{seglen=5,delsegs=true,numsegs=15,splitanywhere=true,index=$path/stream-$camID.m3u8,index-url=http://10.154.28.203/lhttp/$userID/stream-$camID-########.ts},mux=ts{use-key-frames},dst=$path/stream-$camID-########.ts}");
     }
 
     /**
