@@ -67,10 +67,13 @@ define('TLSTART',44300);
 define('TLPWD','12345');
 define('HTSTART',8100);
 define('VLC_STREAM_PORT_START', 9000);
-define('VLCBIN','cvlc');
+define('VLC_L_FLV_PORT_START', 11000);
+define('VLC_RE_FLV_PORT_START', 13000);
+define('VLCBIN','cvlc -vvv');
 define('VLCD','-d');
 define('VLCNETCACHE', 500);
-define('VLCSOUTCACHE',200);
+//define('VLCSOUTCACHE',1000);
+define('VLCSOUTCACHE', 300);
 define('VLC_USE_LOG', false);       //можно отключить лог для vlc
 
 //FOR MOTION
