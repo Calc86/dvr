@@ -157,7 +157,7 @@ class CamStream implements ICamStream{
             case \CamPrefix::LHTTP:
                 $path = new \Path(DIR."/{$this->prefix}/$this->dvr_id");
                 $port = new \Port(18000+$this->dvr_id->get());
-                $this->cc->create(new \VLMInput($stream), $this->cc->gen_lhttp_string($port, $path, $this->dvr_id, $this->cam_id));
+                $this->cc->create(new \VLMInput($input), $this->cc->gen_lhttp_string($port, $path, $this->dvr_id, $this->cam_id));
         }
     }
 

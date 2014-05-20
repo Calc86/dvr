@@ -121,6 +121,7 @@ class System {
     }
 
     public function timelaps(){
+        return;
         Log::getInstance()->put(__FUNCTION__, __CLASS__);
 
         $lock = new Lock(__FUNCTION__);

@@ -61,7 +61,7 @@ class MotionVlc extends Vlc {
 
                 $createList = new \BashCommand("ls $path/snapshot*.jpg | sort > $list");
                 $deleteList = new \BashCommand("rm $list");
-                $createTimelaps = new \BashCommand("cat $list | xargs cat | ffmpeg -f image2pipe -r 1 -vcodec mjpeg -i - -vcodec libx264 $path/../$filename");
+                $createTimelaps = new \BashCommand("cat $list | xargs cat | ffmpeg -f image2pipe -r 3 -vcodec mjpeg -i - -vcodec libx264 $path/../$filename");
                 $deleteImages = new \BashCommand("cat $list | xargs rm");
 
                 $createList->exec();
