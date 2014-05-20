@@ -1,18 +1,31 @@
 <component name="ProjectDictionaryState">
   <dictionary name="calc">
     <words>
+      <w>acodec</w>
+      <w>bbdvr</w>
+      <w>codec</w>
+      <w>deinterlace</w>
       <w>devel</w>
       <w>dirname</w>
+      <w>dvrs</w>
+      <w>executables</w>
       <w>fstab</w>
       <w>idvr</w>
+      <w>keyint</w>
       <w>libx</w>
       <w>mjpeg</w>
       <w>mtab</w>
+      <w>multicast</w>
       <w>nginx</w>
       <w>rebuilded</w>
+      <w>samplerate</w>
+      <w>splitanywhere</w>
       <w>timelaps</w>
+      <w>tmpfs</w>
+      <w>transcode</w>
       <w>umount</w>
       <w>vcodec</w>
+      <w>venc</w>
       <w>xargs</w>
     </words>
   </dictionary>
