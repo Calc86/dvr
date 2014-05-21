@@ -82,4 +82,12 @@ class Lock {
         }
         return false;
     }
+
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
 }
