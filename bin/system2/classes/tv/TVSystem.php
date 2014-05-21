@@ -20,4 +20,15 @@ class TVSystem extends System {
         parent::create();
     }
 
-} 
+    protected function _update()
+    {
+        parent::_update();
+
+        // удалить всё старше одного дня
+        $path = Path::getNfsPath(Path::RECORD);
+
+        $delete = new \BashCommand('find '.$path.'/* -mtime +1 -exec rm {} \ ;');
+        Log::getInstance()->put($delete, __CLASS__);
+        $delete->exec();
+    }
+}
