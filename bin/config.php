@@ -90,6 +90,8 @@ define('MOTION_STREAM_LOCALHOST', 'off');
 
 define('SOCKET_TIMEOUT', 3);
 
+define('TIME_LOCK_RECORD', (600-30));
+
 //nginx
 define('NGINX_MOTION_SECURE_LINK_HASH','motion{expire}{motion_stream_port}');
 
