@@ -15,6 +15,7 @@ require_once __DIR__.'/HLSVlcStream.php';
 
 require_once __DIR__.'/LiveVlcStream.php';
 require_once __DIR__.'/FlvVlcReStream.php';
+require_once __DIR__.'/RtmpVlcReStream.php';
 require_once __DIR__.'/RecVlcStream.php';
 require_once __DIR__.'/VlcCam.php';
 
