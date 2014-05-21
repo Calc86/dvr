@@ -100,6 +100,7 @@ abstract class Cam implements ICam{
     public function update()
     {
         $this->log(__FUNCTION__);
+        $this->create();    //need to fill cam array!!!
         foreach($this->streams as $stream){
             /** @var $stream ICamStream */
             $stream->update();
