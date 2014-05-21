@@ -34,8 +34,11 @@ class BBCam extends VlcCam{
         if($cs->live){
             $live = new LiveVlcStream($this);
             $this->streams[] = $live;
-            $this->streams[] = new HLSVlcStream($this, $live);
-            $this->streams[] = new FlvVlcReStream($this, $live);
+            //$this->streams[] = new HLSVlcStream($this, $live);
+            //$this->streams[] = new FlvVlcReStream($this, $live);
+
+            //nginx rtmp stream
+            $this->streams[] = new RtmpVlcReStream($this, $live);
 
             if($cs->rec) $this->streams[] = new RecVlcStream($this, $live);
 
