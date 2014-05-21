@@ -88,4 +88,33 @@ class MotionStream extends Stream {
     public function addConfig($name, $value){
         $this->config[$name] = $value;
     }
+
+    public function update()
+    {
+        parent::update();
+
+        $path = Path::getTmpfsPath(Path::IMAGE.'/'.$this->cam->getDVR()->getID().'/'.$this->cam->getID());
+
+        $list = "$path/list.txt";
+
+        $filename = $this->cam->getID()."_".date("Ymd_His").".mp4";
+
+        $createList = new \BashCommand("ls $path/snapshot*.jpg | sort > $list");
+        $deleteList = new \BashCommand("rm $list");
+
+        $createTimelaps = new \BashCommand("cat $list | xargs cat | ffmpeg -f image2pipe -r 3 -vcodec mjpeg -i - -vcodec libx264 $path/../$filename");
+        $deleteImages = new \BashCommand("cat $list | xargs rm");
+
+        $this->log($createList);
+        $this->log($createTimelaps);
+        $this->log($deleteImages);
+
+        $createList->exec();
+        //$createTimelaps->exec();
+
+        $deleteImages->exec();
+        $deleteList->exec();
+    }
+
+
 }
