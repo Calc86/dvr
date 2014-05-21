@@ -45,6 +45,10 @@ abstract class VlcStream extends Stream {
         $this->vlm->_setup($this->getOutputVlm());
     }
 
+    public function delete(){
+        $this->vlm->_del();
+    }
+
     protected function testInput(){
 
         $url = parse_url($this->getInputVlm());
