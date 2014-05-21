@@ -15,12 +15,19 @@ namespace system2;
  */
 class RecVlcStream extends VlcReStream {
     /**
+     * @var TimeLock для update
+     */
+    private $lock;
+
+    /**
      * @param ICam $cam
      * @param LiveVlcStream $live
      */
     function __construct(ICam $cam, LiveVlcStream $live)
     {
         parent::__construct($cam, $live, 'rec');
+
+        $this->lock = new TimeLock($this->getName(), TIME_LOCK_RECORD);
     }
 
     /**
@@ -89,13 +96,14 @@ class RecVlcStream extends VlcReStream {
             }
 
             //Мы сделали всё что могил, теперь удаляем следы нашего пребывания
-            unlink($this->getRecFilePath());
+            //unlink($this->getRecFilePath());
         }
     }
 
     public function stop()
     {
         parent::stop();
+        parent::delete();
 
         $this->moveToNfs();
     }
@@ -103,9 +111,19 @@ class RecVlcStream extends VlcReStream {
 
     public function update()
     {
+        if(!$this->lock->create()) return;    //время не пришло
+
         parent::update();
 
         $this->stop();
         $this->start();
+    }
+
+    public function start()
+    {
+        parent::create();
+        parent::start();
+        //создаем timelock
+        $this->lock->create();
     }
 }
