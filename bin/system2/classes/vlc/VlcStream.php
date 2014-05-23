@@ -40,6 +40,8 @@ abstract class VlcStream extends Stream {
     public function create(){
         parent::create();
 
+        if(System::getInstance()->getFlag(System::FLAG_STOP)) return;
+
         $this->vlm->_new();
         $this->vlm->_setup($this->getInputVlm(), true);
         $this->vlm->_setup($this->getOutputVlm());
