@@ -20,6 +20,12 @@ class RecVlcStream extends VlcReStream {
     private $lock;
 
     /**
+     * Переменная для хранения старого имени файла
+     * @var string
+     */
+    protected $oldRec = '';
+
+    /**
      * @param ICam $cam
      * @param LiveVlcStream $live
      */
@@ -61,62 +67,86 @@ class RecVlcStream extends VlcReStream {
         return "#std{access=file{append},mux=ts{use-key-frames},dst=$filePath.avi}";
     }
 
+    /**
+     * @return string path on ''
+     */
+    protected function getNfsPath(){
+        return str_replace(Path::TMPFS, Path::NFS, $this->oldRec);
+    }
+
+    /**
+     * @return string path or '' if no path
+     */
+    protected function getTmpfsPath(){
+        if(file_exists($this->getRecFilePath()))
+            return trim(file_get_contents($this->getRecFilePath()));
+        else
+            return '';
+    }
+
+    /**
+     *
+     */
     protected function moveToNfs(){
-        if(file_exists($this->getRecFilePath())){
-            $file = trim(file_get_contents($this->getRecFilePath()));
-            $avi = $file.".avi";
 
-            // change tmpfs to nfs
-            $path = str_replace(Path::TMPFS, Path::NFS, $file);
-            $mp4 = $path.".mp4";
+        $file = $this->oldRec;
+        if($file == '') return;
+        $avi = $file.".avi";
 
-            //ffmpeg необходим для правильного заполения метаданных, так как у vlc с этим проблемы (по крайней мере у 2.0.10)
-            $ffmpeg = new \BashCommand("ffmpeg -y -i $avi -codec copy $mp4\n");
-            $this->log($ffmpeg);
+        // change tmpfs to nfs
+        $path = $this->getNfsPath();
+        $mp4 = $path.".mp4";
 
-            $ffmpeg->exec();
+        //ffmpeg необходим для правильного заполения метаданных, так как у vlc с этим проблемы (по крайней мере у 2.0.10)
+        $ffmpeg = new \BashCommand("ffmpeg -y -i $avi -codec copy $mp4\n");
+        $this->log($ffmpeg);
 
-            //если это какой либо мжпег поток и ffmpeg вышел с ошибкой, но создал нулевой файл
-            // обычно если ffmpeg не может сделать файлик, то размер его 203 байта.... ы(
-            if(file_exists($mp4) && (filesize($mp4) <= 300)){
-                unlink($mp4);
-                $this->log("файл $mp4 имеет нулевой размер");
-            }
+        $ffmpeg->exec();
 
-            //если ffmpeg не создал файл или мы удалили нулевой файл
-            if(!file_exists($mp4)){
-                $mv = new \BashCommand("mv $avi $path.avi\n");
-                $this->log($mv);
-                $mv->exec();
-            }
-            else{
-                //файлик успешно переехал на новое место
-                if(file_exists($avi))
-                    unlink($avi);
-            }
-
-            //Мы сделали всё что могил, теперь удаляем следы нашего пребывания
-            //unlink($this->getRecFilePath());
+        //если это какой либо мжпег поток и ffmpeg вышел с ошибкой, но создал нулевой файл
+        // обычно если ffmpeg не может сделать файлик, то размер его 203 байта.... ы(
+        if(file_exists($mp4) && (filesize($mp4) <= 300)){
+            unlink($mp4);
+            $this->log("файл $mp4 имеет нулевой размер");
         }
+
+        //если ffmpeg не создал файл или мы удалили нулевой файл
+        if(!file_exists($mp4)){
+            $mv = new \BashCommand("mv $avi $path.avi\n");
+            $this->log($mv);
+            $mv->exec();
+        }
+        else{
+            //файлик успешно переехал на новое место
+            if(file_exists($avi))
+                unlink($avi);
+        }
+
+        //Мы сделали всё что могил, теперь удаляем следы нашего пребывания
+        //unlink($this->getRecFilePath());
     }
 
     public function stop()
     {
+        $this->oldRec = $this->getTmpfsPath();
+
         parent::stop();
         parent::delete();
-
-        $this->moveToNfs();
     }
 
 
     public function update()
     {
-        if(!$this->lock->create()) return;    //время не пришло
+        if(!System::getInstance()->getFlag(System::FLAG_STOP))
+            if(!$this->lock->create()) return;    //время не пришло
 
         parent::update();
 
         $this->stop();
         $this->start();
+
+        //спецом переноим после start чтобы не пропускать запись.
+        $this->moveToNfs();
     }
 
     public function start()
