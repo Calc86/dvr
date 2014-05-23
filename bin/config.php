@@ -72,8 +72,13 @@ define('VLC_RE_FLV_PORT_START', 13000);
 define('VLCBIN','cvlc -vvv');
 define('VLCD','-d');
 define('VLCNETCACHE', 500);
-//define('VLCSOUTCACHE',1000);
-define('VLCSOUTCACHE', 300);
+
+if(file_exists(DIR.'/../tv')){
+    define('VLCSOUTCACHE',1000);
+}
+else
+    define('VLCSOUTCACHE', 300);
+
 define('VLC_USE_LOG', false);       //можно отключить лог для vlc
 
 //FOR MOTION

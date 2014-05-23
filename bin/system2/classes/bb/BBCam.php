@@ -40,7 +40,7 @@ class BBCam extends VlcCam{
             //nginx rtmp stream
             $this->streams[] = new RtmpVlcReStream($this, $live);
 
-            if($cs->rec) $this->streams[] = new RecVlcStream($this, $live);
+            if($cs->rec) $this->streams[] = new BBRecStream($this, $live);
 
             //motion flv stream?
             $this->streams[] = new UrlFlvVlcStream($this, "http://localhost:".(MOTION_STREAM_PORT + $this->getID()));
