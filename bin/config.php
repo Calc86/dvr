@@ -74,7 +74,7 @@ define('VLCD','-d');
 define('VLCNETCACHE', 500);
 
 if(file_exists(DIR.'/../tv')){
-    define('VLCSOUTCACHE',1000);
+    define('VLCSOUTCACHE',5000);
 }
 else
     define('VLCSOUTCACHE', 300);

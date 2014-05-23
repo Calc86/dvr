@@ -10,7 +10,8 @@ namespace system2;
 
 define(
 'VLC_FLV_STREAM_TRANSCODE_STRING',
-'transcode{vcodec=FLV1,vb=4096,acodec=mp3,deinterlace,fps=25,scale=0,samplerate=44100,ab=128}:'
+//'transcode{vcodec=FLV1,vb=4096,fps=25,deinterlace,scale=1,acodec=mp3,samplerate=44100,ab=128}:'
+'transcode{vcodec=FLV1,vb=4096,fps=25,scale=1,acodec=mp3,samplerate=44100,ab=128}:'
 );
 
 /**
