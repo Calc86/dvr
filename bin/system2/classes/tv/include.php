@@ -6,7 +6,8 @@
  * Time: 09:09
  */
 
-require_once __DIR__.'/TVStream.php';
+require_once __DIR__.'/TVHlsStream.php';
+require_once __DIR__.'/TVReStream.php';
 require_once __DIR__.'/TVCam.php';
 require_once __DIR__.'/TVDvr.php';
 require_once __DIR__.'/TVUser.php';
