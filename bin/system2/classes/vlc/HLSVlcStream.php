@@ -29,7 +29,8 @@ class HLSVlcStream extends VlcReStream {
      */
     protected function getOutputVlm($transcode = '')
     {
-        $liveHost = LIVEHOST;
+        //$liveHost = LIVEHOST;
+        $liveHost = 'localhost';
         $camID = $this->cam->getID();
         $dvrID = $this->cam->getDVR()->getID();
         $path = $this->getPath();

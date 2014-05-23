@@ -26,7 +26,8 @@ abstract class VlcStream extends Stream {
     {
         parent::__construct($cam);
         $this->streamName = $streamName;
-        $this->vlm = new HttpVlm($this->getName(), LIVEHOST, HTSTART+$this->cam->getDVR()->getID());
+        //$this->vlm = new HttpVlm($this->getName(), LIVEHOST, HTSTART+$this->cam->getDVR()->getID());
+        $this->vlm = new HttpVlm($this->getName(), 'localhost', HTSTART+$this->cam->getDVR()->getID());
     }
 
     /**
