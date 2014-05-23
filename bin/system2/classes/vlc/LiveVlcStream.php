@@ -41,7 +41,6 @@ class LiveVlcStream extends VlcStream{
         //$transcode = "transcode{width=320,height=240,fps=25,vcodec=h264,vb=256,venc=x264{aud,profile=baseline,level=30,keyint=30,ref=1},acodec=mp3,ab=96}:";
 
         return "#{$transcode}std{access=http{mime={$this->mime}},mux=ts{use-key-frames},dst=*:{$this->getPort()}/{$this->path}}";
-        //return "#{$transcode}http{dst=*:{$this->getPort()}/1.flv}";
     }
 
     /**
@@ -56,7 +55,7 @@ class LiveVlcStream extends VlcStream{
      * @return string
      */
     public function getOutUrl($ip = 'localhost'){
-        return "http://{$ip}:{$this->getPort()}/path.mp4";
+        return "http://{$ip}:{$this->getPort()}/{$this->path}";
     }
 
     public function update()
