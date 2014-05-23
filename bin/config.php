@@ -36,9 +36,9 @@ if(file_exists(DIR.'/../devel')){
     define ('TARGET','_devel');
     define('LIVEHOST','10.154.28.203');
 }
-else if(file_exists(DIR.'/../test')){
+else if(file_exists(DIR.'/../tv')){
     define ('TARGET','_test');
-    define('LIVEHOST','10.154.28.204');
+    define('LIVEHOST','10.154.28.191');
 }
 else{
     define ('TARGET','');
@@ -71,15 +71,18 @@ define('VLC_L_FLV_PORT_START', 11000);
 define('VLC_RE_FLV_PORT_START', 13000);
 define('VLCBIN','cvlc -vvv');
 define('VLCD','-d');
-define('VLCNETCACHE', 500);
+define('VLC_USE_LOG', true);       //можно отключить лог для vlc
 
 if(file_exists(DIR.'/../tv')){
-    define('VLCSOUTCACHE',5000);
+    define('VLCSOUTCACHE', 5000);
+    define('VLCNETCACHE', 5000);
+    define('VLC_LIVE_CACHE', 5000);
 }
-else
+else{
     define('VLCSOUTCACHE', 300);
-
-define('VLC_USE_LOG', false);       //можно отключить лог для vlc
+    define('VLCNETCACHE', 500);
+    define('VLC_LIVE_CACHE', 500);
+}
 
 //FOR MOTION
 define('MOTION_USE_LOG', false);     //вкл, выкл лог motion
