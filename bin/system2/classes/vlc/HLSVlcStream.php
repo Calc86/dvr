@@ -29,12 +29,16 @@ class HLSVlcStream extends VlcReStream {
      */
     protected function getOutputVlm($transcode = '')
     {
-        //$liveHost = LIVEHOST;
-        $liveHost = 'localhost';
+        $liveHost = LIVEHOST;
+        //$liveHost = '10.154.28.203';
+        //$liveHost = 'localhost';
         $camID = $this->cam->getID();
         $dvrID = $this->cam->getDVR()->getID();
         $path = $this->getPath();
-        return "#{$transcode}std{access=livehttp{seglen=5,delsegs=true,numsegs=15,splitanywhere=true,index=$path/stream-{$camID}.m3u8,index-url=http://$liveHost/lhttp/{$dvrID}/stream-{$camID}-########.ts},mux=ts{use-key-frames},dst=$path/stream-$camID-########.ts}";
+        //$transcode = 'transcode{vcodec=FLV1,vb=4096,fps=25,scale=1,acodec=mp3,samplerate=44100,ab=128}:';
+        //return "#{$transcode}std{access=livehttp{seglen=5,delsegs=true,numsegs=15,splitanywhere=true,index=$path/stream-{$camID}.m3u8,index-url=http://$liveHost/lhttp/{$dvrID}/stream-{$camID}-########.ts},mux=ts{use-key-frames},dst=$path/stream-$camID-########.ts}";
+        //$transcode = 'transcode{acodec=mp3}:';
+        return "#{$transcode}std{access=livehttp{seglen=5,delsegs=true,numsegs=15,index=$path/stream-{$camID}.m3u8,index-url=http://$liveHost/lhttp/{$dvrID}/stream-{$camID}-########.ts},mux=ts{use-key-frames},dst=$path/stream-$camID-########.ts}";
     }
 
     /**
