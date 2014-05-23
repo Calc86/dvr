@@ -13,7 +13,7 @@ require_once __DIR__.'/include.php';
 date_default_timezone_set('Europe/Moscow');
 
 \system2\EchoLog::getInstance()->put(__FILE__);
-$s = new \system2\BBSystem();
+$s = \system2\BBSystem::getInstance();
 //$s = new \system\FileSystem("/home/vlc/vlc/bin/system/tv.m3u");
 if($argc<2) die(usage());
 

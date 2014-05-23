@@ -13,14 +13,6 @@ namespace system2;
  * @package system2
  */
 class BBSystem extends System{
-    /**
-     *
-     */
-    function __construct()
-    {
-        parent::__construct();
-    }
-
     public function create(){
         $db = \Database::getInstance();
         $q = "select id from users where banned=0";
@@ -38,4 +30,4 @@ class BBSystem extends System{
 
         //$this->recPts();
     }
-} 
+}

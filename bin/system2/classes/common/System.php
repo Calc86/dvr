@@ -15,6 +15,15 @@ namespace system2;
 
 abstract class System implements ISystem{
     /**
+     * @var ISystem
+     */
+    private static $instance = null;
+
+    //runtime flags
+    const FLAG_STOP = 'stop';
+    private $flags = array();
+
+    /**
      * @var Lock
      */
     private $lock;
@@ -27,7 +36,7 @@ abstract class System implements ISystem{
     /**
      *
      */
-    function __construct()
+    private function __construct()
     {
         Log::getInstance()->put(__FUNCTION__, __CLASS__);
 
@@ -37,6 +46,25 @@ abstract class System implements ISystem{
 
         $this->create();
     }
+
+    public function getFlag($flag){
+        if(isset($this->flags[$flag])) return $this->flags[$flag];
+        return false;
+    }
+
+    protected  function setFlag($flag){
+        $this->flags[$flag] = true;
+    }
+
+    protected function resetFlag($flag){
+        $this->flags[$flag] = false;
+    }
+
+    public static function getInstance(){
+        if(self::$instance == null) return (self::$instance = new static);
+        else return self::$instance;
+    }
+
 
     public function create()
     {
@@ -76,8 +104,11 @@ abstract class System implements ISystem{
     {
         Log::getInstance()->put(__FUNCTION__, __CLASS__);
 
+        $this->setFlag(System::FLAG_STOP);
+
         //$lock = new Lock(__FUNCTION__);
         //if(!$lock->create()) return;
+        $this->update();
         $this->_stop();
         //$lock->delete();
         $this->lock->delete();
