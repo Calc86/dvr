@@ -56,7 +56,6 @@ class TVDvr extends DVR{
             $cs->setLiveProto($el['scheme']);
             $cs->setIp($el['host']);
             $cs->setLivePort($el['port']);
-            //$cs->setLivePath($el['path']);
             $cs->setLivePath('');
 
             $this->cams[] = new TVCam($this, $cs);
