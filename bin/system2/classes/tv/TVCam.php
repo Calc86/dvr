@@ -24,7 +24,7 @@ class TVCam extends VlcCam{
 
         //flv
         $this->streams[] = new TVReStream($this, $live);
-        $this->streams[] = new HLSVlcStream($this, $live);
+        $this->streams[] = new TVHlsStream($this, $live);
         //$this->streams[] = new RtmpVlcReStream($this, $live);
     }
 }
