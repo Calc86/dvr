@@ -15,7 +15,7 @@ date_default_timezone_set('Europe/Moscow');
 \system2\EchoLog::getInstance()->put(__FILE__);
 
 //if(file_exists(DIR.'/../tv')){
-if(file_exists(\system2\Path::getRoot().'/tv')){
+if(file_exists(\system2\Path::getRoot().'/../tv')){
     $s = \system2\TVSystem::getInstance();
 }
 else{
