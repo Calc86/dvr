@@ -34,6 +34,9 @@ class Stream implements ICamStream {
 
     public function start()
     {
+        //если система стопится, то мы не стратуем
+        if(System::getInstance()->getFlag(System::FLAG_STOP)) return;
+
         $this->log(__FUNCTION__);
     }
 
@@ -63,6 +66,4 @@ class Stream implements ICamStream {
     {
         Log::getInstance($this->cam->getID())->put($message, __CLASS__);
     }
-
-
 }
