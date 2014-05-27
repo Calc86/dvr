@@ -15,5 +15,7 @@ require_once __DIR__.'/mysql/include.php';
 require_once __DIR__.'/vlc/include.php';
 require_once __DIR__.'/motion/include.php';
 
+require_once __DIR__.'/ffmpeg/include.php';
+
 require_once __DIR__.'/bb/include.php';
 require_once __DIR__.'/tv/include.php';
