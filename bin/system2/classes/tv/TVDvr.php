@@ -58,12 +58,6 @@ class TVDvr extends DVR{
     public function update()
     {
         parent::update();
-
-        foreach($this->daemons as $d){
-            /** @var Daemon $d */
-            $date = new \BashCommand("echo `date` >> {$d->getLogFile()}");
-            $date->exec();
-        }
     }
 
 

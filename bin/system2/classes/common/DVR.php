@@ -84,6 +84,12 @@ abstract class DVR implements IDVR {
             /** @var $cam ICam*/
             $cam->update();
         }
+
+        foreach($this->daemons as $d){
+            /** @var Daemon $d */
+            $date = new \BashCommand("echo `date` >> {$d->getLogFile()}");
+            $date->exec();
+        }
     }
 
     /**

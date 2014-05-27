@@ -169,6 +169,16 @@ abstract class Daemon implements ILog {
         if(is_file($this->getPidFile())) unlink($this->getPidFile());
     }
 
+    public function sigTerm(){
+        $pid = `cat {$this->getPidFile()}`;
+        if($pid != 0 && $pid != '')
+            (new \BashCommand("kill -INT $pid"))->exec();
+        $pid = $this->getProcess();
+        if($pid != 0 && $pid != '')
+            (new \BashCommand("kill -INT $pid"))->exec();
+        if(is_file($this->getPidFile())) unlink($this->getPidFile());
+    }
+
     /**
      * @return boolean
      */
