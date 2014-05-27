@@ -22,6 +22,9 @@ class TVCam extends VlcCam{
         //rec
         //$this->streams[] = new RecVlcStream($this, $live);
 
+        //rtmp stream from ffmpeg
+        //$this->streams[] = new NginxStream($this, $live->getOutUrl());
+
         //flv
         $this->streams[] = new TVReStream($this, $live);
         $this->streams[] = new TVHlsStream($this, $live);
