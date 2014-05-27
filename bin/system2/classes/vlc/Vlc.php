@@ -73,7 +73,7 @@ class Vlc extends Daemon{
         else
             $vlc_logs = '--extraintf=http';
         //$vlc_shell = VLCBIN." --rtsp-tcp --ffmpeg-hw --http-reconnect --http-continuous --sout-keep ".VLCD." $vlc_ifs  --repeat --loop --network-caching ".VLCNETCACHE." --sout-mux-caching ".VLCSOUTCACHE." $vlc_vlm --pidfile {$this->getPidFile()} $vlc_logs \n";
-        $vlc_shell = VLCBIN." --rtsp-tcp --ffmpeg-hw ".VLCD." $vlc_ifs --repeat --loop --live-caching ".VLC_LIVE_CACHE." --network-caching ".VLCNETCACHE." --sout-mux-caching ".VLCSOUTCACHE."  --sout-ts-dts-delay 400 $vlc_vlm --pidfile {$this->getPidFile()} $vlc_logs \n";
+        $vlc_shell = VLCBIN." --rtsp-tcp ".VLCD." $vlc_ifs --repeat --loop --live-caching ".VLC_LIVE_CACHE." --network-caching ".VLCNETCACHE." --sout-mux-caching ".VLCSOUTCACHE."  --sout-ts-dts-delay 400 $vlc_vlm --pidfile {$this->getPidFile()} $vlc_logs \n";
 
         $this->log($vlc_shell);
 
