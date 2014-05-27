@@ -26,13 +26,6 @@ class TVDvr extends DVR{
     }
 
     protected function createCams(){
-        $file = 'Зарубежное кино 1/1+1 (Неприкасаемые) Dolby Digital/Intouchables.avi';
-        $a = explode('/',$file);
-
-        $path = '';
-        foreach($a as $aa)
-            $path.= '/'.rawurlencode(iconv('utf8', 'cp1251', $aa));
-
         $db = array(
             #EXTINF:CТC ,CТC
             'udp://@224.0.90.25:1234',
@@ -61,5 +54,18 @@ class TVDvr extends DVR{
             $this->cams[] = new TVCam($this, $cs);
         }
     }
+
+    public function update()
+    {
+        parent::update();
+
+        foreach($this->daemons as $d){
+            /** @var Daemon $d */
+            $date = new \BashCommand("echo `date` >> {$d->getLogFile()}");
+            $date->exec();
+        }
+    }
+
+
 }
 
