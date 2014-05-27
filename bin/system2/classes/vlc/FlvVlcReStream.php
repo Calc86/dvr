@@ -49,6 +49,14 @@ class FlvVlcReStream extends VlcReStream{
     private function getPort(){
         return VLC_RE_FLV_PORT_START + $this->cam->getID();
     }
+
+    public function start()
+    {
+        usleep(1000 * VLCSOUTCACHE);
+        parent::start();
+    }
+
+
 }
 
 /**
@@ -96,5 +104,11 @@ class UrlFlvVlcStream extends VlcStream{
     protected function getPort()
     {
         return VLC_L_FLV_PORT_START + $this->cam->getID();
+    }
+
+    public function start()
+    {
+        usleep(1000 * VLCSOUTCACHE);
+        parent::start();
     }
 }
