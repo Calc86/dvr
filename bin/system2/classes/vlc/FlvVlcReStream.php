@@ -52,7 +52,6 @@ class FlvVlcReStream extends VlcReStream{
 
     public function start()
     {
-        usleep(1000 * VLCSOUTCACHE);
         parent::start();
     }
 
@@ -108,7 +107,6 @@ class UrlFlvVlcStream extends VlcStream{
 
     public function start()
     {
-        usleep(1000 * VLCSOUTCACHE);
         parent::start();
     }
 }
