@@ -16,6 +16,7 @@ namespace system2;
 class MotionStream extends Stream {
 
     private $config = array();
+    private $lock;
 
     /**
      * @param ICam $cam
@@ -25,8 +26,9 @@ class MotionStream extends Stream {
     {
         parent::__construct($cam);
 
-        //create config file
+        $this->lock = new TimeLock($this->cam->getID().'_timelaps', (8*60*60)); //8h
 
+        //create config file
         $motionUrl = $cs->getStopProto()."://".$cs->getIp().":".$cs->getStopPort()."/".$cs->getStopPath();
         $this->addConfig('netcam_url',$motionUrl);
 
@@ -91,29 +93,22 @@ class MotionStream extends Stream {
 
     public function update()
     {
+        if(!System::getInstance()->getFlag(System::FLAG_STOP))
+            if(!$this->lock->create()) return;    //время не пришло
+
         parent::update();
 
         $path = Path::getTmpfsPath(Path::IMAGE.'/'.$this->cam->getDVR()->getID().'/'.$this->cam->getID());
 
-        $list = "$path/list.txt";
+        System::getInstance()->addCommand(new CreateSnapshotCommand($this->cam->getID(),$path));
+    }
 
-        $filename = $this->cam->getID()."_".date("Ymd_His").".mp4";
+    public function start()
+    {
+        parent::start();
 
-        $createList = new \BashCommand("ls $path/snapshot*.jpg | sort > $list");
-        $deleteList = new \BashCommand("rm $list");
-
-        $createTimelaps = new \BashCommand("cat $list | xargs cat | ffmpeg -f image2pipe -r 3 -vcodec mjpeg -i - -vcodec libx264 $path/../$filename");
-        $deleteImages = new \BashCommand("cat $list | xargs rm");
-
-        $this->log($createList);
-        $this->log($createTimelaps);
-        $this->log($deleteImages);
-
-        $createList->exec();
-        //$createTimelaps->exec();
-
-        $deleteImages->exec();
-        $deleteList->exec();
+        //создаем timelock
+        $this->lock->create();
     }
 
 
