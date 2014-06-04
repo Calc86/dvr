@@ -16,3 +16,4 @@ require_once __DIR__.'/DVR.php';
 require_once __DIR__.'/CamSettings.php';
 require_once __DIR__.'/Cam.php';
 require_once __DIR__.'/Stream.php';
+require_once __DIR__.'/Streams.php';

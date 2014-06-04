@@ -18,7 +18,7 @@ abstract class Cam implements ICam{
     protected $id = 0;
 
     /**
-     * @var CamSettings
+     * @var ICamSettings
      */
     protected $cs = null;
 
@@ -26,7 +26,11 @@ abstract class Cam implements ICam{
      * @var IDVR
      */
     protected $dvr;
-    protected $streams = array();
+    //protected $streams = array();
+    /**
+     * @var ICamStream
+     */
+    protected $stream;
 
     /**
      * @param IDVR $dvr
@@ -40,7 +44,14 @@ abstract class Cam implements ICam{
 
         $this->dvr = $dvr;
         $this->setSettings($cs);
+        $this->create();
     }
+
+    /**
+     * Создает стрим (new)
+     * @return void
+     */
+    abstract function createStream();
 
     /**
      * @return int
@@ -53,10 +64,8 @@ abstract class Cam implements ICam{
     {
         $this->log(__FUNCTION__);
 
-        $this->_create();
+        $this->createStream();
     }
-
-    abstract protected function _create();
 
     public function delete(){
         $this->log(__FUNCTION__);
@@ -66,45 +75,28 @@ abstract class Cam implements ICam{
     {
         $this->log(__FUNCTION__);
 
-        foreach($this->streams as $stream){
-        /** @var $stream ICamStream */
-            $stream->create();
-        }
+        $this->stream->start();
 
-        foreach($this->streams as $stream){
-            /** @var $stream ICamStream */
-            $stream->start();
-        }
     }
 
     public function stop()
     {
         $this->log(__FUNCTION__);
 
-        foreach(array_reverse($this->streams) as $stream){
-        //foreach($this->streams as $stream){
-            /** @var $stream ICamStream */
-            $stream->stop();
-        }
+        $this->stream->stop();
     }
 
     public function restart()
     {
         $this->log(__FUNCTION__);
-        foreach($this->streams as $stream){
-            /** @var $stream ICamStream */
-            $stream->restart();
-        }
+        $this->stream->restart();
     }
 
     public function update()
     {
         $this->log(__FUNCTION__);
         $this->create();    //need to fill cam array!!!
-        foreach($this->streams as $stream){
-            /** @var $stream ICamStream */
-            $stream->update();
-        }
+        $this->stream->update();
     }
 
     /**

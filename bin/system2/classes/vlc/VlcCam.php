@@ -14,10 +14,17 @@ namespace system2;
  * @package system2
  */
 class VlcCam extends Cam{
-    public function _create()
+    /**
+     * Создает стрим (new)
+     * @return void
+     */
+    function createStream()
     {
+        $this->stream = new Streams($this);
         $live = new LiveVlcStream($this);
-        $this->streams[] = $live;
-        $this->streams[] = new RecVlcStream($this, $live);
+        $this->stream->addStream($live);
+        $this->stream->addStream(new RecVlcStream($this, $live));
     }
+
+
 }

@@ -27,23 +27,32 @@ class BBCam extends VlcCam{
         if($cs->live) $this->streams[] = new MotionStream($this, $cs);
     }
 
-    public function _create()
+    /**
+     * Создает стрим (new)
+     * @return void
+     */
+    function createStream()
     {
+        $this->stream = new Streams($this);
+
         $cs = $this->cs;
         /** @var $cs BBCamSettings */
         if($cs->live){
             $live = new BBLiveStream($this);
-            $this->streams[] = $live;
-            $this->streams[] = new HLSVlcStream($this, $live);
+            $this->stream->addStream($live);
+
+            $this->stream->addStream(new HLSVlcStream($this, $live));
             //$this->streams[] = new FlvVlcReStream($this, $live);
 
             //nginx rtmp stream
             //$this->streams[] = new RtmpVlcReStream($this, $live);
 
-            if($cs->rec) $this->streams[] = new BBRecStream($this, $live);
+            if($cs->rec) $this->stream->addStream(new BBRecStream($this, $live));
 
             //motion flv stream
-            $this->streams[] = new UrlFlvVlcStream($this, "http://localhost:".(MOTION_STREAM_PORT + $this->getID()));
+            $this->stream->addStream(
+                new UrlFlvVlcStream($this, "http://localhost:".(MOTION_STREAM_PORT + $this->getID()))
+            );
         }
     }
 }
