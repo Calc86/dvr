@@ -31,6 +31,9 @@ abstract class User implements IUser {
         //$this->create();
     }
 
+    /**
+     * @return int
+     */
     public function getID(){
         return $this->id;
     }
