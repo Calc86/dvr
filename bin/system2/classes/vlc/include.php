@@ -6,6 +6,8 @@
  * Time: 20:04
  */
 
+require_once __DIR__.'/MoveVideoCommand.php';
+
 require_once __DIR__.'/Vlm.php';
 require_once __DIR__.'/HttpVlm.php';
 require_once __DIR__.'/VlcStream.php';
