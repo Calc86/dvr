@@ -53,23 +53,43 @@ abstract class System implements ISystem{
         $this->create();
     }
 
+    /**
+     * Добавить комманду, которая будет вызвана в конце update
+     * @param ICommand $command
+     */
     public function addCommand(ICommand $command){
         $this->commands[] = $command;
     }
 
+    /**
+     * Получить текущий флаг...
+     * @param $flag
+     * @return bool
+     */
     public function getFlag($flag){
         if(isset($this->flags[$flag])) return $this->flags[$flag];
         return false;
     }
 
+    /**
+     * Установить флаг
+     * @param $flag
+     */
     protected  function setFlag($flag){
         $this->flags[$flag] = true;
     }
 
+    /**
+     * @param $flag
+     */
     protected function resetFlag($flag){
         $this->flags[$flag] = false;
     }
 
+    /**
+     * Возвращает нужный класс, возможно наследование
+     * @return ISystem|static
+     */
     public static function getInstance(){
         if(self::$instance == null) return (self::$instance = new static);
         else return self::$instance;
