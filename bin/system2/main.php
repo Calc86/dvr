@@ -42,6 +42,9 @@ switch($cmd){
     case 'control':
         $s->control();
         break;
+    case 'serialize':
+        print_r(unserialize(serialize($s)));
+        break;
     default:
         die(usage());
 }
