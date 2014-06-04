@@ -19,6 +19,12 @@ abstract class System implements ISystem{
      */
     private static $instance = null;
 
+    /**
+     * Команды вызываемые в конце update метода, устанавливаются через addCommand();
+     * @var array
+     */
+    private $commands = array();
+
     //runtime flags
     const FLAG_STOP = 'stop';
     private $flags = array();
@@ -45,6 +51,10 @@ abstract class System implements ISystem{
         $this->lock = new Lock('system');
 
         $this->create();
+    }
+
+    public function addCommand(ICommand $command){
+        $this->commands[] = $command;
     }
 
     public function getFlag($flag){
@@ -151,6 +161,12 @@ abstract class System implements ISystem{
         $lock = new Lock(__FUNCTION__);
         if(!$lock->create()) return;
         $this->_update();
+
+        while(($command = array_shift($this->commands)) != null){
+            /** @var $command ICommand */
+            $command->execute();
+        }
+
         $lock->delete();
     }
 
