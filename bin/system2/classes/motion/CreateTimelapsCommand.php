@@ -13,7 +13,7 @@ namespace system2;
  * Class CreateSnapshotCommand
  * @package system2
  */
-class CreateSnapshotCommand implements ICommand {
+class CreateTimelapsCommand implements ICommand {
     private $cid;
     private $path;
 

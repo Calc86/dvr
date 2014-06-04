@@ -100,7 +100,7 @@ class MotionStream extends Stream {
 
         $path = Path::getTmpfsPath(Path::IMAGE.'/'.$this->cam->getDVR()->getID().'/'.$this->cam->getID());
 
-        System::getInstance()->addCommand(new CreateSnapshotCommand($this->cam->getID(),$path));
+        System::getInstance()->addCommand(new CreateTimelapsCommand($this->cam->getID(),$path));
     }
 
     public function start()
