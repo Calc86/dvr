@@ -6,6 +6,8 @@
  * Time: 15:34
  */
 
+require_once __DIR__.'/ICommand.php';
+
 require_once __DIR__.'/ILog.php';
 require_once __DIR__.'/IUnique.php';
 require_once __DIR__.'/IControlled.php';
