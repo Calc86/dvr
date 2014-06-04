@@ -97,30 +97,7 @@ class RecVlcStream extends VlcReStream {
         $path = $this->getNfsPath();
         $mp4 = $path.".mp4";
 
-        //ffmpeg необходим для правильного заполения метаданных, так как у vlc с этим проблемы (по крайней мере у 2.0.10)
-        $ffmpeg = new \BashCommand("ffmpeg -y -i $avi -codec copy $mp4\n");
-        $this->log($ffmpeg);
-
-        $ffmpeg->exec();
-
-        //если это какой либо мжпег поток и ffmpeg вышел с ошибкой, но создал нулевой файл
-        // обычно если ffmpeg не может сделать файлик, то размер его 203 байта.... ы(
-        if(file_exists($mp4) && (filesize($mp4) <= 300)){
-            unlink($mp4);
-            $this->log("файл $mp4 имеет нулевой размер");
-        }
-
-        //если ffmpeg не создал файл или мы удалили нулевой файл
-        if(!file_exists($mp4)){
-            $mv = new \BashCommand("mv $avi $path.avi\n");
-            $this->log($mv);
-            $mv->exec();
-        }
-        else{
-            //файлик успешно переехал на новое место
-            if(file_exists($avi))
-                unlink($avi);
-        }
+        System::getInstance()->addCommand(new MoveVideoICommand($avi, $mp4, $path));
 
         //Мы сделали всё что могил, теперь удаляем следы нашего пребывания
         //unlink($this->getRecFilePath());
