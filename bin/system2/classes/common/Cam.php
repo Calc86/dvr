@@ -107,29 +107,6 @@ abstract class Cam implements ICam{
         }
     }
 
-    /*public function timelaps()
-    {
-        $this->log(__FUNCTION__);*/
-
-        /*$camMotion = $cam->getCamMotion();
-        if($camMotion != null ){
-            Log::getInstance()->put("CID: ".$cam->getID()." do", __CLASS__);
-            $path = $camMotion->getTargetDir();
-
-
-            $list = "$path/list.txt";
-            $filename = $cam->getID()."_".date("Y-m-d_H:i:s").".mp4";
-
-            $createList = new \BashCommand("ls $path/snapshot*.jpg | sort > $list");
-            $deleteList = new \BashCommand("rm $list");
-            $createTimelaps = new \BashCommand("cat $list | xargs cat | ffmpeg -f image2pipe -r 3 -vcodec mjpeg -i - -vcodec libx264 $path/../$filename");
-            $deleteImages = new \BashCommand("cat $list | xargs rm");
-
-            $createList->exec();
-            $createTimelaps->exec();
-        }*/
-    //}
-
     /**
      * @return IDVR
      */
