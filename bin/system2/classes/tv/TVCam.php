@@ -20,14 +20,14 @@ class TVCam extends VlcCam{
         $this->streams[] = $live;
 
         //rec
-        //$this->streams[] = new RecVlcStream($this, $live);
+        $this->streams[] = new RecVlcStream($this, $live);
 
         //rtmp stream from ffmpeg
         //$this->streams[] = new NginxStream($this, $live->getOutUrl());
 
         //flv
         $this->streams[] = new TVReStream($this, $live);
-        $this->streams[] = new TVHlsStream($this, $live);
+        //$this->streams[] = new TVHlsStream($this, $live);
         //$this->streams[] = new RtmpVlcReStream($this, $live);
     }
 }
