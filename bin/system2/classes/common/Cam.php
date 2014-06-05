@@ -13,7 +13,7 @@ namespace system2;
  * Class Cam
  * @package system2
  */
-abstract class Cam implements ICam{
+class Cam implements ICam{
 
     protected $id = 0;
 
@@ -44,14 +44,9 @@ abstract class Cam implements ICam{
 
         $this->dvr = $dvr;
         $this->setSettings($cs);
-        $this->create();
-    }
 
-    /**
-     * Создает стрим (new)
-     * @return void
-     */
-    abstract function createStream();
+        $this->stream = AbstractFactory::getInstance()->createStream($this);
+    }
 
     /**
      * @return int
@@ -60,15 +55,20 @@ abstract class Cam implements ICam{
         return $this->id;
     }
 
+    /**
+     * Создает стримы после запуска демонов
+     */
     final public function create()
     {
         $this->log(__FUNCTION__);
 
-        $this->createStream();
+        $this->stream->create();
     }
 
     public function delete(){
         $this->log(__FUNCTION__);
+
+        $this->stream->delete();
     }
 
     public function start()
@@ -76,7 +76,6 @@ abstract class Cam implements ICam{
         $this->log(__FUNCTION__);
 
         $this->stream->start();
-
     }
 
     public function stop()
@@ -89,13 +88,14 @@ abstract class Cam implements ICam{
     public function restart()
     {
         $this->log(__FUNCTION__);
+
         $this->stream->restart();
     }
 
     public function update()
     {
         $this->log(__FUNCTION__);
-        $this->create();    //need to fill cam array!!!
+
         $this->stream->update();
     }
 
@@ -128,6 +128,6 @@ abstract class Cam implements ICam{
      */
     public function log($message)
     {
-        Log::getInstance($this->getID())->put($message, __CLASS__);
+        Log::getInstance($this->getID())->put($message, $this);
     }
 }
