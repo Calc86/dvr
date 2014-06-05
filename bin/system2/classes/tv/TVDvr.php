@@ -14,27 +14,30 @@ namespace system2;
  * @package system2
  */
 class TVDvr extends DVR{
-
-    public function create()
+    /**
+     * @param IUser $user
+     */
+    function __construct(IUser $user)
     {
-        parent::create();
+        parent::__construct($user);
 
-        // создаем камеры перед запуском демона, так как в демон нам нужно засунуть камеры.
-        $this->createCams();
+        $this->createCams();    //new+add
 
-        $this->daemons[] = new Vlc($this);
+        $vlc = new Vlc($this);
+        //$vlc->setValgrind();    //set mem leak debug
+        $this->addDaemon($vlc);
     }
 
     protected function createCams(){
         $db = array(
             #EXTINF:CТC ,CТC
-            'udp://@224.0.90.25:1234',
+            //'udp://@224.0.90.25:1234',
             #EXTINF:2x2 ,2x2
             'udp://@224.0.90.60:1234',
             #EXTINF:Discovery tvg-name="Discovery" ,Discovery
-            'udp://@224.0.90.68:1234',
+            //'udp://@224.0.90.68:1234',
             #EXTINF:Роccия 2 tvg-name="Россия_2_(Спорт)" ,Роccия 2
-            'udp://@224.0.90.85:1234',
+            //'udp://@224.0.90.85:1234',
         );
 
         $i=0;
@@ -51,7 +54,7 @@ class TVDvr extends DVR{
             $cs->setLivePort($el['port']);
             $cs->setLivePath('');
 
-            $this->cams[] = new TVCam($this, $cs);
+            $this->addCam(new TVCam($this, $cs));
         }
     }
 
