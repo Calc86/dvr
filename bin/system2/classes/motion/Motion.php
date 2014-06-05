@@ -91,7 +91,10 @@ class Motion extends Daemon {
         // добавить в конфиг трейды и записать конфиг файлы для трейдов
     }
 
-    public function _start()
+    /**
+     * @return string Bash command
+     */
+    protected function getCommand()
     {
         $this->writeConfig();
         if(MOTION_USE_LOG)
@@ -100,12 +103,11 @@ class Motion extends Daemon {
             $log = '-l /dev/null';
 
         $shell = "motion -c {$this->getConfigFile()} -p {$this->getPidFile()} $log";
-        Log::getInstance()->put($shell, __CLASS__);
-        (new \BashCommand($shell))->exec();
+        return $shell;
     }
 
-    public function _stop()
+    /*public function _stop()
     {
         $this->kill();  //он автоматом обрабатывает kill
-    }
+    }*/
 }
