@@ -54,7 +54,7 @@ class TVDvr extends DVR{
             $cs->setLivePort($el['port']);
             $cs->setLivePath('');
 
-            $this->addCam(new TVCam($this, $cs));
+            $this->addCam(AbstractFactory::getInstance()->createCam($this, $cs));
         }
     }
 
