@@ -62,7 +62,10 @@ class Vlc extends Daemon{
         return $this->telnetPort;
     }
 
-    public function _start()
+    /**
+     * @return string
+     */
+    public function getCommand()
     {
         $vlc_vlm = '';
 
@@ -73,11 +76,13 @@ class Vlc extends Daemon{
         else
             $vlc_logs = '--extraintf=http';
         //$vlc_shell = VLCBIN." --rtsp-tcp --ffmpeg-hw --http-reconnect --http-continuous --sout-keep ".VLCD." $vlc_ifs  --repeat --loop --network-caching ".VLCNETCACHE." --sout-mux-caching ".VLCSOUTCACHE." $vlc_vlm --pidfile {$this->getPidFile()} $vlc_logs \n";
-        $vlc_shell = VLCBIN." --rtsp-tcp ".VLCD." $vlc_ifs --repeat --loop --live-caching ".VLC_LIVE_CACHE." --network-caching ".VLCNETCACHE." --sout-mux-caching ".VLCSOUTCACHE."  --sout-ts-dts-delay 400 $vlc_vlm --pidfile {$this->getPidFile()} $vlc_logs \n";
+        $vlc_shell = VLCBIN." --rtsp-tcp ".VLCD." $vlc_ifs --repeat --loop --live-caching ".VLC_LIVE_CACHE." --network-caching ".VLCNETCACHE." --sout-mux-caching ".VLCSOUTCACHE."  --sout-ts-dts-delay 400 $vlc_vlm --pidfile {$this->getPidFile()} $vlc_logs ";
 
-        $this->log($vlc_shell);
+        if($this->isValgrind()){
+            $vlc_shell = "valgrind -v --trace-children=yes --log-file={$this->getValgrindFile()} --error-limit=no --leak-check=full $vlc_shell";
+        }
 
-        (new \BashCommand($vlc_shell))->exec();
+        return $vlc_shell;
     }
 
     public function _stop()

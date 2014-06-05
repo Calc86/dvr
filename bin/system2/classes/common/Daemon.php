@@ -22,6 +22,12 @@ abstract class Daemon implements ILog {
     private $configFile;
     private $logFile;
     private $logrotateFile;
+    private $valgrindFile;  //memory leak
+
+    /**
+     * @var bool
+     */
+    private $valgrind = false;
 
     /**
      * @param IDVR $dvr
@@ -41,6 +47,8 @@ abstract class Daemon implements ILog {
         $this->setPidFile(Path::getLocalPath(Path::PROCESS."/{$this->dvr->getID()}")."/{$this->getName()}.pid");
 
         $this->setLogrotateFile(Path::getLocalPath(Path::ETC."/{$this->dvr->getID()}")."/{$this->getName()}.conf");
+
+        $this->setValgrindFile(Path::getLocalPath(Path::LOG."/{$this->dvr->getID()}")."/{$this->getName()}.valgrind");
     }
 
     /**
@@ -57,7 +65,7 @@ abstract class Daemon implements ILog {
     /**
      * @param $configFile
      */
-    public function setConfigFile($configFile)
+    private function setConfigFile($configFile)
     {
         $this->configFile = $configFile;
     }
@@ -70,7 +78,7 @@ abstract class Daemon implements ILog {
     /**
      * @param $logFile
      */
-    public function setLogFile($logFile)
+    private function setLogFile($logFile)
     {
         $this->logFile = $logFile;
     }
@@ -96,10 +104,10 @@ abstract class Daemon implements ILog {
     /**
      * @param $name
      */
-    public function setName($name)
+    /*public function setName($name)
     {
         $this->name = $name;
-    }
+    }*/
 
     /**
      * @return string
@@ -110,9 +118,25 @@ abstract class Daemon implements ILog {
     }
 
     /**
+     * @param mixed $valgrindFile
+     */
+    private function setValgrindFile($valgrindFile)
+    {
+        $this->valgrindFile = $valgrindFile;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValgrindFile()
+    {
+        return $this->valgrindFile;
+    }
+
+    /**
      * @param $pidFile
      */
-    public function setPidFile($pidFile)
+    private function setPidFile($pidFile)
     {
         $this->pidFile = $pidFile;
     }
@@ -122,6 +146,25 @@ abstract class Daemon implements ILog {
         return $this->pidFile;
     }
 
+
+    public function setValgrind()
+    {
+        $this->valgrind = true;
+    }
+
+    public function resetValgrind()
+    {
+        $this->valgrind = false;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isValgrind()
+    {
+        return $this->valgrind;
+    }
+
     final public function start(){
         if($this->isStarted()){
             $this->log($this->getName()." для пользователя {$this->dvr->getID()} уже запущен или мертв", __CLASS__);
@@ -129,12 +172,18 @@ abstract class Daemon implements ILog {
             return;
         }
 
-        $this->_start();
+        $this->log($this->getCommand());
+        (new \BashCommand($this->getCommand()))->exec();
 
         $this->wait_for_unix_proc_start();
     }
 
-    abstract protected function _start();
+    /**
+     * @return string Bash command
+     */
+    abstract protected function getCommand();
+
+    //abstract protected function _start();
 
     final public function stop(){
         $this->log(__FUNCTION__);
@@ -152,7 +201,9 @@ abstract class Daemon implements ILog {
         }
     }
 
-    abstract protected function _stop();
+    protected function _stop(){
+        $this->sigTerm();
+    }
 
     public function restart(){
         if($this->isStarted()) $this->stop();

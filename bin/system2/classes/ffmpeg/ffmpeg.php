@@ -37,19 +37,20 @@ class ffmpeg extends Daemon{
         parent::__construct($this->dvr, $name);
     }
 
-    public function _start()
+    /**
+     * @return string
+     */
+    protected function getCommand()
     {
         $ffmpeg = "ffmpeg $this->input $this->output >> {$this->getLogFile()} & ";
 
-        $this->log($ffmpeg);
-
-        (new \BashCommand($ffmpeg))->exec();
+        return $ffmpeg;
     }
 
-    protected function _stop()
+    /*protected function _stop()
     {
         $this->sigTerm();
-    }
+    }*/
 
 
 }
