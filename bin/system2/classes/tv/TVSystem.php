@@ -13,11 +13,10 @@ namespace system2;
  * @package system2
  */
 class TVSystem extends System {
-    public function create()
-    {
-        $this->users[] = new TVUser(1);
 
-        parent::create();
+    public function _create()
+    {
+        $this->addUser(AbstractFactory::getInstance()->createUser(1));
     }
 
     protected function _update()
