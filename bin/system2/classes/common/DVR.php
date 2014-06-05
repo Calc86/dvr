@@ -23,9 +23,9 @@ abstract class DVR implements IDVR {
     /**
      * @var array
      */
-    protected $daemons = array();
+    private $daemons = array();
 
-    protected $cams = array();
+    private $cams = array();
 
     /**
      * @param IUser $user
@@ -34,7 +34,20 @@ abstract class DVR implements IDVR {
     {
         $this->user = $user;
         $this->id = $user->getID();
-        //parent::__construct($user->getID(), 'dvr');
+    }
+
+    /**
+     * @param ICam $cam
+     */
+    protected function addCam(ICam $cam){
+        $this->cams[] = $cam;
+    }
+
+    /**
+     * @param Daemon $daemon
+     */
+    protected function addDaemon(Daemon $daemon){
+        $this->daemons[] = $daemon;
     }
 
     /**
@@ -43,11 +56,6 @@ abstract class DVR implements IDVR {
     public function getID()
     {
         return $this->id;
-    }
-
-    public function create()
-    {
-        $this->log(__FUNCTION__);
     }
 
     public function start()
@@ -69,17 +77,24 @@ abstract class DVR implements IDVR {
     public function restart()
     {
         $this->log(__FUNCTION__);
-        foreach($this->cams as $cam){
+        /*foreach($this->cams as $cam){
             /** @var $cam ICam*/
-            $cam->stop();
+            /*$cam->stop();
             sleep(1);
             $cam->start();
-        }
+        }*/
+
+        $this->stopCams();
+        $this->stopDaemons();
+        sleep(1);
+        $this->startDaemons();
+        $this->startCams();
     }
 
     public function update()
     {
         $this->log(__FUNCTION__);
+
         foreach($this->cams as $cam){
             /** @var $cam ICam*/
             $cam->update();
@@ -102,24 +117,25 @@ abstract class DVR implements IDVR {
 
     //----------------
 
-    protected function startCams(){
+    private function startCams(){
         $this->log(__FUNCTION__);
         foreach($this->cams as $cam){
             /** @var $cam ICam*/
-            $cam->create();
+            $this->create();
             $cam->start();
         }
     }
 
-    protected function startDaemons(){
+    private function startDaemons(){
         $this->log(__FUNCTION__);
+
         foreach($this->daemons as $daemon){
             /** @var $daemon Daemon*/
             $daemon->start();
         }
     }
 
-    protected function stopDaemons(){
+    private function stopDaemons(){
         $this->log(__FUNCTION__);
         foreach($this->daemons as $daemon){
             /** @var $daemon Daemon*/
@@ -127,13 +143,11 @@ abstract class DVR implements IDVR {
         }
     }
 
-    protected function stopCams(){
+    private function stopCams(){
         $this->log(__FUNCTION__);
 
-        // TODO: Разобраться с этой ерезью
         foreach($this->cams as $cam){
             /** @var $cam ICam*/
-            $cam->create();
             $cam->stop();
             $cam->delete();
         }
