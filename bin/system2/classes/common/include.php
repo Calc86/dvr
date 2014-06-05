@@ -6,6 +6,8 @@
  * Time: 20:04
  */
 
+require_once __DIR__.'/AbstractFactory.php';
+
 require_once __DIR__.'/Daemon.php';
 require_once __DIR__.'/Lock.php';
 require_once __DIR__.'/Log.php';
