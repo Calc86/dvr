@@ -13,8 +13,6 @@ namespace system2;
  * @package system2
  */
 interface IControlled {
-    public function create();
-
     public function start();
     public function stop();
     public function restart();
