@@ -8,7 +8,6 @@
 
 require_once __DIR__.'/ICommand.php';
 
-require_once __DIR__.'/ILog.php';
 require_once __DIR__.'/IUnique.php';
 require_once __DIR__.'/IControlled.php';
 require_once __DIR__.'/IDelete.php';
