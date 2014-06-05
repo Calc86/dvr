@@ -13,6 +13,6 @@ namespace system2;
  * Interface IDVR
  * @package system2
  */
-interface IDVR extends IControlled, IUnique, ILog{
+interface IDVR extends IControlled, IUnique{
 
 } 

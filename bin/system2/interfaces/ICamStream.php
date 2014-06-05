@@ -13,6 +13,6 @@ namespace system2;
  * Interface ICamStream
  * @package system2
  */
-interface ICamStream extends IControlled, ILog{
+interface ICamStream extends IControlled, ICreate, IDelete{
 
 }

@@ -12,5 +12,5 @@ namespace system2;
  * Interface IUser
  * @package system2
  */
-interface IUser extends IControlled, IUnique, ILog{
+interface IUser extends IControlled, IUnique{
 }

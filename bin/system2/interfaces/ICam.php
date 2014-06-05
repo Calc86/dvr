@@ -12,7 +12,7 @@ namespace system2;
  * Interface ICam
  * @package system2
  */
-interface ICam extends IControlled, IDelete, IUnique, ILog{
+interface ICam extends IControlled, ICreate, IDelete, IUnique{
     /**
      * @return IDVR
      */
