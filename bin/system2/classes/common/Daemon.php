@@ -9,7 +9,7 @@ namespace system2;
  * Time: 17:42
  */
 
-abstract class Daemon implements ILog {
+abstract class Daemon {
 
     /**
      * @var string Daemon name
