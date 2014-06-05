@@ -29,6 +29,11 @@ class Stream implements ICamStream {
 
     public function create()
     {
+        $this->log(get_class($this).":".__FUNCTION__);
+    }
+
+    public function delete()
+    {
         $this->log(__FUNCTION__);
     }
 
@@ -64,6 +69,6 @@ class Stream implements ICamStream {
      */
     public function log($message)
     {
-        Log::getInstance($this->cam->getID())->put($message, __CLASS__);
+        Log::getInstance($this->cam->getID())->put($message, $this);
     }
 }
