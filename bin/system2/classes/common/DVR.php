@@ -121,7 +121,7 @@ abstract class DVR implements IDVR {
         $this->log(__FUNCTION__);
         foreach($this->cams as $cam){
             /** @var $cam ICam*/
-            $this->create();
+            $cam->create();
             $cam->start();
         }
     }
