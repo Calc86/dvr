@@ -37,20 +37,27 @@ abstract class System implements ISystem{
     /**
      * @var array of IUser
      */
-    protected $users;
+    private $users;
 
     /**
      *
      */
     private function __construct()
     {
-        Log::getInstance()->put(__FUNCTION__, __CLASS__);
+        Log::getInstance()->put(__FUNCTION__, $this);
 
         Path::createAll();
 
         $this->lock = new Lock('system');
 
         $this->create();
+    }
+
+    /**
+     * @param IUser $user
+     */
+    protected function addUser(IUser $user){
+        $this->users[] = $user;
     }
 
     /**
@@ -96,19 +103,16 @@ abstract class System implements ISystem{
     }
 
 
-    public function create()
+    final protected function create()
     {
-        Log::getInstance()->put(__FUNCTION__, __CLASS__);
+        Log::getInstance()->put(__FUNCTION__, $this);
 
-        foreach($this->users as $user){
-            /** @var $user IUser */
-            $user->create();
-        }
+        $this->addUser(AbstractFactory::getInstance()->createUser(1));
     }
 
     final public function start()
     {
-        Log::getInstance()->put(__FUNCTION__, __CLASS__);
+        Log::getInstance()->put(__FUNCTION__, $this);
 
         $lock = new Lock(__FUNCTION__);
         if(!$lock->create()) return;
@@ -125,14 +129,14 @@ abstract class System implements ISystem{
                 $user->start();
             }
             catch(\Exception $e){
-                Log::getInstance()->put(__FUNCTION__.':'.$user->getID()." ".$e->getMessage(), __CLASS__);
+                Log::getInstance()->put(__FUNCTION__.':'.$user->getID()." ".$e->getMessage(), $this);
             }
         }
     }
 
     final public function stop()
     {
-        Log::getInstance()->put(__FUNCTION__, __CLASS__);
+        Log::getInstance()->put(__FUNCTION__, $this);
 
         $this->setFlag(System::FLAG_STOP);
 
@@ -153,7 +157,7 @@ abstract class System implements ISystem{
                 $user->stop();
             }
             catch(\Exception $e){
-                Log::getInstance()->put(__FUNCTION__.':'.$user->getID()." ".$e->getMessage(), __CLASS__);
+                Log::getInstance()->put(__FUNCTION__.':'.$user->getID()." ".$e->getMessage(), $this);
             }
         }
 
@@ -165,7 +169,7 @@ abstract class System implements ISystem{
 
     final public function restart()
     {
-        Log::getInstance()->put(__FUNCTION__, __CLASS__);
+        Log::getInstance()->put(__FUNCTION__, $this);
 
         $lock = new Lock(__FUNCTION__);
         if(!$lock->create()) return;
@@ -177,7 +181,7 @@ abstract class System implements ISystem{
 
     final public function update()
     {
-        Log::getInstance()->put(__FUNCTION__, __CLASS__);
+        Log::getInstance()->put(__FUNCTION__, $this);
         $lock = new Lock(__FUNCTION__);
         if(!$lock->create()) return;
         $this->_update();
@@ -197,7 +201,7 @@ abstract class System implements ISystem{
                 $user->update();
             }
             catch(\Exception $e){
-                Log::getInstance()->put(__FUNCTION__.':'.$user->getID()." ".$e->getMessage(), __CLASS__);
+                Log::getInstance()->put(__FUNCTION__.':'.$user->getID()." ".$e->getMessage(), $this);
             }
         }
 
