@@ -15,6 +15,6 @@ namespace system2;
 class TVUser extends User {
     protected function _create()
     {
-        $this->dvrs[] = new TVDvr($this);
+        $this->dvrs[] = AbstractFactory::getInstance()->createDvr($this);
     }
-} 
+}
