@@ -12,7 +12,7 @@ namespace system2;
  * Class User
  * @package system2
  */
-abstract class User implements IUser {
+class User implements IUser {
     protected $id;
 
     /**
@@ -28,7 +28,7 @@ abstract class User implements IUser {
         $this->id = $id;
         $this->log(__FUNCTION__);
 
-        //$this->create();
+        $this->create();
     }
 
     /**
@@ -41,15 +41,14 @@ abstract class User implements IUser {
     final public function create()
     {
         $this->log(__FUNCTION__);
-        $this->_create();
 
-        foreach($this->dvrs as $dvr){
-            /** @var $dvr IDVR */
-            $dvr->create();
-        }
+        //todo убрать массив, скомпановать
+        $this->dvrs[]  = AbstractFactory::getInstance()->createDvr($this);
+
+        //$this->_create();
     }
 
-    abstract protected function _create();
+    //abstract protected function _create();
 
     public function start()
     {
@@ -90,9 +89,9 @@ abstract class User implements IUser {
     /**
      * @param $message
      */
-    public function log($message)
+    final protected function log($message)
     {
-        Log::getInstance($this->id)->put($message, __CLASS__);
+        Log::getInstance($this->id)->put($message, $this);
     }
 
 
