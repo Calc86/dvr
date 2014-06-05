@@ -19,7 +19,7 @@ class TVFactory extends AbstractFactory {
      */
     public function createUser($id)
     {
-        return new TVUser($id);
+        return new User($id);
     }
 
     /**
@@ -38,7 +38,7 @@ class TVFactory extends AbstractFactory {
      */
     public function createCam(IDVR $dvr, ICamSettings $cs)
     {
-        return new TVCam($dvr, $cs);
+        return new Cam($dvr, $cs);
     }
 
     /**
