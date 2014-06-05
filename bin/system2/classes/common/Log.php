@@ -73,11 +73,14 @@ class Log {
 
     /**
      * @param $string
-     * @param string $module
+     * @param string|object $module
      * @param string $target
      * @return string
      */
-    public function put($string, $module = "log", $target = "NOTICE"){
+    public function put($string, $module, $target = "NOTICE"){
+        if(is_object($module)){
+            $module = get_class($module);
+        }
         $data = date("[ Y-m-d H:i:s ]")." UID:{$this->userID} {$target} $module ".trim($string)."\n";
         file_put_contents($this->getLogPath(), $data, FILE_APPEND);
         return $data;
