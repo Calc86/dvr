@@ -12,8 +12,7 @@ namespace system2;
  * Class DVR
  * @package system2
  */
-//abstract class DVR extends Daemon implements IDVR {
-abstract class DVR implements IDVR {
+class DVR implements IDVR {
     protected $id = -1; //-1 for debug
     /**
      * @var IUser
@@ -39,14 +38,14 @@ abstract class DVR implements IDVR {
     /**
      * @param ICam $cam
      */
-    protected function addCam(ICam $cam){
+    public function addCam(ICam $cam){
         $this->cams[] = $cam;
     }
 
     /**
      * @param Daemon $daemon
      */
-    protected function addDaemon(Daemon $daemon){
+    public function addDaemon(Daemon $daemon){
         $this->daemons[] = $daemon;
     }
 
@@ -112,7 +111,7 @@ abstract class DVR implements IDVR {
      */
     public function log($message)
     {
-        Log::getInstance($this->id)->put($message, __CLASS__);
+        Log::getInstance($this->id)->put($message, $this);
     }
 
     //----------------
