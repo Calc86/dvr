@@ -25,6 +25,4 @@ class VlcCam extends Cam{
         $this->stream->addStream($live);
         $this->stream->addStream(new RecVlcStream($this, $live));
     }
-
-
 }
