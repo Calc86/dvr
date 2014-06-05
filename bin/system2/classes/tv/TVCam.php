@@ -13,9 +13,9 @@ namespace system2;
  * Class TVCam
  * @package system2
  */
-class TVCam extends VlcCam{
+/**class TVCam extends Cam{
     function createStream()
     {
         $this->stream = AbstractFactory::getInstance()->createStream($this);
     }
-}
+}*/
