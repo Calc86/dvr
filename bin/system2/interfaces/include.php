@@ -12,6 +12,7 @@ require_once __DIR__.'/ILog.php';
 require_once __DIR__.'/IUnique.php';
 require_once __DIR__.'/IControlled.php';
 require_once __DIR__.'/IDelete.php';
+require_once __DIR__.'/ICreate.php';
 
 require_once __DIR__.'/ICamSettings.php';
 require_once __DIR__.'/ICam.php';
