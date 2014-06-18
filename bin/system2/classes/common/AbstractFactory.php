@@ -28,20 +28,56 @@ abstract class AbstractFactory {
      * @param int $id
      * @return IUser
      */
-    abstract public function createUser($id);
+    public function createUser($id)
+    {
+        return new User($id);
+    }
 
     /**
      * @param IUser $user
      * @return IDVR
      */
-    abstract public function createDvr(IUser $user);
+    public function createDvr(IUser $user)
+    {
+        $dvr = new Dvr($user);
+
+        $cams = $this->createCams($dvr);    //new+add
+        foreach($cams as $cam){
+            /** @var $cam Cam */
+            $dvr->addCam($cam);
+        }
+
+        $daemons = $this->createDaemons($dvr);
+
+        foreach($daemons as $daemon){
+            /** @var $daemon Daemon */
+            $dvr->addDaemon($daemon);
+        }
+
+        return $dvr;
+    }
+
+    /**
+     * @param DVR $dvr
+     * @return array of Cams
+     */
+    abstract protected function createCams(DVR $dvr);
+
+    /**
+     * @param DVR $dvr
+     * @return array of Daemons
+     */
+    abstract protected function createDaemons(DVR $dvr);
 
     /**
      * @param IDVR $dvr
      * @param ICamSettings $cs
      * @return ICam
      */
-    abstract public function createCam(IDVR $dvr, ICamSettings $cs);
+    public function createCam(IDVR $dvr, ICamSettings $cs)
+    {
+        return new Cam($dvr, $cs);
+    }
 
     /**
      * @param ICam $cam
