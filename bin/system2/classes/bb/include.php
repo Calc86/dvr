@@ -16,4 +16,4 @@ require_once __DIR__.'/BBRecStream.php';
 //require_once __DIR__.'/BBCam.php';
 //require_once __DIR__.'/BBDvr.php';
 //require_once __DIR__.'/BBUser.php';
-require_once __DIR__.'/BBSystem.php';
+//require_once __DIR__.'/BBSystem.php';
