@@ -57,6 +57,19 @@ class DVR implements IDVR {
         return $this->id;
     }
 
+    /**
+     * @return array
+     */
+    public function getCamIDs(){
+        $ids = array();
+        foreach($this->cams as $cam){
+            /** @var $cam Cam */
+            $ids[] = $cam->getID();
+        }
+
+        return $ids;
+    }
+
     public function start()
     {
         $this->log(__FUNCTION__);
