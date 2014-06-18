@@ -13,7 +13,7 @@ namespace system2;
  * Class Vlm
  * @package system2
  */
-abstract class Vlm implements ILog {
+abstract class Vlm {
     protected $return = '';
     protected $cam;
 
