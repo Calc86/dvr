@@ -25,6 +25,20 @@ abstract class AbstractFactory {
     }
 
     /**
+     * @return ISystem
+     */
+    public function createSystem(){
+        return System::getInstance();
+    }
+
+    /**
+     * @return array of Users
+     */
+    public function createUsers(){
+        return array(AbstractFactory::getInstance()->createUser(1));
+    }
+
+    /**
      * @param int $id
      * @return IUser
      */

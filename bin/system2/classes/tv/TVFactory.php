@@ -14,35 +14,30 @@ namespace system2;
  */
 class TVFactory extends AbstractFactory {
     /**
-     * @param int $id
-     * @return IUser
+     * @param DVR $dvr
+     * @return array of Daemons
      */
-    public function createUser($id)
+    protected function createDaemons(DVR $dvr)
     {
-        return new User($id);
+        $vlc = new Vlc($dvr);
+
+        return array($vlc);
     }
 
     /**
-     * @param IUser $user
-     * @return IDVR
+     * @return ISystem
      */
-    public function createDvr(IUser $user)
+    public function createSystem()
     {
-        $dvr = new Dvr($user);
-
-        $this->createCams($dvr);    //new+add
-
-        $vlc = new Vlc($dvr);
-        //$vlc->setValgrind();    //set mem leak debug
-        $dvr->addDaemon($vlc);
-
-        return $dvr;
+        return TVSystem::getInstance();
     }
+
 
     /**
      * @param Dvr $dvr
+     * @return array
      */
-    private function createCams(Dvr $dvr){
+    protected function createCams(Dvr $dvr){
         $db = array(
             #EXTINF:CТC ,CТC
             //'udp://@224.0.90.25:1234',
@@ -55,6 +50,7 @@ class TVFactory extends AbstractFactory {
         );
 
         $i=0;
+        $cams = array();
         foreach($db as $link){
             /** @var BBCamSettings $row */
 
@@ -68,18 +64,10 @@ class TVFactory extends AbstractFactory {
             $cs->setLivePort($el['port']);
             $cs->setLivePath('');
 
-            $dvr->addCam(AbstractFactory::getInstance()->createCam($dvr, $cs));
+            //$dvr->addCam(AbstractFactory::getInstance()->createCam($dvr, $cs));
+            $cams[] = AbstractFactory::getInstance()->createCam($dvr, $cs);
         }
-    }
-
-    /**
-     * @param IDVR $dvr
-     * @param ICamSettings $cs
-     * @return ICam
-     */
-    public function createCam(IDVR $dvr, ICamSettings $cs)
-    {
-        return new Cam($dvr, $cs);
+        return $cams;
     }
 
     /**

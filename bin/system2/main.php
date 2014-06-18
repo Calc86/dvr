@@ -12,15 +12,17 @@ require_once __DIR__.'/include.php';
 
 date_default_timezone_set('Europe/Moscow');
 
-\system2\EchoLog::getInstance()->put(__FILE__);
+\system2\EchoLog::getInstance()->put(__FILE__, "main");
 
 //if(file_exists(DIR.'/../tv')){
 if(file_exists(\system2\Path::getRoot().'/../tv')){
-    $s = \system2\TVSystem::getInstance();
+    $factory = \system2\TVFactory::getInstance();
+
 }
 else{
-    $s = \system2\BBSystem::getInstance();
+    $factory = \system2\BBFactory::getInstance();
 }
+$s = $factory::getInstance()->createSystem();
 //$s = new \system\FileSystem("/home/vlc/vlc/bin/system/tv.m3u");
 if($argc<2) die(usage());
 
