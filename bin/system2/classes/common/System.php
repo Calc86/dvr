@@ -13,7 +13,7 @@ namespace system2;
  * @package system2
  */
 
-abstract class System implements ISystem{
+class System implements ISystem{
     /**
      * @var ISystem
      */
@@ -107,7 +107,11 @@ abstract class System implements ISystem{
     {
         Log::getInstance()->put(__FUNCTION__, $this);
 
-        $this->addUser(AbstractFactory::getInstance()->createUser(1));
+        $users = AbstractFactory::getInstance()->createUsers();
+
+        foreach($users as $user){
+            $this->addUser($user);
+        }
     }
 
     final public function start()
