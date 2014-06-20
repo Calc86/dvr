@@ -46,7 +46,7 @@ class MotionStream extends Stream {
         $path = dirname((new Motion($this->cam->getDVR(), array()))->getConfigFile());
         $threadPath = $path."/thread_".$cam->getID().".conf";
 
-        $threadTemplatePath = Path::getLocalPath(Path::ETC)."/templates/thread.conf";
+        $threadTemplatePath = Path::getPath(Path::getRoot(), Path::ETC)."/templates/thread.conf";
         $thread = file_get_contents($threadTemplatePath);
         $f = fopen($threadPath, "w+");
         fwrite($f, MotionConfig::parseConfig(
@@ -55,7 +55,9 @@ class MotionStream extends Stream {
                 $this->config,
                 array(
                     MotionHttpConfigCmd::P_STREAM_PORT => MOTION_STREAM_PORT + $cam->getID(),
-                    MotionHttpConfigCmd::P_STREAM_LOCALHOST => MOTION_STREAM_LOCALHOST
+                    MotionHttpConfigCmd::P_STREAM_LOCALHOST => MOTION_STREAM_LOCALHOST,
+                    'cam_id' => $cam->getID(),
+                    'user_id' => $cam->getDVR()->getUser()->getID(),
                 )
             )
         ));
