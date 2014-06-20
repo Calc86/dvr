@@ -20,10 +20,16 @@ class System implements ISystem{
     private static $instance = null;
 
     /**
-     * Команды вызываемые в конце update метода, устанавливаются через addCommand();
+     * Команды вызываемые в конце update один раз метода, устанавливаются через addCommand();
      * @var array
      */
     private $commands = array();
+
+    /**
+     * Команды вызываемые в конце каждого update метода, устанавливаются через addCommand();
+     * @var array
+     */
+    private $permanentCommands = array();
 
     //runtime flags
     const FLAG_STOP = 'stop';
@@ -78,6 +84,14 @@ class System implements ISystem{
      */
     public function addCommand(ICommand $command){
         $this->commands[] = $command;
+    }
+
+    /**
+     * Добавить комманду, которая будет вызвана в конце update
+     * @param ICommand $command
+     */
+    public function addPermanentCommand(ICommand $command){
+        $this->permanentCommands[] = $command;
     }
 
     /**
@@ -202,9 +216,16 @@ class System implements ISystem{
         if(!$lock->create()) return;
         $this->_update();
 
+        //одноразовые команды
         while(($command = array_shift($this->commands)) != null){
             /** @var $command ICommand */
             $command->execute();
+        }
+
+        //команды на каждый раз
+        foreach($this->permanentCommands as $command){
+            /** @var $command ICommand */
+           $command->execute();
         }
 
         $lock->delete();
