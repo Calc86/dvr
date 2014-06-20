@@ -3,15 +3,21 @@
     <words>
       <w>acodec</w>
       <w>bbdvr</w>
+      <w>centos</w>
       <w>codec</w>
+      <w>ctime</w>
       <w>cvlc</w>
       <w>deinterlace</w>
       <w>devel</w>
       <w>dirname</w>
       <w>dvrs</w>
       <w>executables</w>
+      <w>fclose</w>
       <w>ffserver</w>
+      <w>filectime</w>
+      <w>fopen</w>
       <w>fstab</w>
+      <w>fwrite</w>
       <w>idvr</w>
       <w>keyint</w>
       <w>libx</w>

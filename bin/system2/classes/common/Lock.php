@@ -38,7 +38,7 @@ class Lock {
     public function create(){
         Log::getInstance()->put(__FUNCTION__, __CLASS__."-".$this->fName);
         if(file_exists($this->path)){
-            Log::getInstance()->put($this->fName);
+            Log::getInstance()->put($this->fName, $this);
             return false;
         }
         $f = fopen($this->path, "w+");

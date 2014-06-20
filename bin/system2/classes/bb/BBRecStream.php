@@ -8,7 +8,11 @@
 
 namespace system2;
 
-
+/**
+ * измененный алгоритм пермещения на NFS, добавление записи в mysql
+ * Class BBRecStream
+ * @package system2
+ */
 class BBRecStream extends RecVlcStream{
     public function update()
     {

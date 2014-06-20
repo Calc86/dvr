@@ -18,9 +18,9 @@ class MoveVideoICommand implements ICommand {
     private $path;
 
     /**
-     * @param $avi path to avi file on local
-     * @param $mp4 path to mp4 file on nfs
-     * @param $path path on nfs
+     * @param $avi string path to avi file on local
+     * @param $mp4 string path to mp4 file on nfs
+     * @param $path string path on nfs
      */
     function __construct($avi, $mp4, $path)
     {
