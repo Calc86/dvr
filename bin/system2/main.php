@@ -47,6 +47,12 @@ switch($cmd){
     case 'serialize':
         print_r(unserialize(serialize($s)));
         break;
+    case 'event':
+        if($argc < 7 ) die(usage());
+        list($file, $command, $userID, $camID, $eventName, $timestamp, $csvParams) = $argv;
+
+        $s->event($userID, $camID, $eventName, $timestamp, $csvParams);
+        break;
     default:
         die(usage());
 }
@@ -55,6 +61,6 @@ switch($cmd){
  * @return string
  */
 function usage(){
-    return "start/stop/restart/update/control*\n";
+    return "start/stop/restart/update/control*/event(userID, camID, name, timestamp, csvParams)\n";
 }
 
