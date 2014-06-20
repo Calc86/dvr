@@ -29,6 +29,8 @@ class System implements ISystem{
     const FLAG_STOP = 'stop';
     private $flags = array();
 
+    private $events = array();
+
     /**
      * @var Lock
      */
@@ -57,7 +59,17 @@ class System implements ISystem{
      * @param IUser $user
      */
     protected function addUser(IUser $user){
-        $this->users[] = $user;
+        $this->users[$user->getID()] = $user;
+    }
+
+    /**
+     * @param $userID
+     * @return User|null
+     */
+    protected function getUser($userID){
+        if(isset($this->users[$userID]))
+            return $this->users[$userID];
+        else return null;
     }
 
     /**
@@ -238,6 +250,50 @@ class System implements ISystem{
     public function control()
     {
 
+    }
+
+    /**
+     * @param $userID
+     * @param $camID
+     * @param $eventName
+     * @param $timestamp
+     * @param $csvParams
+     */
+    final public function event($userID, $camID, $eventName, $timestamp, $csvParams){
+        $user = $this->getUser($userID);
+        if($user==null)
+            $cam = null;
+        else
+            $cam = $user->getDVR(0)->getCam($camID);
+        if($csvParams == "")
+            $params = array();
+        else
+            $params = str_getcsv($csvParams);
+
+        $this->_event($user, $cam, $eventName, $timestamp, $params);
+    }
+
+    /**
+     * @param User $user
+     * @param Cam $cam
+     * @param $eventName
+     * @param $timestamp
+     * @param array $params
+     */
+    protected function _event($user,$cam, $eventName, $timestamp, array $params){
+        if(isset($this->events[$eventName])){
+            $event = $this->events[$eventName];
+            /** @var $event Event */
+            $event->handle($user, $cam, $timestamp, $params);
+        }
+    }
+
+    /**
+     * @param Event $event
+     * @return mixed|void
+     */
+    public function addEvent(Event $event){
+        $this->events[$event->getName()] = $event;
     }
 
     /*public function recPts()
