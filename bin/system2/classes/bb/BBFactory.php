@@ -14,6 +14,30 @@ namespace system2;
  */
 class BBFactory extends AbstractFactory {
     /**
+     * @return ISystem
+     */
+
+    public function createSystem()
+    {
+        $system =  parent::createSystem();
+
+        $e = new BBMotionEvent(Motion::EVENT_MOTION_START);
+        $system->addEvent($e);
+
+        $e = new BBMotionEvent(Motion::EVENT_MOTION_STOP);
+        $system->addEvent($e);
+
+        $e = new BBMotionEvent(Motion::EVENT_MOTION_DETECTED);
+        $system->addEvent($e);
+
+        $e = new BBMotionEvent(Motion::EVENT_CAMERA_LOSS);
+        $system->addEvent($e);
+
+        return $system;
+    }
+
+
+    /**
      * @param DVR $dvr
      * @return array of Daemons
      */
