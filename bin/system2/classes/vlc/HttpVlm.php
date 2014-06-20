@@ -54,6 +54,7 @@ class HttpVlm extends Vlm{
         $this->return = '';
 
         try{
+            //Todo в будущих реализациях VLC (2.1.4 и далее) требуется авторизация.
             $this->return = file_get_contents($this->getFullUrl().rawurlencode($command));
         }catch (\Exception $e){
             $this->log($e->getMessage());
