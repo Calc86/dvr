@@ -39,7 +39,17 @@ class DVR implements IDVR {
      * @param ICam $cam
      */
     public function addCam(ICam $cam){
-        $this->cams[] = $cam;
+        $this->cams[$cam->getID()] = $cam;
+    }
+
+    /**
+     * @param $camID
+     * @return Cam|null
+     */
+    public function getCam($camID){
+        if(isset($this->cams[$camID]))
+            return $this->cams[$camID];
+        else return null;
     }
 
     /**
@@ -163,5 +173,12 @@ class DVR implements IDVR {
             $cam->stop();
             $cam->delete();
         }
+    }
+
+    /**
+     * @return IUser
+     */
+    public function getUser(){
+        return $this->user;
     }
 }
