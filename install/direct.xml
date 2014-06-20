@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<direct>
+  <rule priority="1" table="filter" ipv="ipv4" chain="INPUT">-s 10.0.0.0/8 -m state --state NEW -p tcp --dport 22 -j ACCEPT</rule>
+  <rule priority="1" table="filter" ipv="ipv4" chain="INPUT">-s 10.0.0.0/8 -m state --state NEW -p tcp --dport 21 -j ACCEPT</rule>
+  <rule priority="1" table="filter" ipv="ipv4" chain="INPUT">-s 10.0.0.0/8 -m state --state NEW -p tcp --dport 20 -j ACCEPT</rule>
+  <rule priority="1" table="filter" ipv="ipv4" chain="INPUT">-s 10.0.0.0/8 -m state --state NEW -p tcp --dport 80 -j ACCEPT</rule>
+  <rule priority="1" table="filter" ipv="ipv4" chain="INPUT">-s 10.0.0.0/8 -m state --state NEW -p tcp --dport 8100:8999 -j ACCEPT</rule>
+  <rule priority="1" table="filter" ipv="ipv4" chain="INPUT">-s 10.0.0.0/8 -m state --state NEW -p tcp --dport 9000:9999 -j ACCEPT</rule>
+  <rule priority="1" table="filter" ipv="ipv4" chain="INPUT">-s 10.0.0.0/8 -m state --state NEW -p tcp --dport 11000:11999 -j ACCEPT</rule>
+  <rule priority="1" table="filter" ipv="ipv4" chain="INPUT">-s 10.0.0.0/8 -m state --state NEW -p tcp --dport 13000:13999 -j ACCEPT</rule>
+  <rule priority="1" table="filter" ipv="ipv4" chain="INPUT">-s 10.0.0.0/8 -m state --state NEW -p tcp --dport 33300:34299 -j ACCEPT</rule>
+  <rule priority="1" table="filter" ipv="ipv4" chain="INPUT">-s 10.0.0.0/8 -m state --state NEW -p tcp --dport 55300:56299 -j ACCEPT</rule>
+</direct>
