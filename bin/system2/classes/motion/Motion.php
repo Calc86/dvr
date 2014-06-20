@@ -14,6 +14,11 @@ namespace system2;
  */
 class Motion extends Daemon {
 
+    const EVENT_MOTION_START = 'motion_start';
+    const EVENT_MOTION_STOP  = 'motion_stop';
+    const EVENT_MOTION_DETECTED  = 'motion_detected';
+    const EVENT_CAMERA_LOSS = 'motion_camera_lost';
+
     /**
      * @var array of CamMotion
      */
@@ -39,7 +44,7 @@ class Motion extends Daemon {
     }
 
     private function writeConfig(){
-        $motionTemplatePath = Path::getLocalPath(Path::ETC)."/templates/motion.conf";
+        $motionTemplatePath = Path::getPath(Path::getRoot(),Path::ETC)."/templates/motion.conf";
         //$threadTemplatePath = Path::getLocalPath(Path::ETC)."/templates/thread.conf";
         $config = file_get_contents($motionTemplatePath);
         //$thread = file_get_contents($threadTemplatePath);
