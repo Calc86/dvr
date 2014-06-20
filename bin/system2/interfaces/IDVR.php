@@ -14,5 +14,14 @@ namespace system2;
  * @package system2
  */
 interface IDVR extends IControlled, IUnique{
+    /**
+     * @return IUser
+     */
+    public function getUser();
 
+    /**
+     * @param $camID
+     * @return ICam
+     */
+    public function getCam($camID);
 } 
