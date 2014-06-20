@@ -1,0 +1,3 @@
+
+tmpfs /home/vlc/dvr/tmpfs tmpfs size=3072m 0 0
+nfs_ip:/nfs_path /home/vlc/dvr/nfs nfs users 0 0
