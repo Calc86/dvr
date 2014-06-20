@@ -43,7 +43,7 @@ class User implements IUser {
         $this->log(__FUNCTION__);
 
         //todo убрать массив, скомпановать
-        $this->dvrs[]  = AbstractFactory::getInstance()->createDvr($this);
+        $this->dvrs[] = AbstractFactory::getInstance()->createDvr($this);
 
         //$this->_create();
     }
@@ -84,6 +84,17 @@ class User implements IUser {
             /** @var $dvr IDVR */
             $dvr->update();
         }
+    }
+
+    /**
+     * @param $dvrID
+     * @return DVR|null
+     */
+    public function getDVR($dvrID){
+        if(isset($this->dvrs[$dvrID]))
+            return $this->dvrs[$dvrID];
+        else
+            return null;
     }
 
     /**
