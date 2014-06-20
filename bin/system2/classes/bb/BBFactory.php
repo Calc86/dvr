@@ -33,6 +33,9 @@ class BBFactory extends AbstractFactory {
         $e = new BBMotionEvent(Motion::EVENT_CAMERA_LOSS);
         $system->addEvent($e);
 
+        //удалить записи старше 30 дней при каждом update
+        $system->addPermanentCommand(new RotateRecCommand());
+
         return $system;
     }
 
@@ -44,7 +47,19 @@ class BBFactory extends AbstractFactory {
     protected function createDaemons(DVR $dvr)
     {
         $vlc = new Vlc($dvr);
-        $motion = new Motion($dvr, $dvr->getCamIDs());
+
+        // нам необходимы только те камеры, в которых включен mtn
+        $cams = $dvr->getCamIDs();
+
+        $ids = array();
+        foreach($cams as $id){
+            $cam = $dvr->getCam($id);
+            $cs = $cam->getSettings();
+            /** @var $cs BBCamSettings  */
+            if($cs->mtn) $ids[] = $id;
+        }
+
+        $motion = new Motion($dvr, $ids);
 
         return array($vlc, $motion);
     }
@@ -99,26 +114,30 @@ class BBFactory extends AbstractFactory {
 
         $cs = $cam->getSettings();
         /** @var $cs BBCamSettings */
-        if($cs->live){
-            $motion = new MotionStream($cam, $cs);
-            $stream->addStream($motion);
+        $motion = new MotionStream($cam, $cs);
+        $motion->setEnabled($cs->live && $cs->mtn);
+        $stream->addStream($motion);
 
-            $live = new BBLiveStream($cam);
-            $stream->addStream($live);
+        $live = new BBLiveStream($cam);
+        $live->setEnabled($cs->live);
+        $stream->addStream($live);
 
-            $stream->addStream(new HLSVlcStream($cam, $live));
-            //$this->streams[] = new FlvVlcReStream($this, $live);
+        $hls = new HLSVlcStream($cam, $live);
+        $hls->setEnabled($cs->live);
+        $stream->addStream($hls);
+        //$this->streams[] = new FlvVlcReStream($this, $live);
 
-            //nginx rtmp stream
-            //$this->streams[] = new RtmpVlcReStream($this, $live);
+        //nginx rtmp stream
+        //$this->streams[] = new RtmpVlcReStream($this, $live);
 
-            if($cs->rec) $stream->addStream(new BBRecStream($cam, $live));
+        $rec = new BBRecStream($cam, $live);
+        $rec->setEnabled($cs->live && $cs->rec);
+        if($cs->rec) $stream->addStream($rec);
 
-            //motion flv stream
-            $stream->addStream(
-                new UrlFlvVlcStream($cam, "http://localhost:".(MOTION_STREAM_PORT + $cam->getID()))
-            );
-        }
+        //motion flv stream
+        $flv = new UrlFlvVlcStream($cam, "http://localhost:".(MOTION_STREAM_PORT + $cam->getID()));
+        $flv->setEnabled($cs->live);
+        $stream->addStream($flv);
 
         return $stream;
     }
