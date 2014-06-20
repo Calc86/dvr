@@ -80,7 +80,7 @@ class Path {
      * @param string $path2
      * @return string
      */
-    protected static function getPath($path1, $path2 = ''){
+    public static function getPath($path1, $path2 = ''){
         if($path2 != '')
             $path1.= '/'.$path2;
         static::createDir($path1);
