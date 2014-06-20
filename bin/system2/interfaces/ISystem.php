@@ -15,4 +15,32 @@ namespace system2;
  */
 interface ISystem extends IControlled{
     public function control();
+
+    /**
+     * @param $userID
+     * @param $camID
+     * @param $eventName
+     * @param $timestamp
+     * @param $csvParams
+     * @return void
+     */
+    public function event($userID, $camID, $eventName, $timestamp, $csvParams);
+
+    /**
+     * @param Event $event
+     * @return mixed
+     */
+    public function addEvent(Event $event);
+
+    /**
+     * Добавить комманду, которая будет вызвана в конце update
+     * @param ICommand $command
+     */
+    public function addCommand(ICommand $command);
+
+    /**
+     * Добавить комманду, которая будет вызвана в конце update
+     * @param ICommand $command
+     */
+    public function addPermanentCommand(ICommand $command);
 } 
