@@ -4,17 +4,20 @@
       <w>acodec</w>
       <w>bbdvr</w>
       <w>codec</w>
+      <w>cvlc</w>
       <w>deinterlace</w>
       <w>devel</w>
       <w>dirname</w>
       <w>dvrs</w>
       <w>executables</w>
+      <w>ffserver</w>
       <w>fstab</w>
       <w>idvr</w>
       <w>keyint</w>
       <w>libx</w>
       <w>mjpeg</w>
       <w>mtab</w>
+      <w>mtime</w>
       <w>multicast</w>
       <w>myapp</w>
       <w>nginx</w>
@@ -26,9 +29,11 @@
       <w>tmpfs</w>
       <w>transcode</w>
       <w>umount</w>
+      <w>valgrind</w>
       <w>vcodec</w>
       <w>venc</w>
       <w>xargs</w>
+      <w>роccия</w>
     </words>
   </dictionary>
 </component>

@@ -24,12 +24,9 @@ class Motion extends Daemon {
      */
     private $uid;
 
-    /**
-     * @param \UserID $uid
-     */
-    function __construct(\UserID $uid)
+    function __construct(IUser $user)
     {
-        $this->uid = $uid;
+        $this->uid = $user->get;
         parent::__construct($uid, "motion");
     }
 

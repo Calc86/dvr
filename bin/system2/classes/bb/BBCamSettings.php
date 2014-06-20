@@ -16,4 +16,5 @@ namespace system2;
 class BBCamSettings extends CamSettings {
     public $live;
     public $rec;
+    public $mtn;
 }
