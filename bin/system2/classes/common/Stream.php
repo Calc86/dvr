@@ -14,6 +14,9 @@ namespace system2;
  * @package system2
  */
 class Stream implements ICamStream {
+
+    private $enabled = true;
+
     /**
      * @var ICam
      */
@@ -42,6 +45,9 @@ class Stream implements ICamStream {
         //если система стопится, то мы не стратуем
         if(System::getInstance()->getFlag(System::FLAG_STOP)) return;
 
+        //если стрим disabled, то не стартуем
+        if(!$this->enabled) return;
+
         $this->log(__FUNCTION__);
     }
 
@@ -60,6 +66,18 @@ class Stream implements ICamStream {
     public function update()
     {
         $this->log(__FUNCTION__);
+    }
+
+    /**
+     * @param $enabled
+     */
+    public function setEnabled($enabled){
+        $this->enabled = boolval($enabled);
+
+        //пусть выполнит все свои "фишки" и мы о нем забудем
+        /*if(!$this->enabled){
+            $this->update();
+        }*/
     }
 
     /**
