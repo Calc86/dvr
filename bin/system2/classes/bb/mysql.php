@@ -16,7 +16,7 @@ namespace system2;
 class mysql {
     const CAM_SETTINGS =
         "select
-          c.id as id, c.live as live, c.rec as rec, c.ip as ip, cs.live_proto as liveProto, cs.live_port as livePort,
+          c.id as id, c.live as live, c.rec as rec, c.mtn as mtn, c.ip as ip, cs.live_proto as liveProto, cs.live_port as livePort,
           cs.live_path as livePath, cs.stop_proto as stopProto, cs.stop_port as stopPort, cs.stop_path as stopPath
          from cams as c, cam_settings as cs
          where
