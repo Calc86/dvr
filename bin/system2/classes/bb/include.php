@@ -9,6 +9,8 @@
 require_once __DIR__.'/mysql.php';
 
 require_once __DIR__.'/BBMotionEvent.php';
+require_once __DIR__.'/RotateRecCommand.php';
+
 
 require_once __DIR__.'/BBFactory.php';
 
