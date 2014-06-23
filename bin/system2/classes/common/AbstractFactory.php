@@ -94,6 +94,15 @@ abstract class AbstractFactory {
     }
 
     /**
+     * @param $from
+     * @param $to
+     * @return MoveToNfsCommand
+     */
+    public function createMoveToNfsCommand($from, $to){
+        return new MoveToNfsCommand($from, $to);
+    }
+
+    /**
      * @param ICam $cam
      * @return ICamStream
      */
