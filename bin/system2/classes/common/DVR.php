@@ -122,6 +122,7 @@ class DVR implements IDVR {
             $cam->update();
         }
 
+        //вставить в лог дату и время
         foreach($this->daemons as $d){
             /** @var Daemon $d */
             $date = new \BashCommand("echo `date` >> {$d->getLogFile()}");
