@@ -23,10 +23,10 @@ class System implements ISystem{
      * Команды вызываемые в конце update один раз метода, устанавливаются через addCommand();
      * @var array
      */
-    private $commands = array();
+    private $commandsQueue = array();
 
     /**
-     * Команды вызываемые в конце каждого update метода, устанавливаются через addCommand();
+     * Команды вызываемые в конце каждого update метода, устанавливаются через addPermanentCommand();
      * @var array
      */
     private $permanentCommands = array();
@@ -35,6 +35,10 @@ class System implements ISystem{
     const FLAG_STOP = 'stop';
     private $flags = array();
 
+    /**
+     * Список обработчиков эевентов
+     * @var array
+     */
     private $events = array();
 
     /**
@@ -83,7 +87,7 @@ class System implements ISystem{
      * @param ICommand $command
      */
     public function addCommand(ICommand $command){
-        $this->commands[] = $command;
+        $this->commandsQueue[] = $command;
     }
 
     /**
@@ -172,12 +176,19 @@ class System implements ISystem{
 
         //$lock = new Lock(__FUNCTION__);
         //if(!$lock->create()) return;
-        $this->update();
+        //$this->update();
         $this->_stop();
         //$lock->delete();
+
+        $this->executeCommands();
+        $this->executePermanentCommands();
+
         $this->lock->delete();
 
         Lock::resetAll();
+
+        /*$clear = new \BashCommand("rm -rf ".Path::getTmpfsPath()."/*");
+        $clear->exec();*/
     }
 
     protected function _stop(){
@@ -196,7 +207,6 @@ class System implements ISystem{
         //(new \BashCommand('php '.BIN.'util/rec-pts.php'))->exec();*/
     }
 
-
     final public function restart()
     {
         Log::getInstance()->put(__FUNCTION__, $this);
@@ -209,26 +219,38 @@ class System implements ISystem{
         $lock->delete();
     }
 
+    /**
+     * update это heartbeat по крону раз в минуту
+     */
     final public function update()
     {
         Log::getInstance()->put(__FUNCTION__, $this);
         $lock = new Lock(__FUNCTION__);
         if(!$lock->create()) return;
+        //пользовательский апдейт
         $this->_update();
 
+        //выполняем очереди комманд.
+        $this->executeCommands();
+        $this->executePermanentCommands();
+
+        $lock->delete();
+    }
+
+    final private function executeCommands(){
         //одноразовые команды
-        while(($command = array_shift($this->commands)) != null){
+        while(($command = array_shift($this->commandsQueue)) != null){
             /** @var $command ICommand */
             $command->execute();
         }
+    }
 
+    final private function executePermanentCommands(){
         //команды на каждый раз
         foreach($this->permanentCommands as $command){
             /** @var $command ICommand */
-           $command->execute();
+            $command->execute();
         }
-
-        $lock->delete();
     }
 
     protected function _update(){
@@ -241,32 +263,7 @@ class System implements ISystem{
                 Log::getInstance()->put(__FUNCTION__.':'.$user->getID()." ".$e->getMessage(), $this);
             }
         }
-
-        //test timelaps !!!
-        //$this->timelaps();
-
-        //делаем перенос из pre папок
-        //делаем синхронно, чтобы не забивать канал сети. Так же ждем выполнения, чтобы не перезаписать файлы пир долгом переносе.
-        //$this->recPts();
     }
-
-    /*final public function timelaps()
-    {
-        Log::getInstance()->put(__FUNCTION__, __CLASS__);
-        $lock = new Lock(__FUNCTION__);
-        if(!$lock->create()) return;
-        $this->_timelaps();
-        $lock->delete();
-    }
-
-    protected function _timelaps(){
-        //return;
-
-        foreach($this->users as $user){
-            /** @var $user IUser */
-            /*$user->timelaps();
-        }
-    }*/
 
     public function control()
     {
