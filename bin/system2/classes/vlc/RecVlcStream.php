@@ -88,6 +88,7 @@ class RecVlcStream extends VlcReStream {
      *
      */
     protected function moveToNfs(){
+        $this->log(__FUNCTION__);
 
         $file = $this->oldRec;
         if($file == '') return;
@@ -97,7 +98,7 @@ class RecVlcStream extends VlcReStream {
         $path = $this->getNfsPath();
         $mp4 = $path.".mp4";
 
-        System::getInstance()->addCommand(new MoveVideoICommand($avi, $mp4, $path));
+        System::getInstance()->addCommand(new MoveVideoCommand($avi, $mp4, $path));
 
         //Мы сделали всё что могил, теперь удаляем следы нашего пребывания
         //unlink($this->getRecFilePath());
@@ -109,6 +110,8 @@ class RecVlcStream extends VlcReStream {
 
         parent::stop();
         parent::delete();
+
+        $this->moveToNfs();
     }
 
 
@@ -121,9 +124,6 @@ class RecVlcStream extends VlcReStream {
 
         $this->stop();
         $this->start();
-
-        //спецом переноим после start чтобы не пропускать запись.
-        $this->moveToNfs();
     }
 
     public function start()
