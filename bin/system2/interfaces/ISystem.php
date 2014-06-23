@@ -30,7 +30,7 @@ interface ISystem extends IControlled{
      * @param Event $event
      * @return mixed
      */
-    public function addEvent(Event $event);
+    public function addEventHandler(Event $event);
 
     /**
      * Добавить комманду, которая будет вызвана в конце update
