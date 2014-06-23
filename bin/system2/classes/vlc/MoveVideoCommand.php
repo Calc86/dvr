@@ -12,7 +12,7 @@ namespace system2;
  * Class MoveVideoCommand
  * @package system2
  */
-class MoveVideoICommand implements ICommand {
+class MoveVideoCommand implements ICommand {
     private $avi;
     private $mp4;
     private $path;
