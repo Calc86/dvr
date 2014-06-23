@@ -100,9 +100,16 @@ class MotionStream extends Stream {
 
         parent::update();
 
-        $path = Path::getTmpfsPath(Path::IMAGE.'/'.$this->cam->getDVR()->getID().'/'.$this->cam->getID());
+        $endPath = '/'.$this->cam->getDVR()->getUser()->getID().'/'.$this->cam->getID();
+        $path = Path::getTmpfsPath(Path::IMAGE.$endPath);
 
-        System::getInstance()->addCommand(new CreateTimelapsCommand($this->cam->getID(),$path));
+        $timelapse = new CreateTimelapsCommand($this->cam->getID(),$path);
+        System::getInstance()->addCommand($timelapse);
+
+        // move to nfs/rec/user/timelapse/file
+        $to = Path::RECORD.$endPath.'/../timelapse/'.$timelapse->getFileName();
+        $move = AbstractFactory::getInstance()->createMoveToNfsCommand($timelapse->getFilePath(), $to);
+        System::getInstance()->addCommand($move);
     }
 
     public function start()
