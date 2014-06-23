@@ -9,7 +9,7 @@
 namespace system2;
 
 /**
- * Создает таймлапсы
+ * Создает таймлапсы (картинки в видео)
  * Class CreateSnapshotCommand
  * @package system2
  */
@@ -27,22 +27,44 @@ class CreateTimelapsCommand implements ICommand {
         $this->path = $path;
     }
 
+    /**
+     * @return string
+     */
+    public function getFileName(){
+        return $this->cid."_".date("Ymd_His").".mp4";
+    }
+
+    /**
+     * полный путь к создаваемому файлу
+     * @return string
+     */
+    public function getFilePath(){
+        return realpath($this->getPath()."/../".$this->getFileName());
+    }
+
+    /**
+     * Рабочий путь (где лежат картинки)
+     * @return string
+     */
+    public function getPath(){
+        return $this->path;
+    }
 
     /**
      * @return void
      */
     public function execute()
     {
-        $path = $this->path;
+        $path = $this->getPath();
 
         $list = "$path/list.txt";
 
-        $filename = $this->cid."_".date("Ymd_His").".mp4";
+        $filename = $this->getFileName();
 
         $createList = new \BashCommand("ls $path/snapshot*.jpg | sort > $list");
         $deleteList = new \BashCommand("rm $list");
 
-        $createTimelaps = new \BashCommand("cat $list | xargs cat | ffmpeg -f image2pipe -r 3 -vcodec mjpeg -i - -vcodec libx264 $path/../$filename");
+        $createTimelaps = new \BashCommand("cat $list | xargs cat | ffmpeg -f image2pipe -r 3 -vcodec mjpeg -i - -vcodec libx264 ".$this->getFilePath());
         $deleteImages = new \BashCommand("cat $list | xargs rm");
 
         Log::getInstance($this->cid)->put($createList,__CLASS__);
@@ -57,4 +79,4 @@ class CreateTimelapsCommand implements ICommand {
         $deleteList->exec();
     }
 
-} 
+}
