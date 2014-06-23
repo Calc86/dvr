@@ -39,7 +39,7 @@ class System implements ISystem{
      * Список обработчиков эевентов
      * @var array
      */
-    private $events = array();
+    private $eventHandlers = array();
 
     /**
      * @var Lock
@@ -299,8 +299,8 @@ class System implements ISystem{
      * @param array $params
      */
     protected function _event($user,$cam, $eventName, $timestamp, array $params){
-        if(isset($this->events[$eventName])){
-            $event = $this->events[$eventName];
+        if(isset($this->eventHandlers[$eventName])){
+            $event = $this->eventHandlers[$eventName];
             /** @var $event Event */
             $event->handle($user, $cam, $timestamp, $params);
         }
@@ -310,8 +310,8 @@ class System implements ISystem{
      * @param Event $event
      * @return mixed|void
      */
-    public function addEvent(Event $event){
-        $this->events[$event->getName()] = $event;
+    public function addEventHandler(Event $event){
+        $this->eventHandlers[$event->getName()] = $event;
     }
 
     /*public function recPts()

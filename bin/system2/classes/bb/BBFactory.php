@@ -22,16 +22,16 @@ class BBFactory extends AbstractFactory {
         $system =  parent::createSystem();
 
         $e = new BBMotionEvent(Motion::EVENT_MOTION_START);
-        $system->addEvent($e);
+        $system->addEventHandler($e);
 
         $e = new BBMotionEvent(Motion::EVENT_MOTION_STOP);
-        $system->addEvent($e);
+        $system->addEventHandler($e);
 
         $e = new BBMotionEvent(Motion::EVENT_MOTION_DETECTED);
-        $system->addEvent($e);
+        $system->addEventHandler($e);
 
         $e = new BBMotionEvent(Motion::EVENT_CAMERA_LOSS);
-        $system->addEvent($e);
+        $system->addEventHandler($e);
 
         //удалить записи старше 30 дней при каждом update
         $system->addPermanentCommand(new RotateRecCommand());
