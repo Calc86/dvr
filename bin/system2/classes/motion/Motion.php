@@ -19,6 +19,8 @@ class Motion extends Daemon {
     const EVENT_MOTION_DETECTED  = 'motion_detected';
     const EVENT_CAMERA_LOSS = 'motion_camera_lost';
 
+    const TIMELAPSE = 'timelapse';
+
     /**
      * @var array of CamMotion
      */
