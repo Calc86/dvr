@@ -70,7 +70,7 @@ class Vlc extends Daemon{
         $vlc_vlm = '';
 
         //$vlc_ifs = "-I http --http-host ".LIVEHOST." --http-port {$this->getHttpPort()} -I telnet --telnet-port {$this->getTelnetPort()}  --telnet-password ".TLPWD;
-        $vlc_ifs = "-I http --http-port {$this->getHttpPort()} -I telnet --telnet-port {$this->getTelnetPort()}  --telnet-password ".TLPWD;
+        $vlc_ifs = "-I http --http-host=0.0.0.0 --http-port {$this->getHttpPort()} -I telnet --telnet-port {$this->getTelnetPort()}  --telnet-password ".TLPWD;
         if(VLC_USE_LOG)
             $vlc_logs = "--extraintf=http:logger --file-logging --log-verbose 0 --logfile {$this->getLogFile()}";
         else

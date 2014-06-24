@@ -11,6 +11,7 @@ require_once __DIR__.'/AbstractFactory.php';
 require_once __DIR__.'/Event.php';
 require_once __DIR__.'/Events.php';
 
+require_once __DIR__.'/BashCommand.php';
 require_once __DIR__.'/MoveToNfsCommand.php';
 
 require_once __DIR__.'/Daemon.php';
