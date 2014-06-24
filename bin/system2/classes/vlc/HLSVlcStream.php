@@ -45,15 +45,17 @@ class HLSVlcStream extends VlcReStream {
      * @return string
      */
     protected function getPath(){
-        return Path::getTmpfsPath(Path::LIVE_HTTP.'/'.$this->cam->getDVR()->getID());
+        return Path::getTmpfsPath(Path::LIVE_HTTP.'/'.$this->cam->getDVR()->getUser()->getID());
     }
 
     public function stop()
     {
         parent::stop();
 
-        $command = "rm -rf {$this->getPath()}";
+        $command = "rm -rf {$this->getPath()}/stream-{$this->cam->getID()}";
         $this->log($command);
+
+        //System::getInstance()->addCommand(new BashCommand($command));
         //(new \BashCommand($command))->exec();
     }
 }

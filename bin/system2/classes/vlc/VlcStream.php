@@ -64,10 +64,14 @@ abstract class VlcStream extends Stream {
         }
     }
 
-    public function start()
+    public function update()
     {
-        parent::start();
+        parent::update();
+        if(!$this->isEnabled()) $this->stop();
+    }
 
+    public function _start()
+    {
         try{
             $this->testInput();
             $this->vlm->_control('play');

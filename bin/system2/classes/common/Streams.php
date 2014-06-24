@@ -32,10 +32,8 @@ class Streams extends Stream {
         }
     }
 
-    public function start()
+    public function _start()
     {
-        parent::start();
-
         foreach($this->streams as $stream){
             /** @var $stream ICamStream */
             $stream->start();

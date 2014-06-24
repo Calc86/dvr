@@ -25,11 +25,9 @@ class NginxStream extends Stream {
         $this->ffmpeg = new ffmpeg($this->cam->getDVR(), "-re -i $input", "$output/$name");
     }
 
-    public function start()
+    public function _start()
     {
-        parent::start();
-
-        $this->ffmpeg->_start();
+        $this->ffmpeg->start();
     }
 
     public function stop()

@@ -126,10 +126,10 @@ class RecVlcStream extends VlcReStream {
         $this->start();
     }
 
-    public function start()
+    public function _start()
     {
         parent::create();
-        parent::start();
+        parent::_start();
         //создаем timelock
         $this->lock->create();
     }

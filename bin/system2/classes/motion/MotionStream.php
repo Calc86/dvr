@@ -112,10 +112,8 @@ class MotionStream extends Stream {
         System::getInstance()->addCommand($move);
     }
 
-    public function start()
+    public function _start()
     {
-        parent::start();
-
         //создаем timelock
         $this->lock->create();
     }
