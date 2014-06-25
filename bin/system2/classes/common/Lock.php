@@ -37,7 +37,7 @@ class Lock {
      */
     public function create(){
         Log::getInstance()->put(__FUNCTION__, __CLASS__."-".$this->fName);
-        if(file_exists($this->path)){
+        if($this->isLock()){
             Log::getInstance()->put($this->fName, $this);
             return false;
         }
@@ -51,7 +51,7 @@ class Lock {
      */
     public function delete(){
         Log::getInstance()->put(__FUNCTION__, __CLASS__."-".$this->fName);
-        if(file_exists($this->path))
+        if($this->isLock())
             unlink($this->path);
     }
 
@@ -89,5 +89,12 @@ class Lock {
     public function getPath()
     {
         return $this->path;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLock(){
+        return file_exists($this->getPath());
     }
 }
