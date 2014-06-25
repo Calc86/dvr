@@ -16,7 +16,7 @@ namespace system2;
 abstract class VlcStream extends Stream {
 
     protected $vlm;
-    protected $streamName;
+    private $streamName;
 
     /**
      * @param ICam $cam
@@ -26,15 +26,22 @@ abstract class VlcStream extends Stream {
     {
         parent::__construct($cam);
         $this->streamName = $streamName;
-        $this->vlm = new HttpVlm($this->getName(), 'localhost', HTSTART+$this->cam->getDVR()->getID());
+        $this->vlm = new HttpVlm($this->getVlcName(), 'localhost', HTSTART+$this->cam->getDVR()->getID());
     }
 
     /**
      * Получить полное имя стрима камеры
      * @return string
      */
-    protected function getName(){
+    protected function getVlcName(){
         return 'CAM_'.$this->cam->getID()."_$this->streamName";
+    }
+
+    /**
+     * @return string
+     */
+    protected function getName(){
+        return $this->streamName;
     }
 
     public function create(){
