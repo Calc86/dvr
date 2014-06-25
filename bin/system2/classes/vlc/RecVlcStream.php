@@ -17,7 +17,9 @@ class RecVlcStream extends VlcReStream {
     /**
      * @var TimeLock для update
      */
-    private $lock;
+    private $lock = null;
+    private $timeLock = 0;
+    private $streamPath = '';
 
     /**
      * Переменная для хранения старого имени файла
@@ -28,12 +30,16 @@ class RecVlcStream extends VlcReStream {
     /**
      * @param ICam $cam
      * @param LiveVlcStream $live
+     * @param int $timeLock
+     * @param string $streamPath
      */
-    function __construct(ICam $cam, LiveVlcStream $live)
+    function __construct(ICam $cam, LiveVlcStream $live, $timeLock = TIME_LOCK_RECORD, $streamPath = Path::RECORD)
     {
-        parent::__construct($cam, $live, 'rec');
+        parent::__construct($cam, $live, $streamPath);
 
-        $this->lock = new TimeLock($this->getName(), TIME_LOCK_RECORD);
+        $this->streamPath = $streamPath;
+
+        $this->lock = new TimeLock($this->getVlcName(), $timeLock);
     }
 
     /**
@@ -41,7 +47,7 @@ class RecVlcStream extends VlcReStream {
      * @return string
      */
     protected function getRecFilePath(){
-        return Path::getTmpfsPath(Path::TEMP)."/{$this->cam->getID()}_rec.file";
+        return Path::getTmpfsPath(Path::TEMP)."/{$this->cam->getID()}_{$this->streamPath}.file";
     }
 
     /**
@@ -54,7 +60,7 @@ class RecVlcStream extends VlcReStream {
         $date = date("Ymd");
         $time = date("His");
 
-        $path = Path::RECORD."/{$this->cam->getDVR()->getID()}/$date";
+        $path = $this->streamPath."/{$this->cam->getDVR()->getID()}/$date";
         Path::getNfsPath($path);    //create dir on NFS
         $realPath = Path::getTmpfsPath($path);
 
@@ -117,8 +123,8 @@ class RecVlcStream extends VlcReStream {
 
     public function update()
     {
-        if(!System::getInstance()->getFlag(System::FLAG_STOP))
-            if(!$this->lock->create()) return;    //время не пришло
+        //if(!System::getInstance()->getFlag(System::FLAG_STOP))
+        if(!$this->lock->create()) return;    //время не пришло
 
         parent::update();
 
