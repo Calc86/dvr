@@ -12,7 +12,7 @@ namespace system2;
  * Class EventHandler
  * @package system2
  */
-class Event {
+abstract class Event {
 
     private $name;
 
@@ -34,7 +34,5 @@ class Event {
      * @param $timestamp
      * @param array $params
      */
-    public function handle($user, $cam, $timestamp, array $params){
-
-    }
+    abstract public function handle($user, $cam, $timestamp, array $params);
 }
