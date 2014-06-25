@@ -41,7 +41,7 @@ class BBRecStream extends RecVlcStream{
         $now = time();
 
         //save to mysql;
-        $q = "insert into archive values(0, {$this->cam->getID()}, 'rec', $cTime, $mTime, $now, $time, 'yes', 0, '$nfsPath')";
+        $q = "insert into archive values(0, {$this->cam->getID()}, '{$this->getName()}', $cTime, $mTime, $now, $time, 'yes', 0, '$nfsPath')";
         $this->log($q);
         $db = \Database::getInstance();
         $db->query($q);
