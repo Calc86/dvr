@@ -16,7 +16,6 @@ class BBFactory extends AbstractFactory {
     /**
      * @return ISystem
      */
-
     public function createSystem()
     {
         $system =  parent::createSystem();
@@ -33,12 +32,16 @@ class BBFactory extends AbstractFactory {
         $e = new BBMotionEvent(Motion::EVENT_CAMERA_LOSS);
         $system->addEventHandler($e);
 
+        $recMotionEvent = new BBRecMotionEvent(Motion::EVENT_MOTION_START);
+        $this->addEventHandler($recMotionEvent);
+        $recMotionEvent = new BBRecMotionEvent(Motion::EVENT_MOTION_STOP);
+        $this->addEventHandler($recMotionEvent);
+
         //удалить записи старше 30 дней при каждом update
         $system->addPermanentCommand(new RotateRecCommand());
 
         return $system;
     }
-
 
     /**
      * @param DVR $dvr
@@ -67,7 +70,7 @@ class BBFactory extends AbstractFactory {
     /**
      * @return array
      */
-    public  function createUsers()
+    public function createUsers()
     {
         $users = array();
         $db = \Database::getInstance();
@@ -132,7 +135,11 @@ class BBFactory extends AbstractFactory {
 
         $rec = new BBRecStream($cam, $live);
         $rec->setEnabled($cs->live && $cs->rec);
-        if($cs->rec) $stream->addStream($rec);
+        $stream->addStream($rec);
+
+        $mtn = new BBRecStream($cam, $live, TIME_LOCK_RECORD, Path::MOTION);
+        $mtn->setEnabled($cs->live && $cs->mtn && BBRecMotionEvent::isMotion($cam));
+        $stream->addStream($mtn, Path::MOTION);
 
         //motion flv stream
         $flv = new UrlFlvVlcStream($cam, "http://localhost:".(MOTION_STREAM_PORT + $cam->getID()));
