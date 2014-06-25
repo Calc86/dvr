@@ -33,9 +33,9 @@ class BBFactory extends AbstractFactory {
         $system->addEventHandler($e);
 
         $recMotionEvent = new BBRecMotionEvent(Motion::EVENT_MOTION_START);
-        $this->addEventHandler($recMotionEvent);
+        $system->addEventHandler($recMotionEvent);
         $recMotionEvent = new BBRecMotionEvent(Motion::EVENT_MOTION_STOP);
-        $this->addEventHandler($recMotionEvent);
+        $system->addEventHandler($recMotionEvent);
 
         //удалить записи старше 30 дней при каждом update
         $system->addPermanentCommand(new RotateRecCommand());
