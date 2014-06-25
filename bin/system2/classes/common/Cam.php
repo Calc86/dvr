@@ -28,7 +28,7 @@ class Cam implements ICam{
     protected $dvr;
     //protected $streams = array();
     /**
-     * @var ICamStream
+     * @var Streams
      */
     protected $stream;
 
@@ -53,6 +53,13 @@ class Cam implements ICam{
      */
     public function getID(){
         return $this->id;
+    }
+
+    /**
+     * @return ICamStream|Streams
+     */
+    public function getStream(){
+        return $this->stream;
     }
 
     /**
