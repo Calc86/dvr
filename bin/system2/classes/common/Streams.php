@@ -16,11 +16,23 @@ class Streams extends Stream {
     private $streams = array();
 
     /**
-     * Добавить стрим
      * @param ICamStream $stream
+     * @param string $name
      */
-    public function addStream(ICamStream $stream){
-        $this->streams[] = $stream;
+    public function addStream(ICamStream $stream, $name = ''){
+        if($name != '')
+            $this->streams[$name] = $stream;
+        else
+            $this->streams[] = $stream;
+    }
+
+    /**
+     * @param $name
+     * @return null|Stream
+     */
+    public function get($name){
+        if(isset($this->streams[$name])) return $this->streams[$name];
+        return null;
     }
 
     public function create()
