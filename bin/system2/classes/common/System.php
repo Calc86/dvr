@@ -132,6 +132,20 @@ class System implements ISystem{
         else return self::$instance;
     }
 
+    /**
+     * @param $userID
+     * @param $camID
+     * @return null
+     */
+    final public function getUserCam($userID, $camID){
+        /** @var User $user */
+        $user = $this->users[$userID];
+        /** @var Cam $cam */
+        $cam = $user->getCam($camID);
+        //$stream = $cam->getStream()->get()
+        return $cam;
+    }
+
 
     final protected function create()
     {
@@ -282,13 +296,15 @@ class System implements ISystem{
         if($user==null)
             $cam = null;
         else
-            $cam = $user->getDVR(0)->getCam($camID);
+            $cam = $user->getDVR($user->getID())->getCam($camID);
         if($csvParams == "")
             $params = array();
         else
             $params = str_getcsv($csvParams);
 
         $this->_event($user, $cam, $eventName, $timestamp, $params);
+
+        $this->executeCommands();
     }
 
     /**
@@ -311,7 +327,13 @@ class System implements ISystem{
      * @return mixed|void
      */
     public function addEventHandler(Event $event){
-        $this->eventHandlers[$event->getName()] = $event;
+        $events = null;
+        if(!isset($this->eventHandlers[$event->getName()])){
+            $this->eventHandlers[$event->getName()] = new Events($event->getName());
+        }
+        /** @var Events $events */
+        $events = $this->eventHandlers[$event->getName()];
+        $events->add($event);
     }
 
     /*public function recPts()
