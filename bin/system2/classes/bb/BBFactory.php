@@ -20,16 +20,16 @@ class BBFactory extends AbstractFactory {
     {
         $system =  parent::createSystem();
 
-        $e = new BBMotionEvent(Motion::EVENT_MOTION_START);
+        $e = new BBLogMotionEvent(Motion::EVENT_MOTION_START);
         $system->addEventHandler($e);
 
-        $e = new BBMotionEvent(Motion::EVENT_MOTION_STOP);
+        $e = new BBLogMotionEvent(Motion::EVENT_MOTION_STOP);
         $system->addEventHandler($e);
 
-        $e = new BBMotionEvent(Motion::EVENT_MOTION_DETECTED);
+        $e = new BBLogMotionEvent(Motion::EVENT_MOTION_DETECTED);
         $system->addEventHandler($e);
 
-        $e = new BBMotionEvent(Motion::EVENT_CAMERA_LOSS);
+        $e = new BBLogMotionEvent(Motion::EVENT_CAMERA_LOSS);
         $system->addEventHandler($e);
 
         $recMotionEvent = new BBRecMotionEvent(Motion::EVENT_MOTION_START);
@@ -38,7 +38,10 @@ class BBFactory extends AbstractFactory {
         $system->addEventHandler($recMotionEvent);
 
         //удалить записи старше 30 дней при каждом update
-        $system->addPermanentCommand(new RotateRecCommand());
+        //$system->addPermanentCommand(new RotateRecCommand());
+        $this->addPermanentCommand(new RotateRecCommand());
+
+        $this->addCommands($system);
 
         return $system;
     }
@@ -102,7 +105,12 @@ class BBFactory extends AbstractFactory {
             /** @var BBCamSettings $row */
 
             //$dvr->addCam(new BBCam($this, $row));
-            $cams[] = $this->createCam($dvr, $row);
+            $cam = $this->createCam($dvr, $row);
+            $cams[] = $cam;
+
+            //Так как у нас Motion создает раз в минуту картинку, то создаем таймлапсы
+            $timelapse = new BBArchiveTimelapseCommand($cam);
+            $this->addPermanentCommand($timelapse);
         }
         return $cams;
     }
@@ -148,5 +156,4 @@ class BBFactory extends AbstractFactory {
 
         return $stream;
     }
-
 } 
