@@ -17,6 +17,11 @@ abstract class AbstractFactory {
     private static $instance = null;
 
     /**
+     * @var array
+     */
+    private $commands;
+
+    /**
      * @return AbstractFactory
      */
     public static function getInstance(){
@@ -24,6 +29,23 @@ abstract class AbstractFactory {
         return self::$instance;
     }
 
+    /**
+     * permanentCommand
+     * @param ICommand $command
+     */
+    protected function addPermanentCommand(ICommand $command){
+        $this->commands[] = $command;
+    }
+
+    /**
+     * @param ISystem $system
+     */
+    protected function addCommands(ISystem $system){
+        foreach($this->commands as $command)
+            $system->addPermanentCommand($command);
+    }
+
+    //todo buildSystem method
     /**
      * @return ISystem
      */
