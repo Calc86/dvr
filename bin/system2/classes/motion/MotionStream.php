@@ -96,31 +96,32 @@ class MotionStream extends Stream {
     /**
      * @return string
      */
-    private function getImagePath(){
-        $endPath = '/'.$this->cam->getDVR()->getUser()->getID().'/'.$this->cam->getID();
-        return Path::getTmpfsPath(Path::IMAGE.$endPath);
+    private function getImagesPath(){
+        return '/'.$this->cam->getDVR()->getUser()->getID().'/'.$this->cam->getID();
     }
 
-    public function update()
+    /*public function update()
     {
-        if(!System::getInstance()->getFlag(System::FLAG_STOP))
-            if(!$this->lock->create()) return;    //время не пришло
+        //if(!System::getInstance()->getFlag(System::FLAG_STOP))
+        //    if(!$this->lock->create()) return;    //время не пришло
 
         parent::update();
 
-        $timelapse = new CreateTimelapsCommand($this->cam->getID(), $this->getImagePath());
-        System::getInstance()->addCommand($timelapse);
+        //$timelapse = new CreateTimelapsCommand($this->cam->getID(), Path::getTmpfsPath(Path::IMAGE.$this->getImagesPath()));
+        //System::getInstance()->addCommand($timelapse);
+
+        //$endPath = '/'.$this->cam->getDVR()->getUser()->getID().'/'.$this->cam->getID();
 
         // move to nfs/rec/user/timelapse/file
-        $to = Path::RECORD.$endPath.'/../timelapse/'.$timelapse->getFileName();
-        $move = AbstractFactory::getInstance()->createMoveToNfsCommand($timelapse->getFilePath(), $to);
+        //$to = Path::RECORD.$this->getImagesPath().'/../timelapse/'.$timelapse->getFileName();
+        //$move = AbstractFactory::getInstance()->createMoveToNfsCommand($timelapse->getFilePath(), $to);
         //System::getInstance()->addCommand($move);
-    }
+    }*/
 
     public function _start()
     {
         //создаем timelock
-        $this->lock->create();
+        //$this->lock->create();
     }
 
 
