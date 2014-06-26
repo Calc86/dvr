@@ -58,33 +58,38 @@ abstract class VlcStream extends Stream {
         $this->vlm->_del();
     }
 
+    /**
+     * @return bool
+     */
     protected function testInput(){
-
         $url = parse_url($this->getInputVlm());
         if($url['scheme'] != 'file'){
             $ip = $url['host'];
             $a = explode('.', $ip);
             if($a[0] < 224){    //no test for multicast
-                $connection = fsockopen($url['host'], $url['port'], $err_no, $err_str, SOCKET_TIMEOUT);
-                fclose($connection);
+                try{
+                    $connection = fsockopen($url['host'], $url['port'], $err_no, $err_str, SOCKET_TIMEOUT);
+                    fclose($connection);
+                    return true;
+                }catch (\Exception $e){
+                    return false;
+                }
             }
         }
+        return true;
     }
 
     public function update()
     {
         parent::update();
         if(!$this->isEnabled()) $this->stop();
+        if(!$this->testInput()) $this->stop();
     }
 
     public function _start()
     {
-        try{
-            $this->testInput();
+        if($this->testInput()){
             $this->vlm->_control('play');
-        }catch (\Exception $e){
-            Log::getInstance()->put($e->getMessage(), __CLASS__, Log::ERROR);
-            $this->stop();
         }
     }
 

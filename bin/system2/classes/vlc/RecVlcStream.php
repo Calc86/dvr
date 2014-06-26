@@ -123,10 +123,9 @@ class RecVlcStream extends VlcReStream {
 
     public function update()
     {
+        parent::update();
         //if(!System::getInstance()->getFlag(System::FLAG_STOP))
         if(!$this->lock->create()) return;    //время не пришло
-
-        parent::update();
 
         $this->stop();
         $this->start();
