@@ -26,7 +26,7 @@ class MotionStream extends Stream {
     {
         parent::__construct($cam);
 
-        $this->lock = new TimeLock($this->cam->getID().'_timelaps', (8*60*60)); //8h
+        $this->lock = new TimeLock($this->cam->getID().'_timelaps', TIME_LOCK_TIMELAPSE);
 
         //create config file
         $motionUrl = $cs->getStopProto()."://".$cs->getIp().":".$cs->getStopPort()."/".$cs->getStopPath();
@@ -40,7 +40,7 @@ class MotionStream extends Stream {
             $this->addConfig('netcam_userpass', $userPass);
         }*/
 
-        $targetDir = Path::getTmpfsPath(Path::IMAGE.'/'.$this->cam->getDVR()->getID().'/'.$this->cam->getID());
+        $targetDir = Path::getTmpfsPath(Path::IMAGE.'/'.$this->cam->getDVR()->getUser()->getID().'/'.$this->cam->getID());
         $this->addConfig('target_dir', $targetDir);
 
         $path = dirname((new Motion($this->cam->getDVR(), array()))->getConfigFile());
@@ -93,6 +93,14 @@ class MotionStream extends Stream {
         $this->config[$name] = $value;
     }
 
+    /**
+     * @return string
+     */
+    private function getImagePath(){
+        $endPath = '/'.$this->cam->getDVR()->getUser()->getID().'/'.$this->cam->getID();
+        return Path::getTmpfsPath(Path::IMAGE.$endPath);
+    }
+
     public function update()
     {
         if(!System::getInstance()->getFlag(System::FLAG_STOP))
@@ -100,16 +108,13 @@ class MotionStream extends Stream {
 
         parent::update();
 
-        $endPath = '/'.$this->cam->getDVR()->getUser()->getID().'/'.$this->cam->getID();
-        $path = Path::getTmpfsPath(Path::IMAGE.$endPath);
-
-        $timelapse = new CreateTimelapsCommand($this->cam->getID(),$path);
+        $timelapse = new CreateTimelapsCommand($this->cam->getID(), $this->getImagePath());
         System::getInstance()->addCommand($timelapse);
 
         // move to nfs/rec/user/timelapse/file
         $to = Path::RECORD.$endPath.'/../timelapse/'.$timelapse->getFileName();
         $move = AbstractFactory::getInstance()->createMoveToNfsCommand($timelapse->getFilePath(), $to);
-        System::getInstance()->addCommand($move);
+        //System::getInstance()->addCommand($move);
     }
 
     public function _start()
