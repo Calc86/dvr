@@ -8,6 +8,7 @@
 
 //require_once __DIR__.'/CamMotion.php';
 require_once __DIR__.'/CreateTimelapsCommand.php';
+require_once __DIR__.'/TimelapseCommand.php';
 require_once __DIR__.'/Motion.php';
 require_once __DIR__.'/MotionStream.php';
 require_once __DIR__.'/MotionConfig.php';
