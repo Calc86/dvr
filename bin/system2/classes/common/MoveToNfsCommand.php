@@ -12,6 +12,7 @@ namespace system2;
  * Переместить файлик в nfs из tmpfs
  * Class MoveToNfsCommand
  * @package system2
+ * @deprecated
  */
 class MoveToNfsCommand implements ICommand {
 
@@ -36,5 +37,4 @@ class MoveToNfsCommand implements ICommand {
         $mv = new \BashCommand("mv $this->pathFrom $this->pathTo\n");
         $mv->exec();
     }
-
 } 
