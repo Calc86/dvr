@@ -12,7 +12,7 @@ namespace system2;
  * Class BBMotionEvent
  * @package system2
  */
-class BBMotionEvent extends Event {
+class BBLogMotionEvent extends Event {
     /**
      * @param $user User
      * @param $cam Cam
@@ -32,5 +32,4 @@ class BBMotionEvent extends Event {
         echo $q."\n";
         Database::getInstance()->query($q);
     }
-
 } 
