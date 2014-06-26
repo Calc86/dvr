@@ -39,7 +39,7 @@ class CreateTimelapsCommand implements ICommand {
      * @return string
      */
     public function getFilePath(){
-        return realpath($this->getPath()."/../".$this->getFileName());
+        return realpath($this->getPath()."/../").$this->getFileName();
     }
 
     /**
