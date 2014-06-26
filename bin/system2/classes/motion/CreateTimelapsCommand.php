@@ -12,6 +12,7 @@ namespace system2;
  * Создает таймлапсы (картинки в видео)
  * Class CreateSnapshotCommand
  * @package system2
+ * @deprecated
  */
 class CreateTimelapsCommand implements ICommand {
     private $cid;
@@ -39,7 +40,8 @@ class CreateTimelapsCommand implements ICommand {
      * @return string
      */
     public function getFilePath(){
-        return realpath($this->getPath()."/../").$this->getFileName();
+        //up from CamID directory
+        return realpath($this->getPath()."/..")."/".$this->getFileName();
     }
 
     /**
