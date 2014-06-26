@@ -98,7 +98,9 @@ define('MOTION_STREAM_LOCALHOST', 'off');
 
 define('SOCKET_TIMEOUT', 3);
 
-define('TIME_LOCK_RECORD', (600-30));
+define('TIME_LOCK_RECORD', (600-30));   //10m
+define('TIME_LOCK_TIMELAPSE', (1*60*60-30));    //1h
+//define('TIME_LOCK_TIMELAPSE', (3*60-30));
 
 define('RECORDS_KEEP', 30);
 
