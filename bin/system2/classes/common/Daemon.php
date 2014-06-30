@@ -18,6 +18,14 @@ abstract class Daemon {
 
     private $dvr;
 
+    /**
+     * @return \system2\IDVR
+     */
+    public function getDvr()
+    {
+        return $this->dvr;
+    }
+
     private $pidFile;
     private $configFile;
     private $logFile;
