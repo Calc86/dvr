@@ -43,4 +43,11 @@ interface ISystem extends IControlled{
      * @param ICommand $command
      */
     public function addPermanentCommand(ICommand $command);
+
+    /**
+     * @return Lock
+     */
+    public function getLock();
+
+    public function clear();
 } 
