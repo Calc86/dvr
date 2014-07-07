@@ -23,13 +23,11 @@ class BBLogMotionEvent extends Event {
     {
         if(isset($params[0])) $timestamp = strtotime($params[0]);
 
-        if($cam == null) $camID = 0;
-        else $camID = $cam->getID();
-        if($user == null) $userID = 0;
-        else $userID = $user->getID();
+        $e = new bb\Events(0, $this->getName());
+        $e->user_id = $user == null ? 0 : $user->getID();
+        $e->cam_id = $cam == null ? 0 : $cam->getID();
+        $e->time = $timestamp;
 
-        $q = "insert into events values(0, $userID, $camID, '{$this->getName()}', $timestamp)";
-        echo $q."\n";
-        Database::getInstance()->query($q);
+        $e->save();
     }
-} 
+}
