@@ -53,6 +53,7 @@ class BBFactory extends AbstractFactory {
     protected function createDaemons(DVR $dvr)
     {
         $vlc = new Vlc($dvr);
+        $this->addPermanentCommand(new BBDaemonWatchdog($vlc));
 
         // нам необходимы только те камеры, в которых включен mtn
         $cams = $dvr->getCamIDs();
@@ -66,6 +67,8 @@ class BBFactory extends AbstractFactory {
         }
 
         $motion = new Motion($dvr, $ids);
+        if(count($cams))
+            $this->addPermanentCommand(new BBDaemonWatchdog($motion));
 
         return array($vlc, $motion);
     }
@@ -130,6 +133,7 @@ class BBFactory extends AbstractFactory {
         $stream->addStream($motion);
 
         $live = new BBLiveStream($cam);
+        $live->setTestInputCommand(new BBTestInputFailSaveCommand($cam, $live));
         $live->setEnabled($cs->live);
         $stream->addStream($live);
 
@@ -143,10 +147,12 @@ class BBFactory extends AbstractFactory {
 
         $rec = new BBRecStream($cam, $live);
         $rec->setEnabled($cs->live && $cs->rec);
+        $rec->setTestInputCommand(new BBTestInputFailSaveCommand($cam, $rec));
         $stream->addStream($rec);
 
         $mtn = new BBRecStream($cam, $live, TIME_LOCK_RECORD, Path::MOTION);
         $mtn->setEnabled($cs->live && $cs->mtn && BBRecMotionEvent::isMotion($cam));
+        $mtn->setTestInputCommand(new BBTestInputFailSaveCommand($cam, $mtn));
         $stream->addStream($mtn, Path::MOTION);
 
         //motion flv stream
