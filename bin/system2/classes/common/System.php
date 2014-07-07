@@ -66,6 +66,13 @@ class System implements ISystem{
     }
 
     /**
+     * @return Lock
+     */
+    public function getLock(){
+        return $this->lock;
+    }
+
+    /**
      * @param IUser $user
      */
     protected function addUser(IUser $user){
@@ -162,12 +169,16 @@ class System implements ISystem{
     {
         Log::getInstance()->put(__FUNCTION__, $this);
 
+        if($this->isStarted() == true) return;
+
         $lock = new Lock(__FUNCTION__);
         if(!$lock->create()) return;
-        if(!$this->lock->create()) return;
+        //if(!$this->lock->create()) return;
 
         $this->_start();
         $lock->delete();
+
+        $this->setStarted(true);
     }
 
     protected function _start(){
@@ -186,6 +197,8 @@ class System implements ISystem{
     {
         Log::getInstance()->put(__FUNCTION__, $this);
 
+        $this->setStarted(false);
+
         $this->setFlag(System::FLAG_STOP);
 
         //$lock = new Lock(__FUNCTION__);
@@ -196,8 +209,6 @@ class System implements ISystem{
 
         $this->executeCommands();
         $this->executePermanentCommands();
-
-        $this->lock->delete();
 
         Lock::resetAll();
 
@@ -238,6 +249,7 @@ class System implements ISystem{
      */
     final public function update()
     {
+        if(!$this->lock->isLock()) return;
         Log::getInstance()->put(__FUNCTION__, $this);
         $lock = new Lock(__FUNCTION__);
         if(!$lock->create()) return;
@@ -292,6 +304,8 @@ class System implements ISystem{
      * @param $csvParams
      */
     final public function event($userID, $camID, $eventName, $timestamp, $csvParams){
+        if(!$this->lock->isLock()) return;
+
         $user = $this->getUser($userID);
         if($user==null)
             $cam = null;
@@ -350,4 +364,26 @@ class System implements ISystem{
     /*protected function _recPts(){
 
     }*/
+    public function clear()
+    {
+    }
+
+    /**
+     * Запущена ли система
+     * @return bool
+     */
+    public function isStarted(){
+        return $this->lock->isLock();
+    }
+
+    /**
+     * @param $bool boolean
+     */
+    public function setStarted($bool){
+        if($bool){
+            $this->lock->create();
+        } else {
+            $this->lock->delete();
+        }
+    }
 }
