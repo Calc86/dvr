@@ -15,6 +15,10 @@ namespace system2;
  */
 abstract class VlcStream extends Stream {
 
+    /**
+     * @var ICommand
+     */
+    private $testInputCommand = null;
     protected $vlm;
     private $streamName;
 
@@ -35,6 +39,13 @@ abstract class VlcStream extends Stream {
      */
     protected function getVlcName(){
         return 'CAM_'.$this->cam->getID()."_$this->streamName";
+    }
+
+    /**
+     * @param ICommand $command
+     */
+    public function setTestInputCommand(ICommand $command){
+        $this->testInputCommand = $command;
     }
 
     /**
@@ -72,6 +83,8 @@ abstract class VlcStream extends Stream {
                     fclose($connection);
                     return true;
                 }catch (\Exception $e){
+                    if($this->testInputCommand != null)
+                        $this->testInputCommand->execute();
                     return false;
                 }
             }
