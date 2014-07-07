@@ -14,6 +14,8 @@ date_default_timezone_set('Europe/Moscow');
 
 \system2\EchoLog::getInstance()->put(__FILE__, "test");
 
+if($argc < 2) die("test.php module test\n");
+
 $module = $argv[1];
 $test = $argv[2];
 
