@@ -39,7 +39,8 @@ switch($cmd){
         $s->restart();
         break;
     case 'update':
-        $s->update();
+        if($s->getLock()->isLock())
+            $s->update();
         break;
     case 'control':
         $s->control();
@@ -53,6 +54,12 @@ switch($cmd){
 
         $s->event($userID, $camID, $eventName, $timestamp, $csvParams);
         break;
+    case 'test':
+        echo "just test\n";
+        break;
+    case 'clear':
+        $s->clear();
+        break;
     default:
         die(usage());
 }
@@ -61,6 +68,6 @@ switch($cmd){
  * @return string
  */
 function usage(){
-    return "start/stop/restart/update/control*/event(userID, camID, name, timestamp, csvParams)\n";
+    return "start/stop/restart/update/control*/clear/event(userID, camID, name, timestamp, csvParams)\n";
 }
 
