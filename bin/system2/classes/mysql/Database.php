@@ -69,4 +69,12 @@ class Database {
         if(!$r) throw new MysqlQueryException($query."; ".$this->db->error);
         return $r;
     }
+
+    /**
+     * @param $message
+     * @return MysqlQueryException
+     */
+    public static function createException($message){
+        return new MysqlQueryException($message);
+    }
 }
