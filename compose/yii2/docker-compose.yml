@@ -1,0 +1,103 @@
+version: '3.6'
+services:
+  yii-http:
+    container_name: ${PREFIX}-yii
+    image: bnet/yii-app:${YII_APP_VER}  # 1.0
+    restart: always
+    read_only: true
+    ports:
+      - ${HTTP_PORT}:80
+    volumes:
+      - ./htdocs:/var/www/html/
+      - ./run:/var/run/
+      - ./tmp/yii-http:/tmp
+    environment:
+      YII_DEFAULT_ADMIN: ${YII_DEFAULT_ADMIN}
+      YII_DEFAULT_PASS: ${YII_DEFAULT_PASS}
+      DB: ${MYSQL_DB}
+      DB_HOST: mysql
+      DB_NAME: ${MYSQL_DB_NAME}
+      DB_USERNAME: ${MYSQL_DB_USER}
+      DB_PASSWORD: ${MYSQL_DB_PASS}
+      MEMCACHED_HOST: memcached
+      RABBIT_MQ_HOST: rabbitmq
+      RABBIT_MQ_PORT: 5672
+      RABBIT_MQ_USER: ${RABBIT_USER}
+      RABBIT_MQ_PASS: ${RABBIT_PASS}
+      RABBIT_MQ_VHOST: ${RABBIT_VHOST}
+
+  supervisord:
+    container_name: ${PREFIX}-supervisord
+    image: bnet/supervisord:${SUPERVISORD_VER} # 1.0
+    restart: always
+    ports:
+      - ${SUPERVISORD_PORT}:9001
+    volumes:
+      - ./htdocs:/var/www/html/
+      - ./etc/supervisor/conf.d:/etc/supervisor/conf.d
+      - ./etc/cron.d:/etc/cron.d
+      - ./log/:/var/log/
+    environment:
+      SUPERVISORD_PASSWORD: ${SUPERVISORD_PASSWORD}
+      DB: ${MYSQL_DB}
+      DB_HOST: mysql
+      DB_NAME: ${MYSQL_DB_NAME}
+      DB_USERNAME: ${MYSQL_DB_USER}
+      DB_PASSWORD: ${MYSQL_DB_PASS}
+      MEMCACHED_HOST: memcached
+      RABBIT_MQ_HOST: rabbitmq
+      RABBIT_MQ_PORT: 5672
+      RABBIT_MQ_USER: ${RABBIT_USER}
+      RABBIT_MQ_PASS: ${RABBIT_PASS}
+      RABBIT_MQ_VHOST: ${RABBIT_VHOST}
+
+  mysql:
+    container_name: ${PREFIX}-mysql
+    image: mysql:${MYSQL_VERSION} #5.5 5.6 5.7 8.0
+    # так как база через одно место, то отключаем все проверки на дефолтные значения полей
+    #    command: mysqld --sql_mode="" --innodb-force-recovery=3 --innodb_purge_threads=0
+    #    command: mysqld --sql_mode="" --innodb-force-recovery=4 --innodb_purge_threads=0
+    command: mysqld --innodb_file_per_table --innodb_buffer_pool_size=${MYSQL_INNODB_BUFFER_POOL_SIZE} --innodb_log_file_size=${MYSQL_INNODB_LOG_FILE_SIZE} --max_allowed_packet=${MYSQL_MAX_ALLOWED_PACKET}
+    restart: always
+    ports:
+      - ${MYSQL_PORT}:3306
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DB_NAME}
+      MYSQL_USER: ${MYSQL_DB_USER}
+      MYSQL_PASSWORD: ${MYSQL_DB_PASS}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASS}
+    volumes:
+      - ./datadir/mysql:/var/lib/mysql
+
+  pma:
+    container_name: ${PREFIX}-pma
+    image: phpmyadmin/phpmyadmin:${PMA_VER}   # 4.6
+    restart: always
+    ports:
+    - ${PMA_PORT}:80
+    environment:
+      PMA_HOST: mysql
+      PMA_ABSOLUTE_URI: ${PMA_ABSOLUTE_URI} # ex http://app-dev.barcoinpay.me/pma
+
+  memcached:
+    container_name: ${PREFIX}-memcached
+    image: memcached:${MEMCACHED_VER}   # latest
+    restart: always
+
+  rabbitmq:
+    container_name: ${PREFIX}-rabbitmq
+    image: rabbitmq:${RABBITMQ_VERSION}-management  #3.7, 3.8
+    restart: always
+    ports:
+      - ${RABBIT_MANAGMENT_PORT}:15672
+      - ${RABBIT_PORT}:5672
+      - ${RABBIT_MQTT_PORT}:1883
+      - ${RABBIT_MQTT_WEB_PORT}:15675
+    volumes:
+      - ./datadir/rabbitmq/:/var/lib/rabbitmq
+      - ./etc/rabbitmq/:/etc/rabbitmq/
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBIT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBIT_PASS}
+      RABBITMQ_DEFAULT_VHOST: ${RABBIT_VHOST}
+

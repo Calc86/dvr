@@ -1,0 +1,13 @@
+#!/bin/sh
+
+######
+# https://github.com/docker-library/php/tree/3f3220a0aa5992cdc08128cbbe0f2490694d6be9/7.1/stretch/apache
+######
+set -e
+
+# first arg is `-f` or `--some-option`
+if [ "${1#-}" != "$1" ]; then
+	set -- apache2-foreground "$@"
+fi
+
+exec "$@"
