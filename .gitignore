@@ -5,3 +5,4 @@
 ./tmp
 .env
 docker-compose.yml
+./htdocs/basic/vendor
