@@ -93,13 +93,13 @@ RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer
 
 #lua installation
-RUN apt-get install -y lua5.3 \
-    liblua5.3-dev \
-    && ln -s /usr/include/lua5.3/ /usr/include/lua \
-    && ln -s /usr/lib/x86_64-linux-gnu/liblua5.3.a /usr/lib/liblua.a \
-    && ln -s /usr/lib/x86_64-linux-gnu/liblua5.3.so /usr/lib/liblua.so \
-    && pecl install lua \
-    && docker-php-ext-enable lua
+RUN #apt-get install -y lua5.3 \
+#    liblua5.3-dev \
+#    && ln -s /usr/include/lua5.3/ /usr/include/lua \
+#    && ln -s /usr/lib/x86_64-linux-gnu/liblua5.3.a /usr/lib/liblua.a \
+#    && ln -s /usr/lib/x86_64-linux-gnu/liblua5.3.so /usr/lib/liblua.so \
+#    && pecl install lua \
+#    && docker-php-ext-enable lua
 
 
 
