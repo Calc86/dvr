@@ -4,7 +4,8 @@ services:
     container_name: ${PREFIX}-yii
     image: bnet/yii-app:${YII_APP_VER}  # 1.0
     restart: always
-    read_only: true
+    read_only: false # todo true for security reasons
+    user: "${UID}:${GID}"
     ports:
       - ${HTTP_PORT}:80
     volumes:

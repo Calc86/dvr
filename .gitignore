@@ -6,3 +6,6 @@
 .env
 docker-compose.yml
 ./htdocs/basic/vendor
+./datadir
+./run/apache2
+

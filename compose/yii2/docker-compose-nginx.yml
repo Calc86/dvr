@@ -1,0 +1,12 @@
+version: '3.6'
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:1.21.3
+    restart: always
+    #network_mode: "bridge"  # "host" not for macOs
+    ports:
+      - 80:80
+    volumes:
+      - ~/etc/nginx:/etc/nginx/
+      - ~/etc/nginx/conf.d:/etc/nginx/conf.d
