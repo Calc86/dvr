@@ -9,29 +9,31 @@
 namespace system;
 
 
+use app\modules\vlc\types\UserID;
+
 /**
  * Class CamCreator
  * @package system
  */
 class CamCreator implements  ICamCreator{
     /**
-     * @var \UserID
+     * @var UserID
      */
-    protected $dvr_id;
+    protected UserID $dvr_id;
 
     /**
      * @var array of Cam
      */
-    protected $cams = array();
+    protected array $cams = [];
 
-    private $position = 0;
-    protected $keys = array();
+    private int $position = 0;
+    protected array $keys = [];
 
     /**
      * fill cams [k]=>v
-     * @param \UserID $dvr_id
+     * @param UserID $dvr_id
      */
-    public function __construct(\UserID $dvr_id)
+    public function __construct(UserID $dvr_id)
     {
         $this->dvr_id = $dvr_id;
     }
@@ -42,7 +44,7 @@ class CamCreator implements  ICamCreator{
      * @link http://php.net/manual/en/iterator.current.php
      * @return Cam
      */
-    public function current()
+    public function current(): Cam
     {
         return $this->cams[$this->keys[$this->position]];
     }
@@ -73,10 +75,10 @@ class CamCreator implements  ICamCreator{
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Checks if current position is valid
      * @link http://php.net/manual/en/iterator.valid.php
-     * @return boolean The return value will be casted to boolean and then evaluated.
+     * @return boolean The return value will be cast to boolean and then evaluated.
      * Returns true on success or false on failure.
      */
-    public function valid()
+    public function valid(): bool
     {
         return isset($this->keys[$this->position]);
     }
@@ -95,7 +97,7 @@ class CamCreator implements  ICamCreator{
     ////ARRAY
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
-     * Whether a offset exists
+     * Whether offset exists
      * @link http://php.net/manual/en/arrayaccess.offsetexists.php
      * @param mixed $offset <p>
      * An offset to check for.
@@ -103,9 +105,9 @@ class CamCreator implements  ICamCreator{
      * @return boolean true on success or false on failure.
      * </p>
      * <p>
-     * The return value will be casted to boolean if non-boolean was returned.
+     * The return value will be cast to boolean if non-boolean was returned.
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->cams[$offset]);
     }
@@ -119,9 +121,9 @@ class CamCreator implements  ICamCreator{
      * </p>
      * @return Cam Can return all value types.
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): ?Cam
     {
-        return isset($this->cams[$offset]) ? $this->cams[$offset] : null;
+        return $this->cams[$offset] ?? null;
     }
 
     /**
