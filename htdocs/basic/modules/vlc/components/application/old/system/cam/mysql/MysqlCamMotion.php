@@ -8,21 +8,26 @@
 
 namespace system;
 
+use app\modules\vlc\components\Database;
+use app\modules\vlc\types\CamID;
+use app\modules\vlc\types\UserID;
+
 /**
  * Class MysqlCamMotion
  * @package system
  */
 class MysqlCamMotion extends CamMotion {
     /**
-     * @param \UserID $dvrID
-     * @param \CamID $camID
+     * @param UserID $dvrID
+     * @param CamID $camID
      * @param $ip
+     * @throws \app\modules\vlc\components\exceptions\MysqlQueryException
      */
-    function __construct(\UserID $dvrID, \CamID $camID, $ip)
+    function __construct(UserID $dvrID, CamID $camID, $ip)
     {
         parent::__construct($dvrID, $camID);
 
-        $db = \Database::getInstance();
+        $db = Database::getInstance();
 
         $q = "select stop_user, stop_pass, stop_proto, stop_port, stop_path from cam_settings where cam_id=$camID";
         $r = $db->query($q);
