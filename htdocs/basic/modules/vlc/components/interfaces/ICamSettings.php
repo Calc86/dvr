@@ -6,7 +6,7 @@
  * Time: 18:20
  */
 
-namespace system2;
+namespace app\modules\vlc\components;
 
 /**
  * Необходимые настройки камеры для работы в системе

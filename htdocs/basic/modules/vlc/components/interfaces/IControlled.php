@@ -6,7 +6,7 @@
  * Time: 14:28
  */
 
-namespace system2;
+namespace app\modules\vlc\components;
 
 /**
  * Interface IControlled

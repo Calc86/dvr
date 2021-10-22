@@ -6,7 +6,7 @@
  * Time: 17:28
  */
 
-namespace system2;
+namespace app\modules\vlc\components;
 
 use ArrayAccess;
 use Iterator;

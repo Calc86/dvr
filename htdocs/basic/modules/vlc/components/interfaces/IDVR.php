@@ -6,7 +6,7 @@
  * Time: 14:33
  */
 
-namespace system2;
+namespace app\modules\vlc\components;
 
 /**
  * Интерфейс для Digital Video Recorder

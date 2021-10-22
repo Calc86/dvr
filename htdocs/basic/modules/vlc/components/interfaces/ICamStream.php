@@ -6,7 +6,7 @@
  * Time: 14:33
  */
 
-namespace system2;
+namespace app\modules\vlc\components;
 
 /**
  * Поток с камеры (любой, будь то live, запись, либо какие то routine при update

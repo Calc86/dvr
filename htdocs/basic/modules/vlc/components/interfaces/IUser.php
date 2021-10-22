@@ -6,7 +6,7 @@
  * Time: 14:32
  */
 
-namespace system2;
+namespace app\modules\vlc\components;
 
 /**
  * Interface IUser
