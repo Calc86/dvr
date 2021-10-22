@@ -1,6 +1,6 @@
 ./.idea/workspace.xml
 ./backup/
-./log/
+data/log/
 ./run/
 ./tmp/
 .env

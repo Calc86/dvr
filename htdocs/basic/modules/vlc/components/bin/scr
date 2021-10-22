@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# make screenshot by ffmpeg
+# todo 20211022 add params to resolution
+# todo 20211012 add full path to ffmpeg
+ffmpeg -i $1 -an -ss 00:01:30 -r 1 -vframes 1 -s 640x480 -y -f mjpeg $1.jpg
