@@ -10,14 +10,14 @@ class vlcRpc extends PHPUnit_Framework_TestCase {
     const CID = 8;
 
     /**
-     * @return vlc
+     * @return Vlc
      */
     public function getVlc(){
-        return new vlc(new UserID(1));
+        return new Vlc(new UserID(1));
     }
 
     public function getVlcRpc(){
-        return new vlc_rpc(1);
+        return new VlcRpc(1);
     }
 
     public function testStart(){

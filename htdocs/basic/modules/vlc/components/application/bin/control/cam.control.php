@@ -17,7 +17,7 @@ $cmd = $argv[1];
 
 $db = open_db(MYHOST, MYUSER, MYPASS, MYDB);
 
-$vlc = new cam_control_archive($uid,$cid,$pref);
+$vlc = new CamControlArchive($uid,$cid,$pref);
 
 switch($cmd){
     case 'play':

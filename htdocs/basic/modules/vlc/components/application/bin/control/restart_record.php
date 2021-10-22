@@ -14,7 +14,7 @@ if(!$r) throw new MysqlQueryException($q);
 while(($row = $r->fetch_row()) != 0){
     list($uid,$cid,$live,$rec) = $row;
 
-    $cc_rec = new cam_control_archive(new UserID($uid), new CamID($cid), new CamPrefix(CamPrefix::RECORD));
+    $cc_rec = new CamControlArchive(new UserID($uid), new CamID($cid), new CamPrefix(CamPrefix::RECORD));
     if($rec){
         $cc_rec->stop();
         $cc_rec->play();

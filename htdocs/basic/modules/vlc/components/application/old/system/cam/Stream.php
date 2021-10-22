@@ -21,7 +21,7 @@ class Stream implements ICamStream{
 
     function __construct()
     {
-        $cc = new \cam_control();
+        $cc = new \CamControl();
         // TODO: Implement __construct() method.
     }
 

@@ -21,12 +21,12 @@ $server = new Zend_XmlRpc_Server();
 
 if($uid){
     //создаем экземпляр для сервера RPC
-    $server->setClass('vlc_rpc','vlc',$uid);
+    $server->setClass('VlcRpc','vlc',$uid);
     //echo '<pre>';
     //print_r($server);
     if($cid){
         //construct($oid,$cid,$pref='live')
-        $server->setClass('cam_control','cam',$uid,$cid,$pref);
+        $server->setClass('CamControl','cam',$uid,$cid,$pref);
     }
 }
 

@@ -25,7 +25,7 @@ if ($argc < 3) {
 $uid = (int)$argv[2];
 $cmd = $argv[1];
 
-$vlc = new vlc(new UserID($uid));
+$vlc = new Vlc(new UserID($uid));
 
 switch($cmd){
     case 'start':

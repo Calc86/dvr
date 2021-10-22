@@ -13,8 +13,8 @@ if(!$r) throw new MysqlQueryException($q);
 while(($row = $r->fetch_row()) != 0){
     list($uid,$cid,$live,$rec) = $row;
 
-    $cc_live = new cam_control(new UserID($uid), new CamID($cid), new CamPrefix(CamPrefix::LIVE));
-    $cc_rec = new cam_control_archive(new UserID($uid), new CamID($cid), new CamPrefix(CamPrefix::RECORD));
+    $cc_live = new CamControl(new UserID($uid), new CamID($cid), new CamPrefix(CamPrefix::LIVE));
+    $cc_rec = new CamControlArchive(new UserID($uid), new CamID($cid), new CamPrefix(CamPrefix::RECORD));
 
     if($live){
         $cc_live->play();

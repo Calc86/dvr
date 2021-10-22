@@ -12,6 +12,7 @@
       <w>dirname</w>
       <w>dvrs</w>
       <w>executables</w>
+      <w>extraintf</w>
       <w>fclose</w>
       <w>ffserver</w>
       <w>filectime</w>
@@ -27,8 +28,10 @@
       <w>multicast</w>
       <w>myapp</w>
       <w>nginx</w>
+      <w>pidfile</w>
       <w>rebuilded</w>
       <w>samplerate</w>
+      <w>sout</w>
       <w>splitanywhere</w>
       <w>timelaps</w>
       <w>timelapse</w>

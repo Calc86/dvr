@@ -9,10 +9,10 @@
 class vlcWorkflow extends PHPUnit_Framework_TestCase {
 
     /**
-     * @return vlc
+     * @return Vlc
      */
     public function getVlc(){
-        return new vlc(new UserID(1));
+        return new Vlc(new UserID(1));
     }
 
     public function testVlcPsKill()
@@ -30,7 +30,7 @@ class vlcWorkflow extends PHPUnit_Framework_TestCase {
     }
 
     public function getCC(CamPrefix $pref){
-        return new cam_control_archive(new UserID(1), new CamID(1),$pref);
+        return new CamControlArchive(new UserID(1), new CamID(1),$pref);
     }
 
     public function testCCStop(){

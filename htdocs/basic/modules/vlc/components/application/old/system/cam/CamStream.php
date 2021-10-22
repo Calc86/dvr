@@ -30,7 +30,7 @@ class CamStream implements ICamStream{
     private $cam_id;
     private $prefix;
     /**
-     * @var \cam_control
+     * @var \CamControl
      */
     private $cc = null;
 
@@ -43,12 +43,12 @@ class CamStream implements ICamStream{
         switch($this->prefix){
             case \CamPrefix::RECORD:
             case \CamPrefix::MOTION:
-                $this->cc = new \cam_control_archive($this->dvr_id, $this->cam_id, $this->prefix);
+                $this->cc = new \CamControlArchive($this->dvr_id, $this->cam_id, $this->prefix);
                 break;
             case \CamPrefix::LHTTP:
             case \CamPrefix::LIVE:
             default:
-                $this->cc = new \cam_control($this->dvr_id, $this->cam_id, $this->prefix);
+                $this->cc = new \CamControl($this->dvr_id, $this->cam_id, $this->prefix);
         }
 
     }
