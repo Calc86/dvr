@@ -8,6 +8,11 @@
 
 namespace system;
 
+use app\modules\vlc\components\IUser;
+use app\modules\vlc\components\Log;
+use app\modules\vlc\types\BashCommand;
+use app\modules\vlc\types\UserID;
+
 /**
  * Class Motion
  * @package system
@@ -17,17 +22,17 @@ class Motion extends Daemon {
     /**
      * @var array of CamMotion
      */
-    private $camMotions = array();
+    private array $camMotions = [];
 
     /**
-     * @var \UserID
+     * @var UserID
      */
     private $uid;
 
     function __construct(IUser $user)
     {
-        $this->uid = $user->get;
-        parent::__construct($uid, "motion");
+        $this->uid = $user->getID();
+        parent::__construct($this->uid, "motion");
     }
 
     /**
@@ -80,8 +85,6 @@ class Motion extends Daemon {
         $f = fopen($this->getConfigFile(), "w+");
         fwrite($f, MotionConfig::parseConfig($config, $settings));
         fclose($f);
-
-        // добавить в конфиг трейды и записать конфиг файлы для трейдов
     }
 
     public function start()
@@ -102,13 +105,13 @@ class Motion extends Daemon {
 
         $shell = "motion -c {$this->getConfigFile()} -p {$this->getPidFile()} $log";
         Log::getInstance()->put($shell, __CLASS__);
-        (new \BashCommand($shell))->exec();
+        (new BashCommand($shell))->exec();
     }
 
     public function stop()
     {
         if(!$this->isStarted()) return;
-        $this->kill();  //он автоматом обрабатывает килл
+        $this->kill();  //он автоматом обрабатывает kill
         while($this->isStarted()){
             sleep(1);
         }
