@@ -14,15 +14,48 @@ namespace system2;
  * @package system2
  */
 interface ICamSettings extends IUnique {
+    /**
+     * @return mixed
+     */
     public function getIp();
 
+    /**
+     * @return mixed
+     */
     public function getLiveProto();
+
+    /**
+     * @return mixed
+     */
     public function getLivePort();
+
+    /**
+     * @return mixed
+     */
     public function getLivePath();
+
+    /**
+     * @return mixed
+     */
     public function getLiveUrl();
 
+    /**
+     * @return mixed
+     */
     public function getStopProto();
+
+    /**
+     * @return mixed
+     */
     public function getStopPort();
+
+    /**
+     * @return mixed
+     */
     public function getStopPath();
+
+    /**
+     * @return mixed
+     */
     public function getStopUrl();
 }

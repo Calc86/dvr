@@ -16,12 +16,12 @@ interface ICam extends IControlled, ICreate, IDelete, IUnique{
     /**
      * @return IDVR
      */
-    public function getDVR();
+    public function getDVR(): IDVR;
 
     /**
      * @return ICamSettings
      */
-    public function getSettings();
+    public function getSettings(): ICamSettings;
 
     /**
      * Установить настройки камеры

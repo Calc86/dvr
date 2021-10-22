@@ -17,11 +17,11 @@ interface IDVR extends IControlled, IUnique{
     /**
      * @return IUser
      */
-    public function getUser();
+    public function getUser(): IUser;
 
     /**
      * @param $camID
      * @return ICam
      */
-    public function getCam($camID);
+    public function getCam($camID): ICam;
 } 

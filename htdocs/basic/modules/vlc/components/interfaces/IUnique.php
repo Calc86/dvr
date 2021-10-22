@@ -16,5 +16,5 @@ interface IUnique {
     /**
      * @return integer id
      */
-    public function getID();
+    public function getID(): int;
 } 

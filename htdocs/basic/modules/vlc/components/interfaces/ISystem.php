@@ -14,6 +14,9 @@ namespace system2;
  * @package system2
  */
 interface ISystem extends IControlled{
+    /**
+     * @return mixed
+     */
     public function control();
 
     /**
@@ -33,13 +36,13 @@ interface ISystem extends IControlled{
     public function addEventHandler(Event $event);
 
     /**
-     * Добавить комманду, которая будет вызвана в конце update
+     * Добавить команду, которая будет вызвана в конце update
      * @param ICommand $command
      */
     public function addCommand(ICommand $command);
 
     /**
-     * Добавить комманду, которая будет вызвана в конце update
+     * Добавить команду, которая будет вызвана в конце update
      * @param ICommand $command
      */
     public function addPermanentCommand(ICommand $command);
@@ -49,5 +52,8 @@ interface ISystem extends IControlled{
      */
     public function getLock();
 
+    /**
+     * @return mixed
+     */
     public function clear();
 } 

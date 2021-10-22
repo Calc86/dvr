@@ -8,10 +8,13 @@
 
 namespace system2;
 
+use ArrayAccess;
+use Iterator;
+
 /**
  * Interface ICamCreator
  * для создания камер
  * @package system
  */
-interface ICamCreator extends \Iterator, \ArrayAccess {
+interface ICamCreator extends Iterator, ArrayAccess {
 }
