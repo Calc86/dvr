@@ -8,13 +8,23 @@
 
 namespace system;
 
+use app\modules\vlc\components\Database;
+use app\modules\vlc\components\exceptions\MysqlQueryException;
+use app\modules\vlc\components\exceptions\PathException;
+use app\modules\vlc\components\Log;
+use app\modules\vlc\components\nas\Nas;
+use app\modules\vlc\types\BashCommand;
+use app\modules\vlc\types\CamID;
+use app\modules\vlc\types\CamPrefix;
+use app\modules\vlc\types\UserID;
+
 /**
  * Class System
  * Класс для управления системой
  * @package system
  */
-class System {
-
+class System
+{
     const UPDATE_LOCK = 'update.lock';
     const TIMELAPS_LOCK = 'timelaps.lock';
 
@@ -28,10 +38,12 @@ class System {
 
 
     /**
-     * @param \UserID $id
+     * @param UserID $id
      * @return User
+     * @throws PathException|MysqlQueryException
      */
-    protected function buildSystem(\UserID $id){
+    protected function buildSystem(UserID $id): User
+    {
         //$userId = new \UserID($id);
         //Log::getInstance($id)->setUserID(0);
         Log::getInstance($id)->put(__FUNCTION__, __CLASS__);
@@ -41,34 +53,37 @@ class System {
         return new User($userId, $dvr);
     }
 
-    public function startup(){
+    /**
+     * @throws MysqlQueryException
+     */
+    public function startup()
+    {
         Lock::resetAll();
 
-        $db = \Database::getInstance();
+        $db = Database::getInstance();
         $q = "select id from users where banned=0";
         $r = $db->query($q);
-        while(($row = $r->fetch_row())){
-            try{
-                $this->buildSystem(new \UserID($row[0]))->getDvr()->startup();
-            }
-            catch(\Exception $e){
-                Log::getInstance()->put($e->getCode().' '.$e->getMessage()."\n".$e->getTraceAsString()."\n", __CLASS__, Log::ERROR);
+        while (($row = $r->fetch_row())) {
+            try {
+                $this->buildSystem(new UserID($row[0]))->getDvr()->startup();
+            } catch (\Exception $e) {
+                Log::getInstance()->put($e->getCode() . ' ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n", __CLASS__, Log::ERROR);
             }
         }
 
         $this->recPts();
     }
 
-    public function shutdown(){
-        $db = \Database::getInstance();
+    public function shutdown()
+    {
+        $db = Database::getInstance();
         $q = "select id from users where banned=0";
         $r = $db->query($q);
-        while(($row = $r->fetch_row())){
-            try{
-                $this->buildSystem(new \UserID($row[0]))->getDvr()->shutdown();
-            }
-            catch(\Exception $e){
-                Log::getInstance()->put($e->getCode().' '.$e->getMessage()."\n".$e->getTraceAsString()."\n", __CLASS__, Log::ERROR);
+        while (($row = $r->fetch_row())) {
+            try {
+                $this->buildSystem(new UserID($row[0]))->getDvr()->shutdown();
+            } catch (\Exception $e) {
+                Log::getInstance()->put($e->getCode() . ' ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n", __CLASS__, Log::ERROR);
             }
         }
 
@@ -77,35 +92,38 @@ class System {
         //(new \BashCommand('php '.BIN.'util/rec-pts.php'))->exec();
     }
 
-    public function live(){
-        $db = \Database::getInstance();
+    /**
+     * @throws MysqlQueryException
+     */
+    public function live()
+    {
+        $db = Database::getInstance();
         $q = "select id from users where banned=0";
         $r = $db->query($q);
-        while(($row = $r->fetch_row())){
-            try{
-                $this->buildSystem(new \UserID($row[0]))->getDvr()->live();
-            }
-            catch(\Exception $e){
-                Log::getInstance()->put($e->getCode().' '.$e->getMessage()."\n".$e->getTraceAsString()."\n", __CLASS__, Log::ERROR);
+        while (($row = $r->fetch_row())) {
+            try {
+                $this->buildSystem(new UserID($row[0]))->getDvr()->live();
+            } catch (\Exception $e) {
+                Log::getInstance()->put($e->getCode() . ' ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n", __CLASS__, Log::ERROR);
             }
         }
     }
 
-    public function update(){
+    public function update()
+    {
         Log::getInstance()->put(__FUNCTION__, __CLASS__);
 
         $lock = new Lock(__FUNCTION__);
-        if(!$lock->create()) return;        //кто товыполняет эту функцию
+        if (!$lock->create()) return;        //кто товыполняет эту функцию
 
-        $db = \Database::getInstance();
+        $db = Database::getInstance();
         $q = "select id from users where banned=0";
         $r = $db->query($q);
-        while(($row = $r->fetch_row())){
-            try{
-                $this->buildSystem(new \UserID($row[0]))->getDvr()->update();
-            }
-            catch(\Exception $e){
-                Log::getInstance()->put($e->getCode().' '.$e->getMessage()."\n".$e->getTraceAsString()."\n", __CLASS__, Log::ERROR);
+        while (($row = $r->fetch_row())) {
+            try {
+                $this->buildSystem(new UserID($row[0]))->getDvr()->update();
+            } catch (\Exception $e) {
+                Log::getInstance()->put($e->getCode() . ' ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n", __CLASS__, Log::ERROR);
             }
         }
 
@@ -120,22 +138,25 @@ class System {
         $lock->delete();
     }
 
-    public function timelaps(){
+    /**
+     * @throws MysqlQueryException
+     */
+    public function timelaps()
+    {
         return;
         Log::getInstance()->put(__FUNCTION__, __CLASS__);
 
         $lock = new Lock(__FUNCTION__);
-        if(!$lock->create()) return;    //кто то уже выполняет эту функцию
+        if (!$lock->create()) return;    //кто то уже выполняет эту функцию
 
-        $db = \Database::getInstance();
+        $db = Database::getInstance();
         $q = "select id from users where banned=0";
         $r = $db->query($q);
-        while(($row = $r->fetch_row())){
-            try{
-                $this->buildSystem(new \UserID($row[0]))->getDvr()->timelaps();
-            }
-            catch(\Exception $e){
-                Log::getInstance()->put($e->getCode().' '.$e->getMessage()."\n".$e->getTraceAsString()."\n", __CLASS__, Log::ERROR);
+        while (($row = $r->fetch_row())) {
+            try {
+                $this->buildSystem(new UserID($row[0]))->getDvr()->timelaps();
+            } catch (\Exception $e) {
+                Log::getInstance()->put($e->getCode() . ' ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n", __CLASS__, Log::ERROR);
             }
         }
 
@@ -143,106 +164,111 @@ class System {
         $lock->delete();
     }
 
-    private function recPts(){
+    private function recPts()
+    {
         Log::getInstance()->setUserID(0);
         Log::getInstance()->put(__FUNCTION__, __CLASS__);
         //$db = open_db(MYHOST, MYUSER, MYPASS, MYDB);
-        $db = \Database::getInstance();
+        $db = Database::getInstance();
         //делаем лимит, так как у нас сейчас оооочень много непроконверченных файликов
         $q = "select id,file from archive where rebuilded='no' and type='rec' order by id desc limit 50";
         $r = $db->query($q);
-        if(!$r) throw new \MysqlQueryException($q);
+        if (!$r) throw new MysqlQueryException($q);
 
-        $nas = new \Nas();
-        if($nas->is_mount()){
-            while(($row=$r->fetch_row()) != 0){
-                list($id,$file) = $row;
-                Log::getInstance()->put(__FUNCTION__." start #$id", __CLASS__);
+        $nas = new Nas();
+        if ($nas->is_mount()) {
+            while (($row = $r->fetch_row()) != 0) {
+                list($id, $file) = $row;
+                Log::getInstance()->put(__FUNCTION__ . " start #$id", __CLASS__);
                 $time = time();
                 $start = microtime_float();
 
                 //перемещаем файл
-                $path = str_replace('/rec/','/pre_rec/',$file);
+                $path = str_replace('/rec/', '/pre_rec/', $file);
                 $newPath = $file;
-                if(!is_dir(dirname($newPath))){
+                if (!is_dir(dirname($newPath))) {
                     mkdir(dirname($newPath));
                 }
-                $ffmpeg = new \BashCommand("ffmpeg -y -i $path.avi -codec copy $newPath.mp4\n");
+                $ffmpeg = new BashCommand("ffmpeg -y -i $path.avi -codec copy $newPath.mp4\n");
                 Log::getInstance()->put($ffmpeg, __CLASS__);
                 $ffmpeg->exec();
                 //если это какой либо мжпег поток
-                if(file_exists($newPath.'.mp4') && (filesize($newPath.".mp4") == 0)){
-                    unlink($newPath.".mp4");
+                if (file_exists($newPath . '.mp4') && (filesize($newPath . ".mp4") == 0)) {
+                    unlink($newPath . ".mp4");
                 }
 
-                if(!file_exists($newPath.'.mp4')){
-                    $mv = new \BashCommand("mv $path.avi $newPath.avi\n");
+                if (!file_exists($newPath . '.mp4')) {
+                    $mv = new BashCommand("mv $path.avi $newPath.avi\n");
                     Log::getInstance()->put($mv, __CLASS__);
                     $mv->exec();
-                }
-                else{
-                    if(file_exists($path.'.avi'))
-                        unlink($path.".avi");
+                } else {
+                    if (file_exists($path . '.avi'))
+                        unlink($path . ".avi");
                 }
 
                 $end = microtime_float();
-                $r_time = $end-$start;
+                $r_time = $end - $start;
 
                 $qu = "update archive set rebuilded='yes', date_rebuild=$time, time_rebuild=$r_time where id=$id";
-                if(!$db->query($qu)) throw new \MysqlQueryException($qu);
-                Log::getInstance()->put(__FUNCTION__." stop #$id", __CLASS__);
+                if (!$db->query($qu)) throw new MysqlQueryException($qu);
+                Log::getInstance()->put(__FUNCTION__ . " stop #$id", __CLASS__);
             }
-        }
-        else{
+        } else {
             Log::getInstance()->put("not mounted", __CLASS__);
         }
     }
 
     /**
-     * @param \UserID $userID
+     * @param UserID $userID
      */
-    public function user_start(\UserID $userID){
+    public function user_start(UserID $userID)
+    {
         $this->buildSystem($userID)->getDvr()->start();
     }
 
     /**
-     * @param \UserID $userID
+     * @param UserID $userID
      */
-    public function user_stop(\UserID $userID){
+    public function user_stop(UserID $userID)
+    {
         $this->buildSystem($userID)->getDvr()->stop();
     }
 
     /**
-     * @param \UserID $userID
-     * @param \CamID $camID
-     * @param \CamPrefix $camPrefix
+     * @param UserID $userID
+     * @param CamID $camID
+     * @param CamPrefix $camPrefix
      */
-    public function cam_play(\UserID $userID, \CamID $camID, \CamPrefix $camPrefix){
+    public function cam_play(UserID $userID, CamID $camID, CamPrefix $camPrefix)
+    {
         $this->buildSystem($userID)->getDvr()->getCam($camID)->getStream($camPrefix)->start();
     }
 
     /**
-     * @param \UserID $userID
-     * @param \CamID $camID
-     * @param \CamPrefix $camPrefix
+     * @param UserID $userID
+     * @param CamID $camID
+     * @param CamPrefix $camPrefix
      */
-    public function cam_stop(\UserID $userID, \CamID $camID, \CamPrefix $camPrefix){
+    public function cam_stop(UserID $userID, CamID $camID, CamPrefix $camPrefix)
+    {
         $this->buildSystem($userID)->getDvr()->getCam($camID)->getStream($camPrefix)->stop();
     }
 
     /**
-     * @param \UserID $userID
-     * @param \CamID $camID
+     * @param UserID $userID
+     * @param CamID $camID
      */
-    public function cam_update(\UserID $userID, \CamID $camID){
+    public function cam_update(UserID $userID, CamID $camID)
+    {
         $this->buildSystem($userID)->getDvr()->getCam($camID)->update();
     }
 
     /**
-     * @param \UserID $userID
-     * @param \CamID $camID
+     * @param UserID $userID
+     * @param CamID $camID
      */
-    public function cam_reload(\UserID $userID, \CamID $camID){
+    public function cam_reload(UserID $userID, CamID $camID)
+    {
         $cam = $this->buildSystem($userID)->getDvr()->getCam($camID);
         $cam->stop();
         $cam->delete();
