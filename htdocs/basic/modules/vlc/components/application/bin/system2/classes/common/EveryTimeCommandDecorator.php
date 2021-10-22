@@ -8,22 +8,25 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICommand;
+
 /**
  * Обертка для команд, которые должны вызываться раз в некоторое время, а не каждый раз
  * Class EveryTimeCommandDecorator
  * @package system2
  */
-class EveryTimeCommandDecorator implements ICommand {
-    private $lockName;
+class EveryTimeCommandDecorator implements ICommand
+{
+    private string $lockName;
     /**
-     * @var ICommand
+     * @var ?ICommand
      */
-    private $command = null;
+    private ?ICommand $command;
     /**
      * @var int
      */
-    private $time = 0;
-    private $executed = false;
+    private int $time;
+    private bool $executed = false;
 
     /**
      * @param $lockName
@@ -32,7 +35,6 @@ class EveryTimeCommandDecorator implements ICommand {
      */
     function __construct($lockName, ICommand $command, $time)
     {
-        //dasd
         $this->command = $command;
         $this->time = $time;
         $this->lockName = $lockName;
@@ -45,7 +47,7 @@ class EveryTimeCommandDecorator implements ICommand {
     {
         $lock = new TimeLock($this->lockName, $this->time);
 
-        if($lock->create()){
+        if ($lock->create()) {
             $this->command->execute();
             $this->executed = true;
         }
@@ -57,7 +59,8 @@ class EveryTimeCommandDecorator implements ICommand {
     /**
      * @return bool
      */
-    public function isExecuted(){
+    public function isExecuted(): bool
+    {
         return $this->executed;
     }
 } 
