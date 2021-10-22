@@ -8,34 +8,36 @@
 
 namespace system;
 
+use app\modules\vlc\types\UserID;
+
 /**
  * Class User
  * @package system
  */
 class User {
     /**
-     * @var \UserID
+     * @var UserID
      */
-    private $uid;
+    private UserID $uid;
     /**
      * @var IDVR
      */
-    private $dvr;
+    private IDVR $dvr;
 
     /**
-     * @param \UserID $uid
+     * @param UserID $uid
      * @param IDVR $dvr
      */
-    function __construct(\UserID $uid, IDVR $dvr)
+    function __construct(UserID $uid, IDVR $dvr)
     {
         $this->dvr = $dvr;
         $this->uid = $uid;
     }
 
     /**
-     * @return \system\IDVR
+     * @return IDVR
      */
-    public function getDvr()
+    public function getDvr(): IDVR
     {
         return $this->dvr;
     }
