@@ -8,6 +8,9 @@
 
 namespace system;
 
+use app\modules\vlc\types\CamID;
+use app\modules\vlc\types\UserID;
+
 /**
  * Class CamMotion
  * @package system
@@ -16,27 +19,27 @@ namespace system;
 class CamMotion {
 
     /**
-     * @var \UserID
+     * @var UserID
      */
     private $dvrID;
 
     /**
-     * @var  \CamID
+     * @var CamID
      */
     private $camID;
 
     /**
      * @var array key=>value
      */
-    private $config;
+    private array $config;
 
-    private $targetDir;
+    private string $targetDir;
 
     /**
-     * @param \UserID $dvrID
-     * @param \CamID $camID
+     * @param UserID $dvrID
+     * @param CamID $camID
      */
-    function __construct(\UserID $dvrID, \CamID $camID)
+    function __construct(UserID $dvrID, CamID $camID)
     {
         $this->dvrID = $dvrID;
         $this->camID = $camID;
@@ -68,17 +71,17 @@ class CamMotion {
     }
 
     /**
-     * @return \CamID
+     * @return CamID
      */
-    public function getCamID()
+    public function getCamID(): CamID
     {
         return $this->camID;
     }
 
     /**
-     * @return \UserID
+     * @return UserID
      */
-    public function getDvrID()
+    public function getDvrID(): UserID
     {
         return $this->dvrID;
     }
@@ -86,7 +89,7 @@ class CamMotion {
     /**
      * @param array $config
      */
-    public function setConfig($config)
+    public function setConfig(array $config)
     {
         foreach($config as $k=>$v){
             $this->addConfig($k,$v);
@@ -96,17 +99,17 @@ class CamMotion {
     /**
      * @return array
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         return $this->config;
     }
 
     /**
      * Добавить или изменить строчку конфига
-     * @param String $name
-     * @param String $value
+     * @param string $name
+     * @param string $value
      */
-    public function addConfig($name, $value){
+    public function addConfig(string $name, string $value){
         $this->config[$name] = $value;
     }
 } 
