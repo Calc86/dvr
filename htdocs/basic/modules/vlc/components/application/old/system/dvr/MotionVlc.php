@@ -8,22 +8,29 @@
 
 namespace system;
 
+use app\modules\vlc\components\exceptions\PathException;
+use app\modules\vlc\components\Log;
+use app\modules\vlc\types\BashCommand;
+use app\modules\vlc\types\UserID;
+
 /**
  * Class MotionVlc
  * vlc with motion
  * @package system
  */
-class MotionVlc extends Vlc {
+class MotionVlc extends Vlc
+{
     /**
      * @var Motion
      */
-    private $motion;
+    private Motion $motion;
 
     /**
-     * @param \UserID $uid
+     * @param UserID $uid
      * @param CamCreator $camCreator
+     * @throws PathException
      */
-    function __construct(\UserID $uid, CamCreator $camCreator)
+    function __construct(UserID $uid, CamCreator $camCreator)
     {
         parent::__construct($uid, $camCreator);
 
@@ -35,34 +42,35 @@ class MotionVlc extends Vlc {
         Log::getInstance()->put(__FUNCTION__, __CLASS__);
         parent::start();
 
-        foreach($this->getCams() as $cam){
+        foreach ($this->getCams() as $cam) {
             /** @var Cam $cam */
             $camMotion = $cam->getCamMotion();
-            if($camMotion != null ) $this->motion->addThread($camMotion);
+            if ($camMotion != null) $this->motion->addThread($camMotion);
         }
 
         $this->motion->start();
     }
 
-    public function timelaps(){
+    public function timelaps()
+    {
         Log::getInstance()->setUserID($this->getUid());
         Log::getInstance()->put(__FUNCTION__, __CLASS__);
-        foreach($this->getCams() as $cam){
+        foreach ($this->getCams() as $cam) {
             /** @var Cam $cam */
-            Log::getInstance()->put("CID: ".$cam->getID(), __CLASS__);
+            Log::getInstance()->put("CID: " . $cam->getID(), __CLASS__);
             $camMotion = $cam->getCamMotion();
-            if($camMotion != null ){
-                Log::getInstance()->put("CID: ".$cam->getID()." do", __CLASS__);
+            if ($camMotion != null) {
+                Log::getInstance()->put("CID: " . $cam->getID() . " do", __CLASS__);
                 $path = $camMotion->getTargetDir();
 
 
                 $list = "$path/list.txt";
-                $filename = $cam->getID()."_".date("Y-m-d_H:i:s").".mp4";
+                $filename = $cam->getID() . "_" . date("Y-m-d_H:i:s") . ".mp4";
 
-                $createList = new \BashCommand("ls $path/snapshot*.jpg | sort > $list");
-                $deleteList = new \BashCommand("rm $list");
-                $createTimelaps = new \BashCommand("cat $list | xargs cat | ffmpeg -f image2pipe -r 3 -vcodec mjpeg -i - -vcodec libx264 $path/../$filename");
-                $deleteImages = new \BashCommand("cat $list | xargs rm");
+                $createList = new BashCommand("ls $path/snapshot*.jpg | sort > $list");
+                $deleteList = new BashCommand("rm $list");
+                $createTimelaps = new BashCommand("cat $list | xargs cat | ffmpeg -f image2pipe -r 3 -vcodec mjpeg -i - -vcodec libx264 $path/../$filename");
+                $deleteImages = new BashCommand("cat $list | xargs rm");
 
                 $createList->exec();
                 $createTimelaps->exec();
