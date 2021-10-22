@@ -1,11 +1,9 @@
 ./.idea/workspace.xml
-./backup
-./log
-./run
-./tmp
+./backup/
+./log/
+./run/
+./tmp/
 .env
 docker-compose.yml
-./htdocs/basic/vendor
-./datadir
-./run/apache2
-
+./htdocs/basic/vendor/
+./datadir/

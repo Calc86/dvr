@@ -113,3 +113,8 @@ CMD ["sh", "/usr/local/bin/init.sh"]
 
 #доступ к статусу
 COPY status.conf /etc/apache2/mods-available/
+
+
+RUN apt install vlc -y
+
+RUN apt install ffmpeg -y

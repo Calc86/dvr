@@ -1,5 +1,15 @@
 version: '3.6'
 services:
+  nginx:  # comment if using host Nginx
+    container_name: nginx
+    image: nginx:1.21.3
+    restart: always
+    #network_mode: "bridge"  # "host" not for macOs
+    ports:
+      - 80:80
+    volumes:
+      - ~/etc/nginx:/etc/nginx/
+      - ~/etc/nginx/conf.d:/etc/nginx/conf.d
   yii-http:
     container_name: ${PREFIX}-yii
     image: bnet/yii-app:${YII_APP_VER}  # 1.0
@@ -75,9 +85,9 @@ services:
     image: mariadb:${MARIADB_VERSION}
     restart: always
     ports:
-      - ${MARIADB_PORT}:3306
+      - ${MYSQL_PORT}:3306
     environment:
-      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MYSQL_ROOT_PASS}
 
   pma:
     container_name: ${PREFIX}-pma
