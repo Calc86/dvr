@@ -6,8 +6,10 @@
  * Time: 16:59
  */
 
-require_once dirname(__FILE__) . '/../../config.php';    //все классы указаны в конфиге
-require_once dirname(__FILE__) . '/../../system/include.php';
+use app\modules\vlc\types\CamID;
+use app\modules\vlc\types\CamPrefix;
+use app\modules\vlc\types\UserID;
+use system\System;
 
 /**
  * Class rpc
@@ -16,7 +18,7 @@ require_once dirname(__FILE__) . '/../../system/include.php';
 class NativeRpc
 {
     /**
-     * @var \system\System
+     * @var System
      */
     private $system;
     private $uid;
@@ -27,7 +29,7 @@ class NativeRpc
     public function __construct($uid)
     {
         $this->uid = $uid;
-        $this->system = new \system\System();
+        $this->system = new System();
     }
 
     /*
@@ -59,7 +61,7 @@ class NativeRpc
      * @param int $camID
      * @param string $camPrefix
      */
-    public function cam_play($camID, $camPrefix)
+    public function cam_play(int $camID, string $camPrefix)
     {
         $this->system->cam_play(new UserID($this->uid), new CamID($camID), new CamPrefix($camPrefix));
     }
@@ -68,7 +70,7 @@ class NativeRpc
      * @param int $camID
      * @param string $camPrefix
      */
-    public function cam_stop($camID, $camPrefix)
+    public function cam_stop(int $camID, string $camPrefix)
     {
         $this->system->cam_stop(new UserID($this->uid), new CamID($camID), new CamPrefix($camPrefix));
     }
@@ -76,7 +78,7 @@ class NativeRpc
     /**
      * @param int $camID
      */
-    public function cam_update($camID)
+    public function cam_update(int $camID)
     {
         $this->system->cam_update(new UserID($this->uid), new CamID($camID));
     }
@@ -84,7 +86,7 @@ class NativeRpc
     /**
      * @param int $camID
      */
-    public function cam_reload($camID)
+    public function cam_reload(int $camID)
     {
         $this->system->cam_reload(new UserID($this->uid), new CamID($camID));
     }
