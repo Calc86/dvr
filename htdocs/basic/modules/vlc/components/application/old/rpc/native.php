@@ -6,13 +6,17 @@
  * Time: 16:59
  */
 
+use app\modules\vlc\types\CamID;
+use app\modules\vlc\types\CamPrefix;
+use app\modules\vlc\types\UserID;
+
 require_once dirname(__FILE__) . '/../bin/config.php';    //все классы указаны в конфиге
 require_once dirname(__FILE__) . '/../bin/system/include.php';
 
 /**
  * Class rpc
  */
-class native_rpc{
+class NativeRpc{
     /**
      * @var \system\System
      */
@@ -96,7 +100,7 @@ $pref = get_var('pref', CamPrefix::LIVE);
 $func = get_var('func', '');
 
 if($uid){
-    $rpc = new native_rpc($uid);
+    $rpc = new NativeRpc($uid);
     if($func != ''){
         try{
             switch($func){

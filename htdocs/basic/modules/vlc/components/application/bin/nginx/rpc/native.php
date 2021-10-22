@@ -11,8 +11,10 @@ require_once dirname(__FILE__) . '/../../system/include.php';
 
 /**
  * Class rpc
+ * @deprecated Есть такой же класс в system2
  */
-class native_rpc{
+class NativeRpc
+{
     /**
      * @var \system\System
      */
@@ -95,18 +97,18 @@ $cid = get_var('cid');
 $pref = get_var('pref', CamPrefix::LIVE);
 $func = get_var('func', '');
 
-if($uid){
-    $rpc = new native_rpc($uid);
-    if($func != ''){
-        try{
-            switch($func){
+if ($uid) {
+    $rpc = new NativeRpc($uid);
+    if ($func != '') {
+        try {
+            switch ($func) {
                 case 'cam_reload':
                     $rpc->$func($cid);
                 default:
-                    $rpc->$func($cid , $pref);
+                    $rpc->$func($cid, $pref);
             }
             echo 'OK';
-        }catch (Exception $e){
+        } catch (Exception $e) {
             echo '<pre>';
             echo $e->getMessage();
             echo $e->getFile();
