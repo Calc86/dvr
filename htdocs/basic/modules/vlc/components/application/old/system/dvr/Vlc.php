@@ -120,7 +120,7 @@ class Vlc extends DVR{
             $cam->delete();
         }
 
-        $telnet = new \telnet();
+        $telnet = new \Telnet();
 
         $f = $telnet->connect('localhost', $this->getTelnetPort()->get());
         if(!$f){
@@ -142,7 +142,7 @@ class Vlc extends DVR{
      * примонтировать наш nas
      */
     private function mount(){
-        $nas = new \nas();
+        $nas = new \Nas();
         if(!$nas->is_mount()->get());
             $nas->mount();
     }
@@ -152,7 +152,7 @@ class Vlc extends DVR{
      */
     /** @noinspection PhpUnusedPrivateMethodInspection */
     private function un_mount(){
-        $nas = new \nas();
+        $nas = new \Nas();
         if($nas->is_mount()->get());
             $nas->un_mount();
     }

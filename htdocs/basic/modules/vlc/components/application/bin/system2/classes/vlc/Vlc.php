@@ -87,7 +87,7 @@ class Vlc extends Daemon{
 
     public function _stop()
     {
-        $telnet = new \telnet();
+        $telnet = new \Telnet();
 
         $f = $telnet->connect('localhost', $this->getTelnetPort());
         if(!$f){

@@ -156,7 +156,7 @@ class vlc{
      */
     protected $config;
     /**
-     * @var telnet класс для протокола telnet
+     * @var Telnet класс для протокола telnet
      */
     protected $telnet;
     /**
@@ -327,7 +327,7 @@ class vlc{
     }
 
     /**
-     * @param \telnet $telnet
+     * @param \Telnet $telnet
      */
     public function setTelnet($telnet)
     {
@@ -335,7 +335,7 @@ class vlc{
     }
 
     /**
-     * @return \telnet
+     * @return \Telnet
      */
     public function getTelnet()
     {
@@ -422,7 +422,7 @@ class vlc{
         $this->setHtPort(new Port(HTSTART+$this->getUserID()->get()));
         $this->setTlPort(new Port(TLSTART+$this->getUserID()->get()));
 
-        $this->telnet = new telnet();
+        $this->telnet = new Telnet();
         $this->config = new config($this->uid);
 
         // если настроек нет, то и не будет камеры в нашем списке
@@ -446,7 +446,7 @@ class vlc{
      * примонтировать наш nas
      */
     public function mount(){
-        $nas = new nas();
+        $nas = new Nas();
         $nas->mount();
     }
 
@@ -454,7 +454,7 @@ class vlc{
      * размонтировать наш nas
      */
     public function un_mount(){
-        $nas = new nas();
+        $nas = new Nas();
         $nas->un_mount();
     }
 

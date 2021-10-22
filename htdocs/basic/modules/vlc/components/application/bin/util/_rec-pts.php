@@ -14,7 +14,7 @@ $q = "select id,file from archive where rebuilded='no' and type='rec' order by i
 $r = $db->query($q);
 if(!$r) throw new MysqlQueryException($q);
 
-$nas = new nas();
+$nas = new Nas();
 if($nas->is_mount()){
     while(($row=$r->fetch_row()) != 0){
         list($id,$file) = $row;

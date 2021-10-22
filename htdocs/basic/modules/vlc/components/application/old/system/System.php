@@ -153,7 +153,7 @@ class System {
         $r = $db->query($q);
         if(!$r) throw new \MysqlQueryException($q);
 
-        $nas = new \nas();
+        $nas = new \Nas();
         if($nas->is_mount()){
             while(($row=$r->fetch_row()) != 0){
                 list($id,$file) = $row;
