@@ -20,13 +20,13 @@ class NativeRpc
     /**
      * @var System
      */
-    private $system;
-    private $uid;
+    private System $system;
+    private int $uid;
 
     /**
-     * @param $uid
+     * @param int $uid
      */
-    public function __construct($uid)
+    public function __construct(int $uid)
     {
         $this->uid = $uid;
         $this->system = new System();
@@ -106,6 +106,7 @@ if ($uid) {
             switch ($func) {
                 case 'cam_reload':
                     $rpc->$func($cid);
+                    break;
                 default:
                     $rpc->$func($cid, $pref);
             }
