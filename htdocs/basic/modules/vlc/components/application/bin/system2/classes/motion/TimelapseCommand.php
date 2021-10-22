@@ -8,18 +8,22 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICam;
+use app\modules\vlc\components\ICommand;
+
 /**
  * Class TimelapseCommand
  * @package system2
  */
-class TimelapseCommand implements ICommand {
+class TimelapseCommand implements ICommand
+{
     /**
      * @var ICam
      */
-    private $cam;
+    private ICam $cam;
 
-    private $startTime;
-    private $endTime;
+    private int $startTime;
+    private int $endTime;
 
     /**
      * @param ICam $cam
@@ -32,66 +36,74 @@ class TimelapseCommand implements ICommand {
     /**
      * @return string
      */
-    public function getImagesPath(){
+    public function getImagesPath(): string
+    {
         $userID = $this->cam->getDVR()->getUser()->getID();
         $camID = $this->cam->getID();
 
-        return Path::IMAGE."/$userID/$camID";
+        return Path::IMAGE . "/$userID/$camID";
     }
 
     /**
      * @return string
      */
-    public function getTmpPath(){
+    public function getTmpPath(): string
+    {
         return Path::getTmpfsPath($this->getImagesPath());
     }
 
     /**
      * @return string
      */
-    public function getNfsPath(){
+    public function getNfsPath(): string
+    {
         return Path::getNfsPath($this->getImagesPath());
     }
 
     /**
      * @return string
      */
-    public function getTimelapseName(){
+    public function getTimelapseName(): string
+    {
         $camID = $this->cam->getID();
-        return $camID."_".date("Ymd_Hi", $this->getStartTime())."00_timelapse.mp4";
+        return $camID . "_" . date("Ymd_Hi", $this->getStartTime()) . "00_timelapse.mp4";
     }
 
     /**
      * @return int timestamp
      */
-    public function getStartTime(){
+    public function getStartTime(): int
+    {
         return $this->startTime;
     }
 
     /**
      * @return int timestamp
      */
-    public function getEndTime(){
+    public function getEndTime(): int
+    {
         return $this->endTime;
     }
 
     /**
      * @return string
      */
-    private function getListFilePath(){
-        return $this->getTmpPath()."/list.txt";
+    private function getListFilePath(): string
+    {
+        return $this->getTmpPath() . "/list.txt";
     }
 
-    private function createListFile(){
-        $createList = new \BashCommand("ls {$this->getTmpPath()}/snapshot*.jpg | sort > {$this->getListFilePath()}");
-        Log::getInstance($this->cam->getID())->put($createList,__CLASS__);
-        $createList->exec();
+    private function createListFile()
+    {
+        $createList = new BashCommand2("ls {$this->getTmpPath()}/snapshot*.jpg | sort > {$this->getListFilePath()}");
+        Log::getInstance($this->cam->getID())->put($createList, __CLASS__);
+        $createList->execute();
 
-        if(file_exists($this->getListFilePath())){
+        if (file_exists($this->getListFilePath())) {
             $f = fopen($this->getListFilePath(), 'r');
-            if($f){
+            if ($f) {
                 $firstFile = trim(fgets($f));
-                if($firstFile != ''){
+                if ($firstFile != '') {
                     $this->startTime = filectime($firstFile);
                     $this->endTime = filectime($this->getListFilePath());
                 }
@@ -100,21 +112,24 @@ class TimelapseCommand implements ICommand {
         }
     }
 
-    private function deleteListFile(){
-        if(file_exists($this->getListFilePath()))
+    private function deleteListFile()
+    {
+        if (file_exists($this->getListFilePath()))
             unlink($this->getListFilePath());
     }
 
-    private function createTimelapse(){
-        $createTimelaps = new \BashCommand("cat {$this->getListFilePath()} | xargs cat | ffmpeg -f image2pipe -r 3 -vcodec mjpeg -i - -vcodec libx264 ".$this->getNfsPath().'/'.$this->getTimelapseName());
-        Log::getInstance($this->cam->getID())->put($createTimelaps,__CLASS__);
-        $createTimelaps->exec();
+    private function createTimelapse()
+    {
+        $createTimelaps = new BashCommand2("cat {$this->getListFilePath()} | xargs cat | ffmpeg -f image2pipe -r 3 -vcodec mjpeg -i - -vcodec libx264 " . $this->getNfsPath() . '/' . $this->getTimelapseName());
+        Log::getInstance($this->cam->getID())->put($createTimelaps, __CLASS__);
+        $createTimelaps->execute();
     }
 
-    private function deleteImages(){
-        $deleteImages = new \BashCommand("cat {$this->getListFilePath()} | xargs rm");
-        Log::getInstance($this->cam->getID())->put($deleteImages,__CLASS__);
-        $deleteImages->exec();
+    private function deleteImages()
+    {
+        $deleteImages = new BashCommand2("cat {$this->getListFilePath()} | xargs rm");
+        Log::getInstance($this->cam->getID())->put($deleteImages, __CLASS__);
+        $deleteImages->execute();
     }
 
     /**
