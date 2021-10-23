@@ -6,7 +6,7 @@
  * Time: 20:13
  */
 
-namespace system2;
+namespace app\modules\vlc\components\motion;
 
 /**
  * Class MotionConfig

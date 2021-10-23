@@ -6,7 +6,7 @@
  * Time: 12:07
  */
 
-namespace system2;
+namespace app\modules\vlc\components\motion;
 
 use app\modules\vlc\components\common\Log;
 use app\modules\vlc\components\ICommand;

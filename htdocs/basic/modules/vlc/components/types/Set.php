@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\vlc\types;
+namespace app\modules\vlc\components\types;
 
 use app\modules\vlc\components\exceptions\SetException;
 

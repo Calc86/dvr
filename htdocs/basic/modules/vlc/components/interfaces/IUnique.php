@@ -6,7 +6,7 @@
  * Time: 14:27
  */
 
-namespace app\modules\vlc\components;
+namespace app\modules\vlc\components\interfaces;
 
 /**
  * Interface IUnique мы имеем id

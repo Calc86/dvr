@@ -6,7 +6,7 @@
  * Time: 13:59
  */
 
-namespace system2;
+namespace app\modules\vlc\components\motion;
 
 use app\modules\vlc\components\common\Path;
 use app\modules\vlc\components\common\Stream;

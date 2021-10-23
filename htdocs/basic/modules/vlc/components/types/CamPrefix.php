@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\vlc\types;
+namespace app\modules\vlc\components\types;
 
 class CamPrefix extends NameType{
     const LIVE = 'live';

@@ -6,29 +6,13 @@
  * Time: 14:23
  */
 
-namespace system2;
+namespace app\modules\vlc\components\mysql;
 
 use Exception;
 use mysqli;
 use mysqli_result;
 
-/**
- * Class MysqlException
- * @package system2
- */
-class MysqlException extends Exception
-{
-    public function putLog()
-    {
-    }
-}
 
-/**
- * Class MysqlQueryException
- */
-class MysqlQueryException extends MysqlException
-{
-}
 
 /**
  * Class Database

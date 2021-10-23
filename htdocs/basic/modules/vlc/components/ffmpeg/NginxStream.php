@@ -6,7 +6,7 @@
  * Time: 13:29
  */
 
-namespace system2;
+namespace app\modules\vlc\components\ffmpeg;
 
 
 use app\modules\vlc\components\common\Stream;
@@ -17,7 +17,7 @@ use app\modules\vlc\components\ICam;
  */
 class NginxStream extends Stream
 {
-    private ffmpeg $ffmpeg;
+    private FFmpeg $ffmpeg;
 
     /**
      *                       input                          output                                                     name
@@ -30,7 +30,7 @@ class NginxStream extends Stream
     function __construct(ICam $cam, $input, string $name = 'stream', string $output = '-c copy -f flv rtmp://localhost/myapp')
     {
         parent::__construct($cam);
-        $this->ffmpeg = new ffmpeg($this->cam->getDVR(), "-re -i $input", "$output/$name");
+        $this->ffmpeg = new FFmpeg($this->cam->getDVR(), "-re -i $input", "$output/$name");
     }
 
     public function _start()

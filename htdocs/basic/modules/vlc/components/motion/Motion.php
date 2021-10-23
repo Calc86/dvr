@@ -6,7 +6,7 @@
  * Time: 17:41
  */
 
-namespace system2;
+namespace app\modules\vlc\components\motion;
 
 use app\modules\vlc\components\common\Daemon;
 use app\modules\vlc\components\common\Path;

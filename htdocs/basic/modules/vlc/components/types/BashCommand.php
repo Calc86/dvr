@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\vlc\types;
+namespace app\modules\vlc\components\types;
 
 class BashCommand extends Command{
     public function __construct($value)

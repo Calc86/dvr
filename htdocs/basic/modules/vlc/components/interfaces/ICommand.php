@@ -6,7 +6,7 @@
  * Time: 11:41
  */
 
-namespace app\modules\vlc\components;
+namespace app\modules\vlc\components\interfaces;
 
 /**
  * Interface Command

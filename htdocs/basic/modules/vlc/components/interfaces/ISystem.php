@@ -6,7 +6,7 @@
  * Time: 14:33
  */
 
-namespace app\modules\vlc\components;
+namespace app\modules\vlc\components\interfaces;
 
 use system2\Event;
 use system2\Lock;

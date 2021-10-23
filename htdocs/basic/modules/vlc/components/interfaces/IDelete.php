@@ -6,7 +6,7 @@
  * Time: 19:28
  */
 
-namespace app\modules\vlc\components;
+namespace app\modules\vlc\components\interfaces;
 
 /**
  * Интерфейс позволяет выполнять команды удаления

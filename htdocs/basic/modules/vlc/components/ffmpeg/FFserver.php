@@ -6,7 +6,7 @@
  * Time: 17:06
  */
 
-namespace system2;
+namespace app\modules\vlc\components\ffmpeg;
 
 use app\modules\vlc\components\common\Daemon;
 use app\modules\vlc\components\IDVR;
@@ -17,7 +17,7 @@ use app\modules\vlc\components\telnet\Telnet;
  * Используем VLC в качестве dvr
  * @package system2
  */
-class ffserver extends Daemon
+class FFserver extends Daemon
 {
 
     /**

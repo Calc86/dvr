@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\vlc\types;
+namespace app\modules\vlc\components\types;
 
 /**
  * Какой-то красивый класс для преобразований
