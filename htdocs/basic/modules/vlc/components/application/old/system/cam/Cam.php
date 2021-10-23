@@ -12,6 +12,7 @@ namespace system;
  * Class Cam
  * Просто контейнет для камеры
  * @package system
+ * @deprecated
  */
 abstract class Cam implements ICam{
     protected $id;

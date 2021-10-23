@@ -17,6 +17,7 @@ use app\modules\vlc\types\UserID;
  * Class MotionVlc
  * vlc with motion
  * @package system
+ * @deprecated
  */
 class MotionVlc extends Vlc
 {

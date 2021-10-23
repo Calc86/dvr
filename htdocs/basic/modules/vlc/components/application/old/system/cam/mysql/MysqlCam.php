@@ -11,6 +11,7 @@ namespace system;
 /**
  * Class MysqlCam
  * @package system
+ * @deprecated
  */
 class MysqlCam extends Cam{
     /**

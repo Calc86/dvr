@@ -14,6 +14,7 @@ use app\modules\vlc\types\CamPrefix;
 /**
  * Interface ICam
  * @package system
+ * @deprecated
  */
 interface ICam {
     /**

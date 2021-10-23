@@ -6,7 +6,7 @@
  * Time: 13:58
  */
 
-namespace system2;
+namespace app\modules\vlc\components;
 
 use app\modules\vlc\components\common\Log;
 

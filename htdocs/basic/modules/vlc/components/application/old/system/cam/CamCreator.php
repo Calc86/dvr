@@ -14,6 +14,7 @@ use app\modules\vlc\types\UserID;
 /**
  * Class CamCreator
  * @package system
+ * @deprecated
  */
 class CamCreator implements  ICamCreator{
     /**

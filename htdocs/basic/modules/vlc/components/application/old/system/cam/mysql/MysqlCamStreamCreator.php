@@ -11,6 +11,7 @@ namespace system;
 /**
  * Class MysqlSqlCamStreamCreatorException
  * @package system
+ * @deprecated
  */
 class MysqlSqlCamStreamCreatorException extends \BBException{};
 

@@ -11,6 +11,7 @@ namespace system;
 /**
  * Class EchoLog
  * @package system
+ * @deprecated
  */
 class EchoLog extends Log {
     /**

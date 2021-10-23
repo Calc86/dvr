@@ -12,6 +12,7 @@ namespace system;
  * Class FileCamCreator
  * Итератор для создания камер из файла
  * @package system
+ * @deprecated
  */
 class FileCamCreator extends  CamCreator {
 

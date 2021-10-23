@@ -12,6 +12,7 @@ namespace system;
  * Interface ICamCreator
  * для создания камер
  * @package system
+ * @deprecated
  */
 interface ICamCreator extends \Iterator, \ArrayAccess {
 } 

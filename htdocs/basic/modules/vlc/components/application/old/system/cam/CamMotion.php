@@ -15,6 +15,7 @@ use app\modules\vlc\types\UserID;
  * Class CamMotion
  * @package system
  * Класс для хранения настроек мошна для камеры
+ * @deprecated
  */
 class CamMotion {
 

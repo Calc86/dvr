@@ -15,6 +15,7 @@ use app\modules\vlc\types\UserID;
 /**
  * Class MysqlCamMotion
  * @package system
+ * @deprecated
  */
 class MysqlCamMotion extends CamMotion {
     /**

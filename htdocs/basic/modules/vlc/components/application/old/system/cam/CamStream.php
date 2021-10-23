@@ -11,6 +11,7 @@ namespace system;
 /**
  * Class CamStream
  * @package system
+ * @deprecated
  */
 class CamStream implements ICamStream{
     //from *CamStreamConstructor

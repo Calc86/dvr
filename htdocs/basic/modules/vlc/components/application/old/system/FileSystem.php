@@ -12,6 +12,7 @@ namespace system;
 /**
  * Class FileSystem
  * @package system
+ * @deprecated
  */
 class FileSystem extends System{
     /**

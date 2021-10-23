@@ -11,6 +11,8 @@ namespace system;
 /**
  * Interface ICamStreamCreator
  * @package system
+ *
+ * @deprecated
  */
 interface ICamStreamCreator extends \Iterator{
     /**

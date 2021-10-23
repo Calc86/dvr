@@ -17,6 +17,7 @@ use app\modules\vlc\types\UserID;
  * Class DVR
  * Система управления камерами
  * @package system
+ * @deprecated
  */
 abstract class DVR extends Daemon implements IDVR
 {

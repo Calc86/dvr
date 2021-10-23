@@ -11,6 +11,7 @@ namespace system;
 /**
  * Class MotionHttp
  * @package system
+ * @deprecated
  */
 class MotionHttp {
 

@@ -11,6 +11,7 @@ namespace system;
 /**
  * Class FileCam
  * @package system
+ * @deprecated
  */
 class FileCam extends Cam {
 

@@ -11,6 +11,7 @@ namespace system;
 /**
  * Class FileCamStreamCreator
  * @package system
+ * @deprecated
  */
 class FileCamStreamCreator extends CamStreamCreator{
 

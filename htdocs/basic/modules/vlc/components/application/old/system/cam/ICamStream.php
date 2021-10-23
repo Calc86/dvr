@@ -11,6 +11,7 @@ namespace system;
 /**
  * Interface ICamStream
  * @package system
+ * @deprecated
  */
 interface ICamStream {
     public function start();

@@ -13,6 +13,7 @@ use app\modules\vlc\types\UserID;
 /**
  * Class User
  * @package system
+ * @deprecated
  */
 class User {
     /**

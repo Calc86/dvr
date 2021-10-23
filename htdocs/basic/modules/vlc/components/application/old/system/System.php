@@ -22,6 +22,7 @@ use app\modules\vlc\types\UserID;
  * Class System
  * Класс для управления системой
  * @package system
+ * @deprecated use 2
  */
 class System
 {

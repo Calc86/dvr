@@ -17,6 +17,7 @@ use app\modules\vlc\types\UserID;
  * Class MysqlCamCreator
  * Итератор для создания камер from Mysql
  * @package system
+ * @deprecated
  */
 class MysqlCamCreator extends CamCreator {
 

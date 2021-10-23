@@ -16,6 +16,7 @@ use app\modules\vlc\types\UserID;
 /**
  * Class Motion
  * @package system
+ * @deprecated
  */
 class Motion extends Daemon {
 

@@ -11,6 +11,7 @@ namespace system;
 /**
  * Class CamStreamCreator
  * @package system
+ * @deprecated
  */
 abstract class CamStreamCreator implements ICamStreamCreator {
     protected  $dvr_id;

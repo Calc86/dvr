@@ -14,6 +14,7 @@ use Exception;
  * User: calc
  * Date: 07.04.14
  * Time: 17:42
+ * @deprecated user 2
  */
 abstract class Daemon
 {

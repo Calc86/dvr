@@ -11,6 +11,7 @@ namespace system;
 /**
  * Class MotionConfig
  * @package system
+ * @deprecated
  */
 class MotionConfig {
 

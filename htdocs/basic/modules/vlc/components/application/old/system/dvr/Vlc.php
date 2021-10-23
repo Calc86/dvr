@@ -21,6 +21,7 @@ use app\modules\vlc\types\UserID;
  * Class Vlc
  * Используем VLC в качестве dvr
  * @package system
+ * @deprecated
  */
 class Vlc extends DVR
 {
