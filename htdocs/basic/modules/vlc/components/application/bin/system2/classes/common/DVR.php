@@ -8,23 +8,29 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICam;
+use app\modules\vlc\components\IDVR;
+use app\modules\vlc\components\IUser;
+use app\modules\vlc\types\BashCommand;
+
 /**
  * Class DVR
  * @package system2
  */
-class DVR implements IDVR {
-    protected $id = -1; //-1 for debug
+class DVR implements IDVR
+{
+    protected int $id = -1; //-1 for debug
     /**
      * @var IUser
      */
-    protected $user;
+    protected IUser $user;
 
     /**
      * @var array
      */
-    private $daemons = array();
+    private array $daemons = [];
 
-    private $cams = array();
+    private array $cams = [];
 
     /**
      * @param IUser $user
@@ -38,7 +44,8 @@ class DVR implements IDVR {
     /**
      * @param ICam $cam
      */
-    public function addCam(ICam $cam){
+    public function addCam(ICam $cam)
+    {
         $this->cams[$cam->getID()] = $cam;
     }
 
@@ -46,23 +53,23 @@ class DVR implements IDVR {
      * @param $camID
      * @return Cam|null
      */
-    public function getCam($camID){
-        if(isset($this->cams[$camID]))
-            return $this->cams[$camID];
-        else return null;
+    public function getCam($camID) : ?ICam
+    {
+        return $this->cams[$camID] ?? null;
     }
 
     /**
      * @param Daemon $daemon
      */
-    public function addDaemon(Daemon $daemon){
+    public function addDaemon(Daemon $daemon)
+    {
         $this->daemons[] = $daemon;
     }
 
     /**
      * @return int
      */
-    public function getID()
+    public function getID() : int
     {
         return $this->id;
     }
@@ -70,9 +77,10 @@ class DVR implements IDVR {
     /**
      * @return array
      */
-    public function getCamIDs(){
+    public function getCamIDs(): array
+    {
         $ids = array();
-        foreach($this->cams as $cam){
+        foreach ($this->cams as $cam) {
             /** @var $cam Cam */
             $ids[] = $cam->getID();
         }
@@ -101,10 +109,10 @@ class DVR implements IDVR {
         $this->log(__FUNCTION__);
         /*foreach($this->cams as $cam){
             /** @var $cam ICam*/
-            /*$cam->stop();
-            sleep(1);
-            $cam->start();
-        }*/
+        /*$cam->stop();
+        sleep(1);
+        $cam->start();
+    }*/
 
         $this->stopCams();
         $this->stopDaemons();
@@ -117,15 +125,15 @@ class DVR implements IDVR {
     {
         $this->log(__FUNCTION__);
 
-        foreach($this->cams as $cam){
-            /** @var $cam ICam*/
+        foreach ($this->cams as $cam) {
+            /** @var $cam ICam */
             $cam->update();
         }
 
         //вставить в лог дату и время
-        foreach($this->daemons as $d){
+        foreach ($this->daemons as $d) {
             /** @var Daemon $d */
-            $date = new \BashCommand("echo `date` >> {$d->getLogFile()}");
+            $date = new BashCommand("echo `date` >> {$d->getLogFile()}");
             $date->exec();
         }
     }
@@ -140,37 +148,41 @@ class DVR implements IDVR {
 
     //----------------
 
-    private function startCams(){
+    private function startCams()
+    {
         $this->log(__FUNCTION__);
-        foreach($this->cams as $cam){
-            /** @var $cam ICam*/
+        foreach ($this->cams as $cam) {
+            /** @var $cam ICam */
             $cam->create();
             $cam->start();
         }
     }
 
-    private function startDaemons(){
+    private function startDaemons()
+    {
         $this->log(__FUNCTION__);
 
-        foreach($this->daemons as $daemon){
-            /** @var $daemon Daemon*/
+        foreach ($this->daemons as $daemon) {
+            /** @var $daemon Daemon */
             $daemon->start();
         }
     }
 
-    private function stopDaemons(){
+    private function stopDaemons()
+    {
         $this->log(__FUNCTION__);
-        foreach($this->daemons as $daemon){
-            /** @var $daemon Daemon*/
+        foreach ($this->daemons as $daemon) {
+            /** @var $daemon Daemon */
             $daemon->stop();
         }
     }
 
-    private function stopCams(){
+    private function stopCams()
+    {
         $this->log(__FUNCTION__);
 
-        foreach($this->cams as $cam){
-            /** @var $cam ICam*/
+        foreach ($this->cams as $cam) {
+            /** @var $cam ICam */
             $cam->stop();
             $cam->delete();
         }
@@ -179,7 +191,8 @@ class DVR implements IDVR {
     /**
      * @return IUser
      */
-    public function getUser(){
+    public function getUser() : IUser
+    {
         return $this->user;
     }
 }

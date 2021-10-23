@@ -8,12 +8,16 @@
 
 namespace app\modules\vlc\components;
 
+use system2\Event;
+use system2\Lock;
+
 /**
  * Общий интерфейс системы
  * Interface ISystem
  * @package system2
  */
-interface ISystem extends IControlled{
+interface ISystem extends IControlled
+{
     /**
      * @return mixed
      */
@@ -50,7 +54,7 @@ interface ISystem extends IControlled{
     /**
      * @return Lock
      */
-    public function getLock();
+    public function getLock(): Lock;
 
     /**
      * @return mixed

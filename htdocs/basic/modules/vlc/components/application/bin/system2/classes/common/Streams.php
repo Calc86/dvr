@@ -8,19 +8,23 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICamStream;
+
 /**
  * Class Streams
  * @package system2
  */
-class Streams extends Stream {
-    private $streams = array();
+class Streams extends Stream
+{
+    private array $streams = [];
 
     /**
      * @param ICamStream $stream
      * @param string $name
      */
-    public function addStream(ICamStream $stream, $name = ''){
-        if($name != '')
+    public function addStream(ICamStream $stream, string $name = '')
+    {
+        if ($name != '')
             $this->streams[$name] = $stream;
         else
             $this->streams[] = $stream;
@@ -30,15 +34,16 @@ class Streams extends Stream {
      * @param $name
      * @return null|Stream
      */
-    public function get($name){
-        if(isset($this->streams[$name])) return $this->streams[$name];
+    public function get($name): ?Stream
+    {
+        if (isset($this->streams[$name])) return $this->streams[$name];
         return null;
     }
 
     public function create()
     {
         parent::create();
-        foreach($this->streams as $stream){
+        foreach ($this->streams as $stream) {
             /** @var $stream ICamStream */
             $stream->create();
         }
@@ -46,7 +51,7 @@ class Streams extends Stream {
 
     public function _start()
     {
-        foreach($this->streams as $stream){
+        foreach ($this->streams as $stream) {
             /** @var $stream ICamStream */
             $stream->start();
         }
@@ -56,7 +61,7 @@ class Streams extends Stream {
     {
         parent::stop();
 
-        foreach(array_reverse($this->streams) as $stream){
+        foreach (array_reverse($this->streams) as $stream) {
             /** @var $stream ICamStream */
             $stream->stop();
         }
@@ -66,7 +71,7 @@ class Streams extends Stream {
     {
         parent::update();
 
-        foreach($this->streams as $stream){
+        foreach ($this->streams as $stream) {
             /** @var $stream ICamStream */
             $stream->update();
         }

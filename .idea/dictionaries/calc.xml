@@ -8,6 +8,7 @@
       <w>ctime</w>
       <w>cvlc</w>
       <w>deinterlace</w>
+      <w>delsegs</w>
       <w>devel</w>
       <w>dirname</w>
       <w>dvrs</w>
@@ -21,27 +22,40 @@
       <w>fwrite</w>
       <w>idvr</w>
       <w>keyint</w>
+      <w>lhttp</w>
       <w>libx</w>
+      <w>livehost</w>
+      <w>livehttp</w>
       <w>mjpeg</w>
       <w>mtab</w>
       <w>mtime</w>
       <w>multicast</w>
       <w>myapp</w>
+      <w>netcam</w>
       <w>nginx</w>
+      <w>numsegs</w>
       <w>pidfile</w>
       <w>rebuilded</w>
       <w>samplerate</w>
+      <w>seglen</w>
       <w>sout</w>
       <w>splitanywhere</w>
       <w>timelaps</w>
       <w>timelapse</w>
       <w>timelock</w>
+      <w>tlpwd</w>
       <w>tmpfs</w>
       <w>transcode</w>
       <w>umount</w>
+      <w>userpass</w>
       <w>valgrind</w>
       <w>vcodec</w>
       <w>venc</w>
+      <w>vlcbin</w>
+      <w>vlcd</w>
+      <w>vlcnetcache</w>
+      <w>vlcsoutcache</w>
+      <w>webcontrol</w>
       <w>xargs</w>
       <w>роccия</w>
     </words>

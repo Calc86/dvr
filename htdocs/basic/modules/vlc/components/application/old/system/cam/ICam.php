@@ -8,6 +8,9 @@
 
 namespace system;
 
+use app\modules\vlc\types\CamID;
+use app\modules\vlc\types\CamPrefix;
+
 /**
  * Interface ICam
  * @package system
@@ -34,13 +37,13 @@ interface ICam {
     public function update();
 
     /**
-     * @param \CamPrefix $camPrefix
+     * @param CamPrefix $camPrefix
      * @return ICamStream
      */
-    public function getStream(\CamPrefix $camPrefix);
+    public function getStream(CamPrefix $camPrefix): ICamStream;
 
     /**
-     * @return \CamID
+     * @return CamID
      */
-    public function getID();
+    public function getID(): CamID;
 }

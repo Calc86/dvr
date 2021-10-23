@@ -23,5 +23,5 @@ interface IDVR extends IControlled, IUnique{
      * @param $camID
      * @return ICam
      */
-    public function getCam($camID): ICam;
+    public function getCam($camID): ?ICam;
 } 

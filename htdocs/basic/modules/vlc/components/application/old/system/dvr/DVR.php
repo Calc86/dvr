@@ -8,22 +8,29 @@
 
 namespace system;
 
+use app\modules\vlc\components\exceptions\PathException;
+use app\modules\vlc\components\Log;
+use app\modules\vlc\types\CamID;
+use app\modules\vlc\types\UserID;
+
 /**
- * class DVR
+ * Class DVR
  * Система управления камерами
  * @package system
  */
-abstract class DVR extends Daemon implements IDVR {
+abstract class DVR extends Daemon implements IDVR
+{
 
     /**
      * @var ICamCreator
      */
-    private $cams;
+    private ICamCreator $cams;
 
     /**
-     * @param \UserID $uid
+     * @param UserID $uid
+     * @throws PathException
      */
-    function __construct(\UserID $uid)
+    function __construct(UserID $uid)
     {
         parent::__construct($uid, 'dvr');
     }
@@ -39,23 +46,24 @@ abstract class DVR extends Daemon implements IDVR {
     /**
      * @return ICamCreator
      */
-    public function getCams()
+    public function getCams(): ICamCreator
     {
         return $this->cams;
     }
 
     /**
-     * @param \CamID $camID
+     * @param CamID $camID
      * Отдать камеру по id
      * @return ICam
      */
-    public function getCam(\CamID $camID)
+    public function getCam(CamID $camID): ?ICam
     {
         return $this->getCams()[$camID->get()];
     }
 
-    public function live(){
-        foreach($this->getCams() as $cam){
+    public function live()
+    {
+        foreach ($this->getCams() as $cam) {
             /** @var Cam $cam */
             $cam->live();
         }
@@ -68,11 +76,11 @@ abstract class DVR extends Daemon implements IDVR {
     public function update()
     {
         Log::getInstance()->put(__FUNCTION__, __CLASS__);
-        //Кладем в файлик логов строку с датой
-        file_put_contents($this->getLogFile(), date("[ Y-m-d H:i:s ]")."  update\n", FILE_APPEND);
-        //апдейт нужно делать только если запущен процесс, иначе будет много маленьких записей в архиве.... ы
-        if($this->isStarted()){
-            foreach($this->getCams() as $cam){
+        //Кладем в файл логов строку с датой
+        file_put_contents($this->getLogFile(), date("[ Y-m-d H:i:s ]") . "  update\n", FILE_APPEND);
+        // Update нужно делать только если запущен процесс, иначе будет много маленьких записей в архиве.... ы
+        if ($this->isStarted()) {
+            foreach ($this->getCams() as $cam) {
                 /** @var Cam $cam */
                 $cam->update();
             }
@@ -81,10 +89,11 @@ abstract class DVR extends Daemon implements IDVR {
 
     /**
      * create timelaps file
-     * @return mixed
+     * @return mixed|null
      */
     public function timelaps()
     {
+        return null;
         //do nothing
     }
 

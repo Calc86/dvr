@@ -23,13 +23,16 @@ rtmp {
 }
 */
 
+use app\modules\vlc\components\ICam;
+
 
 /**
  * rtmp stream to nginx or other
  * Class RtmpVlcReStream
  * @package system2
  */
-class RtmpVlcReStream extends VlcReStream{
+class RtmpVlcReStream extends VlcReStream
+{
 
     /**
      * @param ICam $cam
@@ -43,9 +46,9 @@ class RtmpVlcReStream extends VlcReStream{
 
     /**
      * @param string $transcode
-     * @return mixed
+     * @return string
      */
-    protected function getOutputVlm($transcode = 'transcode{acodec=mp4a,channels=2,samplerate=44100}:')
+    protected function getOutputVlm(string $transcode = 'transcode{acodec=mp4a,channels=2,samplerate=44100}:'): string
     {
         //transcode{vcodec=h264,vb=300,fps=25,scale=1,acodec=mp4a,ab=64,channels=2}:
         $path = $this->getPath();
@@ -55,7 +58,8 @@ class RtmpVlcReStream extends VlcReStream{
     /**
      * @return string
      */
-    protected function getPath(){
-        return 'myapp/stream_'.$this->cam->getID();
+    protected function getPath(): string
+    {
+        return 'myapp/stream_' . $this->cam->getID();
     }
 }

@@ -8,6 +8,9 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICam;
+use app\modules\vlc\components\ICommand;
+
 /**
  * Занести Timelapse в базу данных
  * Class BBArchiveTimelapseCommand
@@ -15,9 +18,9 @@ namespace system2;
  */
 class BBArchiveTimelapseCommand implements ICommand {
     /**
-     * @var ICam
+     * @var ?ICam
      */
-    private $cam = null;
+    private ?ICam $cam;
 
     /**
      * @param ICam $cam
@@ -29,6 +32,7 @@ class BBArchiveTimelapseCommand implements ICommand {
 
     /**
      * @return void
+     * @throws MysqlQueryException
      */
     public function execute()
     {

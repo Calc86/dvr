@@ -13,7 +13,8 @@ namespace system2;
  * Class VlcCam
  * @package system2
  */
-class VlcCam extends Cam{
+class VlcCam extends Cam
+{
     /**
      * Создает стрим (new)
      * @return void

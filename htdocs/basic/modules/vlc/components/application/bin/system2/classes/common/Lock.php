@@ -9,35 +9,39 @@
 namespace system2;
 
 
+use app\modules\vlc\types\BashCommand;
+
 /**
  * Class Lock
  * @package system2
  */
-class Lock {
-    private $path;
-    private $fName;
+class Lock
+{
+    private string $path;
+    private string $fName;
 
     const EXTENSION = '.lock';
 
     /**
      * @param string $fName filename/function name/ __FUNCTION__
      */
-    function __construct($fName)
+    function __construct(string $fName)
     {
 
-        $this->fName = $fName.Lock::EXTENSION;
+        $this->fName = $fName . Lock::EXTENSION;
 
-        Log::getInstance()->put(__FUNCTION__, __CLASS__."-".$this->fName);
+        Log::getInstance()->put(__FUNCTION__, __CLASS__ . "-" . $this->fName);
 
-        $this->path = Path::getTmpfsPath(Path::LOCKS)."/".$this->fName;
+        $this->path = Path::getTmpfsPath(Path::LOCKS) . "/" . $this->fName;
     }
 
     /**
      * @return bool
      */
-    public function create(){
-        Log::getInstance()->put(__FUNCTION__, __CLASS__."-".$this->fName);
-        if($this->isLock()){
+    public function create(): bool
+    {
+        Log::getInstance()->put(__FUNCTION__, __CLASS__ . "-" . $this->fName);
+        if ($this->isLock()) {
             Log::getInstance()->put($this->fName, $this);
             return false;
         }
@@ -49,18 +53,20 @@ class Lock {
     /**
      *
      */
-    public function delete(){
-        Log::getInstance()->put(__FUNCTION__, __CLASS__."-".$this->fName);
-        if($this->isLock())
+    public function delete()
+    {
+        Log::getInstance()->put(__FUNCTION__, __CLASS__ . "-" . $this->fName);
+        if ($this->isLock())
             unlink($this->path);
     }
 
     /**
      *
      */
-    public static function resetAll(){
+    public static function resetAll()
+    {
         Log::getInstance()->put(__FUNCTION__, __CLASS__);
-        $reset = new \BashCommand("ls ".Path::getTmpfsPath(Path::LOCKS)."/*".Lock::EXTENSION." | xargs rm");
+        $reset = new BashCommand("ls " . Path::getTmpfsPath(Path::LOCKS) . "/*" . Lock::EXTENSION . " | xargs rm");
         $reset->exec();
     }
 
@@ -68,16 +74,17 @@ class Lock {
      * @param $maxTimeout
      * @return bool seconds
      */
-    public function wait($maxTimeout){
-        Log::getInstance()->put(__FUNCTION__, __CLASS__."-".$this->fName);
+    public function wait($maxTimeout): bool
+    {
+        Log::getInstance()->put(__FUNCTION__, __CLASS__ . "-" . $this->fName);
         $wait = 0;
-        while(1){
-            if(file_exists($this->path)){
-                sleep(1); $wait ++;
-            }
-            else
+        while (1) {
+            if (file_exists($this->path)) {
+                sleep(1);
+                $wait++;
+            } else
                 return true;
-            if($wait > $maxTimeout)
+            if ($wait > $maxTimeout)
                 return false;
         }
         return false;
@@ -86,7 +93,7 @@ class Lock {
     /**
      * @return string
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -94,7 +101,8 @@ class Lock {
     /**
      * @return bool
      */
-    public function isLock(){
+    public function isLock(): bool
+    {
         return file_exists($this->getPath());
     }
 }

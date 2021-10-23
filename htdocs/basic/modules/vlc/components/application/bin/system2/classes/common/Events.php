@@ -14,7 +14,7 @@ namespace system2;
  */
 final class Events extends Event{
 
-    private $events = array();
+    private array $events = [];
 
     /**
      * @param $name

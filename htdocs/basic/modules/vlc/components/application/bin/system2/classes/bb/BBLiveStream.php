@@ -18,7 +18,7 @@ class BBLiveStream extends LiveVlcStream {
      * @param string $transcode
      * @return string
      */
-    protected function getOutputVlm($transcode = 'transcode{acodec=none}:') //no sound
+    protected function getOutputVlm(string $transcode = 'transcode{acodec=none}:') //no sound
     {
         return parent::getOutputVlm($transcode);
     }

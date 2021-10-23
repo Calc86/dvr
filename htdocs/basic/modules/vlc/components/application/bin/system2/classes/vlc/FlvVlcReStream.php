@@ -8,19 +8,22 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICam;
+
 define(
-'VLC_FLV_STREAM_TRANSCODE_STRING',
+    'VLC_FLV_STREAM_TRANSCODE_STRING',
 //'transcode{vcodec=FLV1,vb=4096,fps=25,deinterlace,scale=1,acodec=mp3,samplerate=44100,ab=128}:'
-'transcode{vcodec=FLV1,vb=4096,fps=25,scale=1,acodec=mp3,samplerate=44100,ab=128}:'
+    'transcode{vcodec=FLV1,vb=4096,fps=25,scale=1,acodec=mp3,samplerate=44100,ab=128}:'
 );
 
 /**
- * ретранслировать live поток в FLV
+ * Ретранслировать live поток в FLV
  * Class FlvVlcReStream
  * @package system2
  */
-class FlvVlcReStream extends VlcReStream{
-    protected $path = 'stream.flv';
+class FlvVlcReStream extends VlcReStream
+{
+    protected string $path = 'stream.flv';
 
     /**
      * @param ICam $cam
@@ -36,27 +39,29 @@ class FlvVlcReStream extends VlcReStream{
      * @param string $transcode
      * @return string
      */
-    protected function getOutputVlm($transcode = VLC_FLV_STREAM_TRANSCODE_STRING)
+    protected function getOutputVlm(string $transcode = VLC_FLV_STREAM_TRANSCODE_STRING): string
     {
         //return parent::getOutputVlm("transcode{vcodec=FLV1,acodec=mp3,vb=200,deinterlace,fps=25,samplerate=44100,ab=32}:");
         //return parent::getOutputVlm("transcode{vcodec=FLV1,acodec=mp3,deinterlace,fps=25,samplerate=44100}:");
-        return "#{$transcode}http{dst=*:{$this->getPort()}/{$this->path}}";
+        return "#{$transcode}http{dst=*:$this->getPort()/$this->path}";
     }
 
     /**
      * @return int
      */
-    private function getPort(){
+    private function getPort(): int
+    {
         return VLC_RE_FLV_PORT_START + $this->cam->getID();
     }
 }
 
 /**
- * получить Flv поток из любой url, даже из файла
+ * Получить Flv поток из любой url, даже из файла
  * Class UrlFlvVlcStream
  * @package system2
  */
-class UrlFlvVlcStream extends VlcStream{
+class UrlFlvVlcStream extends VlcStream
+{
     private $url;
 
     /**
@@ -64,7 +69,7 @@ class UrlFlvVlcStream extends VlcStream{
      * @param $url
      * @param string $streamName
      */
-    function __construct(ICam $cam, $url, $streamName = 'l_flv')
+    function __construct(ICam $cam, $url, string $streamName = 'l_flv')
     {
         parent::__construct($cam, $streamName);
         $this->path = 'stream.flv';
@@ -83,17 +88,17 @@ class UrlFlvVlcStream extends VlcStream{
      * @param string $transcode
      * @return string
      */
-    protected function getOutputVlm($transcode = VLC_FLV_STREAM_TRANSCODE_STRING)
+    protected function getOutputVlm(string $transcode = VLC_FLV_STREAM_TRANSCODE_STRING): string
     {
         //return parent::getOutputVlm("transcode{vcodec=FLV1,acodec=mp3,vb=200,deinterlace,fps=25,samplerate=44100,ab=32}:");
         //return parent::getOutputVlm("transcode{vcodec=FLV1,acodec=mp3,deinterlace,fps=25,samplerate=44100}:");
-        return "#{$transcode}http{dst=*:{$this->getPort()}/{$this->path}}";
+        return "#{$transcode}http{dst=*:$this->getPort()/$this->path}";
     }
 
     /**
      * @return int
      */
-    protected function getPort()
+    protected function getPort(): int
     {
         return VLC_L_FLV_PORT_START + $this->cam->getID();
     }

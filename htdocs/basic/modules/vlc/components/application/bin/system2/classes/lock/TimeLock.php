@@ -15,13 +15,13 @@ namespace system2;
  */
 class TimeLock extends Lock {
 
-    private $time;
+    private int $time;
 
     /**
      * @param string $fName
      * @param int $time in seconds
      */
-    function __construct($fName, $time = 600)
+    function __construct(string $fName, int $time = 600)
     {
         $this->time = $time;
         parent::__construct('time_'.$fName);

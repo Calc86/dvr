@@ -9,16 +9,15 @@
 namespace system2;
 
 /**
- * измененный алгоритм пермещения на NFS, добавление записи в mysql
+ * Измененный алгоритм перемещения на NFS, добавление записи в mysql
  * Class BBRecStream
  * @package system2
  */
 class BBRecStream extends RecVlcStream{
-    public function update()
-    {
-        parent::update();
-    }
 
+    /**
+     * @throws MysqlQueryException
+     */
     protected function moveToNfs()
     {
 
@@ -43,7 +42,7 @@ class BBRecStream extends RecVlcStream{
         //save to mysql;
         $q = "insert into archive values(0, {$this->cam->getID()}, '{$this->getName()}', $cTime, $mTime, $now, $time, 'yes', 0, '$nfsPath')";
         $this->log($q);
-        $db = \Database::getInstance();
+        $db = Database::getInstance();
         $db->query($q);
     }
 }

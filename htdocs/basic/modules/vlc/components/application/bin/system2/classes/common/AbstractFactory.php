@@ -8,24 +8,34 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICam;
+use app\modules\vlc\components\ICamSettings;
+use app\modules\vlc\components\ICamStream;
+use app\modules\vlc\components\ICommand;
+use app\modules\vlc\components\IDVR;
+use app\modules\vlc\components\ISystem;
+use app\modules\vlc\components\IUser;
+
 /**
  * Основной класс для создания других классов
  * Class AbstractFactory
  * @package system2
  */
-abstract class AbstractFactory {
-    private static $instance = null;
+abstract class AbstractFactory
+{
+    private static ?AbstractFactory $instance = null;
 
     /**
      * @var array
      */
-    private $commands;
+    private array $commands;
 
     /**
      * @return AbstractFactory
      */
-    public static function getInstance(){
-        if(self::$instance == null) self::$instance = new static;
+    public static function getInstance(): ?AbstractFactory
+    {
+        if (self::$instance == null) self::$instance = new static;
         return self::$instance;
     }
 
@@ -33,38 +43,43 @@ abstract class AbstractFactory {
      * permanentCommand
      * @param ICommand $command
      */
-    protected function addPermanentCommand(ICommand $command){
+    protected function addPermanentCommand(ICommand $command)
+    {
         $this->commands[] = $command;
     }
 
     /**
      * @param ISystem $system
      */
-    protected function addCommands(ISystem $system){
-        foreach($this->commands as $command)
+    protected function addCommands(ISystem $system)
+    {
+        foreach ($this->commands as $command)
             $system->addPermanentCommand($command);
     }
 
     //todo buildSystem method
+
     /**
      * @return ISystem
      */
-    public function createSystem(){
+    public function createSystem(): ISystem
+    {
         return System::getInstance();
     }
 
     /**
      * @return array of Users
      */
-    public function createUsers(){
+    public function createUsers(): array
+    {
         return array(AbstractFactory::getInstance()->createUser(1));
     }
 
     /**
      * @param int $id
-     * @return IUser
+     * @return User
      */
-    public function createUser($id)
+    public function createUser(int $id): User
     {
         return new User($id);
     }
@@ -78,14 +93,14 @@ abstract class AbstractFactory {
         $dvr = new Dvr($user);
 
         $cams = $this->createCams($dvr);    //new+add
-        foreach($cams as $cam){
+        foreach ($cams as $cam) {
             /** @var $cam Cam */
             $dvr->addCam($cam);
         }
 
         $daemons = $this->createDaemons($dvr);
 
-        foreach($daemons as $daemon){
+        foreach ($daemons as $daemon) {
             /** @var $daemon Daemon */
             $dvr->addDaemon($daemon);
         }
@@ -97,13 +112,13 @@ abstract class AbstractFactory {
      * @param DVR $dvr
      * @return array of Cams
      */
-    abstract protected function createCams(DVR $dvr);
+    abstract protected function createCams(DVR $dvr): array;
 
     /**
      * @param DVR $dvr
      * @return array of Daemons
      */
-    abstract protected function createDaemons(DVR $dvr);
+    abstract protected function createDaemons(DVR $dvr): array;
 
     /**
      * @param IDVR $dvr
@@ -120,7 +135,8 @@ abstract class AbstractFactory {
      * @param $to
      * @return MoveToNfsCommand
      */
-    public function createMoveToNfsCommand($from, $to){
+    public function createMoveToNfsCommand($from, $to): MoveToNfsCommand
+    {
         return new MoveToNfsCommand($from, $to);
     }
 
@@ -128,5 +144,5 @@ abstract class AbstractFactory {
      * @param ICam $cam
      * @return ICamStream
      */
-    abstract public function createStream(ICam $cam);
+    abstract public function createStream(ICam $cam): ICamStream;
 } 

@@ -8,6 +8,9 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICommand;
+use app\modules\vlc\types\BashCommand;
+
 /**
  * Удалить записи из mysql старше 30 дней, так же удалить файлы связанные с ними
  * Class RotateRecCommand
@@ -16,13 +19,14 @@ namespace system2;
 class RotateRecCommand implements ICommand {
     /**
      * @return void
+     * @throws MysqlQueryException
      */
     public function execute()
     {
         $time = time() - RECORDS_KEEP * 24 * 60 * 60;
         $q_files = "select file from archive where date_end < $time";
         $q_delete = "delete from archive where date_end < $time";
-        $r = \Database::getInstance()->query($q_files);
+        $r = Database::getInstance()->query($q_files);
 
         //echo $q_delete."\n";
         //echo $q_files."\n";
@@ -33,15 +37,15 @@ class RotateRecCommand implements ICommand {
                 unlink($file);
         }
 
-        \Database::getInstance()->query($q_delete);
+        Database::getInstance()->query($q_delete);
 
         $path = Path::getNfsPath(Path::RECORD);
         $keep = RECORDS_KEEP + 1;
-        $files = new \BashCommand("find {$path}/* -mtime +$keep -exec rm {} \;");
+        $files = new BashCommand("find $path/* -mtime +$keep -exec rm {} \;");
         //echo $files."\n";
         $files->exec();
 
-        $emptyDirs = new \BashCommand("find {$path}/* -mtime +1 -type d -empty -exec rmdir {} \;");
+        $emptyDirs = new BashCommand("find $path/* -mtime +1 -type d -empty -exec rmdir {} \;");
         //echo $emptyDirs."\n";
         $emptyDirs->exec();
     }

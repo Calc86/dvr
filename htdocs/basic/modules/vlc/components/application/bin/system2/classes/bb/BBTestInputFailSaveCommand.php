@@ -8,13 +8,18 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICam;
+use app\modules\vlc\components\ICamStream;
+use app\modules\vlc\components\ICommand;
+
 /**
  * Class BBTestInputFailSaveCommand
  * @package system2
  */
-class BBTestInputFailSaveCommand implements ICommand{
-    private $cam;
-    private $stream;
+class BBTestInputFailSaveCommand implements ICommand
+{
+    private ICam $cam;
+    private ICamStream $stream;
 
     /**
      * @param ICam $cam

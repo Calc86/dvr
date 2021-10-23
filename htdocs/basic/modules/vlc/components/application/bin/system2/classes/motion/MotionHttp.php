@@ -12,37 +12,38 @@ namespace system2;
  * Class MotionHttp
  * @package system2
  */
-class MotionHttp {
-
+class MotionHttp
+{
     const HOST = MOTION_HTTP_HOST;
     const PORT = MOTION_HTTP_PORT;
     const USER = MOTION_HTTP_USER;
     const PASS = MOTION_HTTP_PASS;
 
     /**
-     * @param $thread
-     * @param $command
-     * @param $subCommand
+     * @param int $thread
+     * @param string $command
+     * @param string $subCommand
      * @param $param
-     * @param $value
+     * @param string $value
      * @return string
      */
-    protected function createUrl($thread = 0, $command = MotionHttpConfigCmd::COMMAND, $subCommand = MotionHttpConfigCmd::LIST_, $param = null, $value = ""){
+    protected function createUrl(int $thread = 0, string $command = MotionHttpConfigCmd::COMMAND, string $subCommand = MotionHttpConfigCmd::LIST_, $param = null, string $value = ""): string
+    {
         $httpUrl = "http://{MotionHttp::HOST}:{MotionHttp::PORT}";
-        if($thread == null) return $httpUrl;
+        if ($thread == null) return $httpUrl;
 
         $threadUrl = "/$thread";
-        if($command == null) return $httpUrl.$threadUrl;
+        if ($command == null) return $httpUrl . $threadUrl;
 
         $commandUrl = "/$command";
-        if($subCommand == null) return $httpUrl.$threadUrl.$commandUrl;
+        if ($subCommand == null) return $httpUrl . $threadUrl . $commandUrl;
 
         $subCommandUrl = "/$subCommand";
-        if($param == null) return $httpUrl.$threadUrl.$commandUrl.$subCommandUrl;
+        if ($param == null) return $httpUrl . $threadUrl . $commandUrl . $subCommandUrl;
 
         $value = urlencode($value);
         $paramUrl = "?$param=$value";
-        return $httpUrl.$threadUrl.$commandUrl.$subCommandUrl.$paramUrl;
+        return $httpUrl . $threadUrl . $commandUrl . $subCommandUrl . $paramUrl;
     }
 
     /**
@@ -53,10 +54,11 @@ class MotionHttp {
      * @param string $value
      * @return string
      */
-    public function command($thread = 0, $command = MotionHttpConfigCmd::COMMAND, $subCommand = MotionHttpConfigCmd::LIST_, $param = null, $value = ""){
+    public function command(int $thread = 0, string $command = MotionHttpConfigCmd::COMMAND, string $subCommand = MotionHttpConfigCmd::LIST_, $param = null, string $value = ""): string
+    {
         $context = stream_context_create(array(
             'http' => array(
-                'header'  => "Authorization: Basic " . base64_encode(MotionHttp::USER.":".MotionHttp::PASS)
+                'header' => "Authorization: Basic " . base64_encode(MotionHttp::USER . ":" . MotionHttp::PASS)
             )
         ));
         return file_get_contents($this->createUrl($thread, $command, $subCommand, $param, $value), false, $context);
@@ -68,10 +70,11 @@ class MotionHttp {
 /**
  * Class MotionHttpCmd
  * @package system
- * Список комманд
+ * Список команд
  * http://www.lavrsen.dk/foswiki/bin/view/Motion/MotionHttpAPI
  */
-class MotionHttpConfigCmd{
+class MotionHttpConfigCmd
+{
     const COMMAND = "config";
 
     const LIST_ = "list";
@@ -103,7 +106,8 @@ class MotionHttpConfigCmd{
  * @package system
  * http://www.lavrsen.dk/foswiki/bin/view/Motion/MotionHttpAPI#Action_Commands
  */
-class MotionHttpActionCmd{
+class MotionHttpActionCmd
+{
     const COMMAND = "action";
     const MAKE_MOVIE = "makemovie";
     const SNAPSHOT = "snapshot";
@@ -116,7 +120,8 @@ class MotionHttpActionCmd{
  * @package system
  * http://www.lavrsen.dk/foswiki/bin/view/Motion/MotionHttpAPI#Detection_Commands
  */
-class MotionHttpDetectionCmd{
+class MotionHttpDetectionCmd
+{
     const COMMAND = "detection";
     const STATUS = "status";
     const START = "start";

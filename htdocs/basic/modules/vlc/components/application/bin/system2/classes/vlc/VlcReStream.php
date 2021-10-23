@@ -8,17 +8,20 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICam;
+
 /**
  * Получает выход с live vlc потока (локальный)
  * Class VlcReStream
  * @package system2
  */
-abstract class VlcReStream extends VlcStream{
+abstract class VlcReStream extends VlcStream
+{
 
     /**
      * @var LiveVlcStream
      */
-    protected $live;
+    protected LiveVlcStream $live;
 
     /**
      * @param ICam $cam

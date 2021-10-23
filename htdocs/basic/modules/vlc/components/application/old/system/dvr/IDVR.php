@@ -8,6 +8,8 @@
 
 namespace system;
 
+use app\modules\vlc\types\CamID;
+
 /**
  * Interface IDVR
  * @package system
@@ -20,7 +22,7 @@ interface IDVR {
     /**
      * @return bool
      */
-    public function isStarted();
+    public function isStarted(): bool;
     public function kill();
     public function startup();
     public function shutdown();
@@ -38,16 +40,16 @@ interface IDVR {
     public function live();
 
     /**
-     * @param \CamID $camID
+     * @param CamID $camID
      * Отдать камеру по id
-     * @return Cam
+     * @return ICam
      */
-    public function getCam(\CamID $camID);
+    public function getCam(CamID $camID): ?ICam;
 
     /**
-     * @return array of ICam
+     * @return ICamCreator of ICam
      */
-    public function getCams();
+    public function getCams(): ICamCreator;
 
     /**
      * create timelaps file

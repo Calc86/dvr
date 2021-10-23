@@ -8,25 +8,28 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICamSettings;
+
 /**
  * Основные настройки, которые необходимы для нашей системы
  * Class CamSettings
  * @package system2
  */
-class CamSettings implements ICamSettings{
-    protected $id = 0;
-    protected $liveProto = 'http';
-    protected $stopProto = 'http';
-    protected $ip = 'localhost';
-    protected $livePort = '1111';
-    protected $stopPort = '1111';
-    protected $livePath = '';
-    protected $stopPath = '';
+class CamSettings implements ICamSettings
+{
+    protected int $id = 0;
+    protected string $liveProto = 'http';
+    protected string $stopProto = 'http';
+    protected string $ip = 'localhost';
+    protected string $livePort = '1111';
+    protected string $stopPort = '1111';
+    protected string $livePath = '';
+    protected string $stopPath = '';
 
     /**
      * @return string
      */
-    public function getLiveProto()
+    public function getLiveProto(): string
     {
         return $this->liveProto;
     }
@@ -34,7 +37,7 @@ class CamSettings implements ICamSettings{
     /**
      * @return string
      */
-    public function getStopProto()
+    public function getStopProto(): string
     {
         return $this->stopProto;
     }
@@ -42,7 +45,7 @@ class CamSettings implements ICamSettings{
     /**
      * @return string
      */
-    public function getIp()
+    public function getIp(): string
     {
         return $this->ip;
     }
@@ -50,7 +53,7 @@ class CamSettings implements ICamSettings{
     /**
      * @return int
      */
-    public function getID()
+    public function getID(): int
     {
         return $this->id;
     }
@@ -58,7 +61,7 @@ class CamSettings implements ICamSettings{
     /**
      * @return string
      */
-    public function getLivePort()
+    public function getLivePort(): string
     {
         return $this->livePort;
     }
@@ -66,7 +69,7 @@ class CamSettings implements ICamSettings{
     /**
      * @return string
      */
-    public function getStopPort()
+    public function getStopPort(): string
     {
         return $this->stopPort;
     }
@@ -74,7 +77,7 @@ class CamSettings implements ICamSettings{
     /**
      * @return string
      */
-    public function getLivePath()
+    public function getLivePath(): string
     {
         return $this->livePath;
     }
@@ -82,7 +85,7 @@ class CamSettings implements ICamSettings{
     /**
      * @return string
      */
-    public function getStopPath()
+    public function getStopPath(): string
     {
         return $this->stopPath;
     }
@@ -91,31 +94,31 @@ class CamSettings implements ICamSettings{
      * Возвращает полную ссылку на stop поток или stop кадр
      * @return string
      */
-    public function getStopUrl()
+    public function getStopUrl(): string
     {
-        return "{$this->stopProto}://{$this->ip}:{$this->stopPort}/{$this->stopPath}";
+        return "$this->stopProto://$this->ip:$this->stopPort/$this->stopPath";
     }
 
     /**
      * Возвращает полную ссылку на live поток
      * @return string
      */
-    public function getLiveUrl()
+    public function getLiveUrl(): string
     {
         //multicast support
         $ip = $this->ip;
         $a = explode('.', $ip);
-        if($a[0] >= 224) $ip = '@'.$ip;
+        if ($a[0] >= 224) $ip = '@' . $ip;
 
-        if($this->liveProto == 'file')
-            return "{$this->liveProto}://{$this->livePath}";
-        return "{$this->liveProto}://{$ip}:{$this->livePort}/{$this->livePath}";
+        if ($this->liveProto == 'file')
+            return "$this->liveProto://$this->livePath";
+        return "$this->liveProto://$ip:$this->livePort/$this->livePath";
     }
 
     /**
      * @param int $id
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
     }
@@ -123,7 +126,7 @@ class CamSettings implements ICamSettings{
     /**
      * @param string $ip
      */
-    public function setIp($ip)
+    public function setIp(string $ip)
     {
         $this->ip = $ip;
     }
@@ -131,7 +134,7 @@ class CamSettings implements ICamSettings{
     /**
      * @param string $livePath
      */
-    public function setLivePath($livePath)
+    public function setLivePath(string $livePath)
     {
         $this->livePath = $livePath;
     }
@@ -139,7 +142,7 @@ class CamSettings implements ICamSettings{
     /**
      * @param string $livePort
      */
-    public function setLivePort($livePort)
+    public function setLivePort(string $livePort)
     {
         $this->livePort = $livePort;
     }
@@ -147,7 +150,7 @@ class CamSettings implements ICamSettings{
     /**
      * @param string $liveProto
      */
-    public function setLiveProto($liveProto)
+    public function setLiveProto(string $liveProto)
     {
         $this->liveProto = $liveProto;
     }
@@ -155,7 +158,7 @@ class CamSettings implements ICamSettings{
     /**
      * @param string $stopPath
      */
-    public function setStopPath($stopPath)
+    public function setStopPath(string $stopPath)
     {
         $this->stopPath = $stopPath;
     }
@@ -163,7 +166,7 @@ class CamSettings implements ICamSettings{
     /**
      * @param string $stopPort
      */
-    public function setStopPort($stopPort)
+    public function setStopPort(string $stopPort)
     {
         $this->stopPort = $stopPort;
     }
@@ -171,7 +174,7 @@ class CamSettings implements ICamSettings{
     /**
      * @param string $stopProto
      */
-    public function setStopProto($stopProto)
+    public function setStopProto(string $stopProto)
     {
         $this->stopProto = $stopProto;
     }

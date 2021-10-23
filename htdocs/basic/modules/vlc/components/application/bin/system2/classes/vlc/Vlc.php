@@ -8,6 +8,9 @@
 
 namespace system2;
 
+use app\modules\vlc\components\IDVR;
+use app\modules\vlc\components\telnet\Telnet;
+
 /**
  * Class Vlc
  * Используем VLC в качестве dvr
@@ -18,7 +21,7 @@ class Vlc extends Daemon{
     /**
      * @var IDVR
      */
-    protected $dvr;
+    protected IDVR $dvr;
 
     private $httpPort;
     private $telnetPort;
@@ -44,6 +47,9 @@ class Vlc extends Daemon{
         $this->httpPort = $port;
     }
 
+    /**
+     * @return mixed
+     */
     private function getHttpPort()
     {
         return $this->httpPort;
@@ -57,6 +63,9 @@ class Vlc extends Daemon{
         $this->telnetPort = $port;
     }
 
+    /**
+     * @return mixed
+     */
     private function getTelnetPort()
     {
         return $this->telnetPort;
@@ -65,7 +74,7 @@ class Vlc extends Daemon{
     /**
      * @return string
      */
-    public function getCommand()
+    public function getCommand(): string
     {
         $vlc_vlm = '';
 
@@ -87,7 +96,7 @@ class Vlc extends Daemon{
 
     public function _stop()
     {
-        $telnet = new \Telnet();
+        $telnet = new Telnet();
 
         $f = $telnet->connect('localhost', $this->getTelnetPort());
         if(!$f){

@@ -12,9 +12,9 @@ namespace system2;
  * Class EventHandler
  * @package system2
  */
-abstract class Event {
-
-    private $name;
+abstract class Event
+{
+    private string $name;
 
     /**
      *
@@ -24,7 +24,11 @@ abstract class Event {
         $this->name = $name;
     }
 
-    public function getName(){
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
         return $this->name;
     }
 

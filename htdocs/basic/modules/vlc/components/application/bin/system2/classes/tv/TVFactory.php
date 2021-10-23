@@ -8,16 +8,21 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICam;
+use app\modules\vlc\components\ICamStream;
+use app\modules\vlc\components\ISystem;
+
 /**
  * Class TVFactory
  * @package system2
  */
-class TVFactory extends AbstractFactory {
+class TVFactory extends AbstractFactory
+{
     /**
      * @param DVR $dvr
      * @return array of Daemons
      */
-    protected function createDaemons(DVR $dvr)
+    protected function createDaemons(DVR $dvr): array
     {
         $vlc = new Vlc($dvr);
 
@@ -27,7 +32,7 @@ class TVFactory extends AbstractFactory {
     /**
      * @return ISystem
      */
-    public function createSystem()
+    public function createSystem(): ISystem
     {
         return TVSystem::getInstance();
     }
@@ -37,7 +42,8 @@ class TVFactory extends AbstractFactory {
      * @param Dvr $dvr
      * @return array
      */
-    protected function createCams(Dvr $dvr){
+    protected function createCams(Dvr $dvr): array
+    {
         $db = array(
             #EXTINF:CТC ,CТC
             //'udp://@224.0.90.25:1234',
@@ -49,9 +55,9 @@ class TVFactory extends AbstractFactory {
             //'udp://@224.0.90.85:1234',
         );
 
-        $i=0;
+        $i = 0;
         $cams = array();
-        foreach($db as $link){
+        foreach ($db as $link) {
             /** @var BBCamSettings $row */
 
             $el = parse_url($link);
@@ -74,7 +80,7 @@ class TVFactory extends AbstractFactory {
      * @param ICam $cam
      * @return ICamStream
      */
-    public function createStream(ICam $cam)
+    public function createStream(ICam $cam): ICamStream
     {
         $stream = new Streams($cam);
         $live = new LiveVlcStream($cam);

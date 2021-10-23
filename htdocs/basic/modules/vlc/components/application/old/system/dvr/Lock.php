@@ -9,9 +9,13 @@
 namespace system;
 
 
+use app\modules\vlc\components\Log;
+use app\modules\vlc\types\BashCommand;
+
 /**
  * Class Lock
  * @package system
+ * @deprecated use Lock from system2
  */
 class Lock {
     private $path;
@@ -60,7 +64,7 @@ class Lock {
      *
      */
     public static function resetAll(){
-        $reset = new \BashCommand("ls ".Lock::getWorkDir()."/*".Lock::EXTENSION." | xargs rm");
+        $reset = new BashCommand("ls ".Lock::getWorkDir()."/*".Lock::EXTENSION." | xargs rm");
         $reset->exec();
     }
 
@@ -68,7 +72,8 @@ class Lock {
      * @param $maxTimeout
      * @return bool seconds
      */
-    public function wait($maxTimeout){
+    public function wait($maxTimeout): bool
+    {
         $wait = 0;
         while(1){
             if(file_exists($this->path)){

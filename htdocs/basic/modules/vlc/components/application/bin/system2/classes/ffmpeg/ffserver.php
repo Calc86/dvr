@@ -8,12 +8,16 @@
 
 namespace system2;
 
+use app\modules\vlc\components\IDVR;
+use app\modules\vlc\components\telnet\Telnet;
+
 /**
  * Class Vlc
  * Используем VLC в качестве dvr
  * @package system2
  */
-class ffserver extends Daemon{
+class ffserver extends Daemon
+{
 
     /**
      * @var IDVR
@@ -24,7 +28,7 @@ class ffserver extends Daemon{
      * @param IDVR $dvr
      * @param string $name
      */
-    function __construct(IDVR $dvr, $name = 'ffserver')
+    function __construct(IDVR $dvr, string $name = 'ffserver')
     {
         $this->dvr = $dvr;
         parent::__construct($this->dvr, 'vlc');
@@ -50,13 +54,12 @@ class ffserver extends Daemon{
 
     public function _stop()
     {
-        $telnet = new \Telnet();
+        $telnet = new Telnet();
 
         $f = $telnet->connect('localhost', $this->getTelnetPort());
-        if(!$f){
+        if (!$f) {
             $this->log("Порт закрыт");
-        }else
-        {
+        } else {
             $this->log("Успешное подключение");
             $telnet->auth(TLPWD);
             $telnet->write('shutdown');
@@ -77,10 +80,13 @@ class ffserver extends Daemon{
     /**
      * размонтировать наш nas
      */
-    /** @noinspection PhpUnusedPrivateMethodInspection */
     /*private function un_mount(){
         $nas = new \nas();
         if($nas->is_mount()->get());
             $nas->un_mount();
     }*/
+    protected function getCommand(): string
+    {
+        // TODO: Implement getCommand() method.
+    }
 }

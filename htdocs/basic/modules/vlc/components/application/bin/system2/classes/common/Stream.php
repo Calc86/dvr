@@ -8,19 +8,23 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICam;
+use app\modules\vlc\components\ICamStream;
+
 /**
  * Камера системы имеет разные потоки, локальные и внешние, либо потоки записи/декодирования
  * Class Stream
  * @package system2
  */
-abstract class Stream implements ICamStream {
+abstract class Stream implements ICamStream
+{
 
-    private $enabled = true;
+    private bool $enabled = true;
 
     /**
      * @var ICam
      */
-    protected $cam;
+    protected ICam $cam;
 
     /**
      * @param ICam $cam
@@ -32,7 +36,7 @@ abstract class Stream implements ICamStream {
 
     public function create()
     {
-        $this->log(get_class($this).":".__FUNCTION__);
+        $this->log(get_class($this) . ":" . __FUNCTION__);
     }
 
     public function delete()
@@ -42,11 +46,11 @@ abstract class Stream implements ICamStream {
 
     final public function start()
     {
-        //если система стопится, то мы не стратуем
-        if(System::getInstance()->getFlag(System::FLAG_STOP)) return;
+        //если система стопится, то мы не запускаем
+        if (System::getInstance()->getFlag(System::FLAG_STOP)) return;
 
         //если стрим disabled, то не стартуем
-        if(!$this->isEnabled()) return;
+        if (!$this->isEnabled()) return;
 
         $this->log(__FUNCTION__);
 
@@ -75,7 +79,8 @@ abstract class Stream implements ICamStream {
     /**
      * @param $enabled
      */
-    public function setEnabled($enabled){
+    public function setEnabled($enabled)
+    {
         $this->enabled = boolval($enabled);
 
         //пусть выполнит все свои "фишки" и мы о нем забудем
@@ -87,7 +92,8 @@ abstract class Stream implements ICamStream {
     /**
      * @return bool
      */
-    public function isEnabled(){
+    public function isEnabled(): bool
+    {
         return $this->enabled;
     }
 

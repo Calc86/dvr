@@ -8,14 +8,18 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICam;
+use app\modules\vlc\components\ICamSettings;
+
 /**
- * стрим для программы motion(Детектор движения), по умолчанию создает тучу картинок...
+ * Stream для программы motion(Детектор движения), по умолчанию создает тучу картинок...
  * Class MotionStream
  * @package system2
  */
-class MotionStream extends Stream {
+class MotionStream extends Stream
+{
 
-    private $config = array();
+    private array $config = [];
     private $lock;
 
     /**
@@ -26,27 +30,27 @@ class MotionStream extends Stream {
     {
         parent::__construct($cam);
 
-        $this->lock = new TimeLock($this->cam->getID().'_timelaps', TIME_LOCK_TIMELAPSE);
+        $this->lock = new TimeLock($this->cam->getID() . '_timelaps', TIME_LOCK_TIMELAPSE);
 
         //create config file
-        $motionUrl = $cs->getStopProto()."://".$cs->getIp().":".$cs->getStopPort()."/".$cs->getStopPath();
-        $this->addConfig('netcam_url',$motionUrl);
+        $motionUrl = $cs->getStopProto() . "://" . $cs->getIp() . ":" . $cs->getStopPort() . "/" . $cs->getStopPath();
+        $this->addConfig('netcam_url', $motionUrl);
 
         $proxyUrl = "http://localhost/out/snap.php?cid={$this->cam->getID()}";
-        $this->addConfig('netcam_proxy',$proxyUrl);
+        $this->addConfig('netcam_proxy', $proxyUrl);
 
         /*if($s['stop_user'] != ''){
             $userPass = $s['stop_user'].":".$s['stop_pass'];
             $this->addConfig('netcam_userpass', $userPass);
         }*/
 
-        $targetDir = Path::getTmpfsPath(Path::IMAGE.'/'.$this->cam->getDVR()->getUser()->getID().'/'.$this->cam->getID());
+        $targetDir = Path::getTmpfsPath(Path::IMAGE . '/' . $this->cam->getDVR()->getUser()->getID() . '/' . $this->cam->getID());
         $this->addConfig('target_dir', $targetDir);
 
         $path = dirname((new Motion($this->cam->getDVR(), array()))->getConfigFile());
-        $threadPath = $path."/thread_".$cam->getID().".conf";
+        $threadPath = $path . "/thread_" . $cam->getID() . ".conf";
 
-        $threadTemplatePath = Path::getPath(Path::getRoot(), Path::ETC)."/templates/thread.conf";
+        $threadTemplatePath = Path::getPath(Path::getRoot(), Path::ETC) . "/templates/thread.conf";
         $thread = file_get_contents($threadTemplatePath);
         $f = fopen($threadPath, "w+");
         fwrite($f, MotionConfig::parseConfig(
@@ -71,15 +75,15 @@ class MotionStream extends Stream {
      */
     public function setConfig(array $config)
     {
-        foreach($config as $k=>$v){
-            $this->addConfig($k,$v);
+        foreach ($config as $k => $v) {
+            $this->addConfig($k, $v);
         }
     }
 
     /**
      * @return array
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         return $this->config;
     }
@@ -89,15 +93,17 @@ class MotionStream extends Stream {
      * @param String $name
      * @param String $value
      */
-    public function addConfig($name, $value){
+    public function addConfig(String $name, String $value)
+    {
         $this->config[$name] = $value;
     }
 
     /**
      * @return string
      */
-    private function getImagesPath(){
-        return '/'.$this->cam->getDVR()->getUser()->getID().'/'.$this->cam->getID();
+    private function getImagesPath(): string
+    {
+        return '/' . $this->cam->getDVR()->getUser()->getID() . '/' . $this->cam->getID();
     }
 
     /*public function update()

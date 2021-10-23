@@ -8,13 +8,15 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICommand;
+
 /**
  * Проверяет запущен ли демон, если нет, перезапускает его
  * Class BBDaemonWatchdog
  * @package system2
  */
-
-class BBDaemonWatchdog implements ICommand{
+class BBDaemonWatchdog implements ICommand
+{
     /**
      * @var Daemon
      */
@@ -33,7 +35,7 @@ class BBDaemonWatchdog implements ICommand{
      */
     public function execute()
     {
-        if(System::getInstance()->getLock()->isLock() && !$this->daemon->isStarted()){
+        if (System::getInstance()->getLock()->isLock() && !$this->daemon->isStarted()) {
             $e = new bb\Events(0, bb\Events::WATCHDOG);
             $e->user_id = $this->daemon->getDvr()->getUser()->getID();
             $e->comment = $this->daemon->getName();

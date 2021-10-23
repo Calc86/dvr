@@ -8,17 +8,22 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICam;
+use app\modules\vlc\components\ICamStream;
+use app\modules\vlc\components\ISystem;
+
 /**
  * Class BBFactory
  * @package system2
  */
-class BBFactory extends AbstractFactory {
+class BBFactory extends AbstractFactory
+{
     /**
      * @return ISystem
      */
-    public function createSystem()
+    public function createSystem(): ISystem
     {
-        $system =  parent::createSystem();
+        $system = parent::createSystem();
 
         $e = new BBLogMotionEvent(Motion::EVENT_MOTION_START);
         $system->addEventHandler($e);
@@ -50,7 +55,7 @@ class BBFactory extends AbstractFactory {
      * @param DVR $dvr
      * @return array of Daemons
      */
-    protected function createDaemons(DVR $dvr)
+    protected function createDaemons(DVR $dvr): array
     {
         $vlc = new Vlc($dvr);
         $this->addPermanentCommand(new BBDaemonWatchdog($vlc));
@@ -59,15 +64,15 @@ class BBFactory extends AbstractFactory {
         $cams = $dvr->getCamIDs();
 
         $ids = array();
-        foreach($cams as $id){
+        foreach ($cams as $id) {
             $cam = $dvr->getCam($id);
             $cs = $cam->getSettings();
-            /** @var $cs BBCamSettings  */
-            if($cs->mtn) $ids[] = $id;
+            /** @var $cs BBCamSettings */
+            if ($cs->mtn) $ids[] = $id;
         }
 
         $motion = new Motion($dvr, $ids);
-        if(count($cams))
+        if (count($cams))
             $this->addPermanentCommand(new BBDaemonWatchdog($motion));
 
         return array($vlc, $motion);
@@ -75,19 +80,19 @@ class BBFactory extends AbstractFactory {
 
     /**
      * @return array
+     * @throws MysqlQueryException
      */
-    public function createUsers()
+    public function createUsers(): array
     {
         $users = array();
-        $db = \Database::getInstance();
+        $db = Database::getInstance();
         $q = "select id from users where banned=0";
         $r = $db->query($q);
-        while(($row = $r->fetch_row())){
-            try{
+        while (($row = $r->fetch_row())) {
+            try {
                 $users[] = AbstractFactory::getInstance()->createUser($row[0]);
-            }
-            catch(\Exception $e){
-                Log::getInstance()->put($e->getCode().' '.$e->getMessage()."\n".$e->getTraceAsString()."\n", __CLASS__, Log::ERROR);
+            } catch (\Exception $e) {
+                Log::getInstance()->put($e->getCode() . ' ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n", __CLASS__, Log::ERROR);
             }
         }
 
@@ -98,13 +103,14 @@ class BBFactory extends AbstractFactory {
      * @param DVR $dvr
      * @return array
      */
-    protected function createCams(DVR $dvr){
-        $db = \Database::getInstance();
+    protected function createCams(DVR $dvr): array
+    {
+        $db = Database::getInstance();
         $q = mysql::getQuery(mysql::CAM_SETTINGS, array('{dvr_id}' => $dvr->getID()));
         $r = $db->query($q);
 
         $cams = array();
-        while(($row = $r->fetch_object('system2\BBCamSettings')) != null){
+        while (($row = $r->fetch_object('system2\BBCamSettings')) != null) {
             /** @var BBCamSettings $row */
 
             //$dvr->addCam(new BBCam($this, $row));
@@ -122,7 +128,7 @@ class BBFactory extends AbstractFactory {
      * @param ICam $cam
      * @return ICamStream
      */
-    public function createStream(ICam $cam)
+    public function createStream(ICam $cam): ICamStream
     {
         $stream = new Streams($cam);
 
@@ -156,7 +162,7 @@ class BBFactory extends AbstractFactory {
         $stream->addStream($mtn, Path::MOTION);
 
         //motion flv stream
-        $flv = new UrlFlvVlcStream($cam, "http://localhost:".(MOTION_STREAM_PORT + $cam->getID()));
+        $flv = new UrlFlvVlcStream($cam, "http://localhost:" . (MOTION_STREAM_PORT + $cam->getID()));
         $flv->setEnabled($cs->live);
         $stream->addStream($flv);
 

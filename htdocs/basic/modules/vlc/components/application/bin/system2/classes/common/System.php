@@ -8,48 +8,53 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICommand;
+use app\modules\vlc\components\ISystem;
+use app\modules\vlc\components\IUser;
+use Exception;
+
 /**
  * Class System
  * @package system2
  */
-
-class System implements ISystem{
+class System implements ISystem
+{
     /**
-     * @var ISystem
+     * @var ?ISystem
      */
-    private static $instance = null;
+    private static ?ISystem $instance = null;
 
     /**
      * Команды вызываемые в конце update один раз метода, устанавливаются через addCommand();
      * @var array
      */
-    private $commandsQueue = array();
+    private array $commandsQueue = [];
 
     /**
      * Команды вызываемые в конце каждого update метода, устанавливаются через addPermanentCommand();
      * @var array
      */
-    private $permanentCommands = array();
+    private array $permanentCommands = [];
 
     //runtime flags
     const FLAG_STOP = 'stop';
-    private $flags = array();
+    private array $flags = [];
 
     /**
-     * Список обработчиков эевентов
+     * Список обработчиков events
      * @var array
      */
-    private $eventHandlers = array();
+    private array $eventHandlers = [];
 
     /**
      * @var Lock
      */
-    private $lock;
+    private Lock $lock;
 
     /**
      * @var array of IUser
      */
-    private $users;
+    private array $users;
 
     /**
      *
@@ -68,14 +73,16 @@ class System implements ISystem{
     /**
      * @return Lock
      */
-    public function getLock(){
+    public function getLock(): Lock
+    {
         return $this->lock;
     }
 
     /**
      * @param IUser $user
      */
-    protected function addUser(IUser $user){
+    protected function addUser(IUser $user)
+    {
         $this->users[$user->getID()] = $user;
     }
 
@@ -83,25 +90,26 @@ class System implements ISystem{
      * @param $userID
      * @return User|null
      */
-    protected function getUser($userID){
-        if(isset($this->users[$userID]))
-            return $this->users[$userID];
-        else return null;
+    protected function getUser($userID): ?User
+    {
+        return $this->users[$userID] ?? null;
     }
 
     /**
-     * Добавить комманду, которая будет вызвана в конце update
+     * Добавить команду, которая будет вызвана в конце update
      * @param ICommand $command
      */
-    public function addCommand(ICommand $command){
+    public function addCommand(ICommand $command)
+    {
         $this->commandsQueue[] = $command;
     }
 
     /**
-     * Добавить комманду, которая будет вызвана в конце update
+     * Добавить команду, которая будет вызвана в конце update
      * @param ICommand $command
      */
-    public function addPermanentCommand(ICommand $command){
+    public function addPermanentCommand(ICommand $command)
+    {
         $this->permanentCommands[] = $command;
     }
 
@@ -110,8 +118,9 @@ class System implements ISystem{
      * @param $flag
      * @return bool
      */
-    public function getFlag($flag){
-        if(isset($this->flags[$flag])) return $this->flags[$flag];
+    public function getFlag($flag): bool
+    {
+        if (isset($this->flags[$flag])) return $this->flags[$flag];
         return false;
     }
 
@@ -119,14 +128,16 @@ class System implements ISystem{
      * Установить флаг
      * @param $flag
      */
-    protected  function setFlag($flag){
+    protected function setFlag($flag)
+    {
         $this->flags[$flag] = true;
     }
 
     /**
      * @param $flag
      */
-    protected function resetFlag($flag){
+    protected function resetFlag($flag)
+    {
         $this->flags[$flag] = false;
     }
 
@@ -134,8 +145,9 @@ class System implements ISystem{
      * Возвращает нужный класс, возможно наследование
      * @return ISystem|static
      */
-    public static function getInstance(){
-        if(self::$instance == null) return (self::$instance = new static);
+    public static function getInstance()
+    {
+        if (self::$instance == null) return (self::$instance = new static);
         else return self::$instance;
     }
 
@@ -144,13 +156,13 @@ class System implements ISystem{
      * @param $camID
      * @return null
      */
-    final public function getUserCam($userID, $camID){
+    final public function getUserCam($userID, $camID): ?Cam
+    {
         /** @var User $user */
         $user = $this->users[$userID];
         /** @var Cam $cam */
-        $cam = $user->getCam($camID);
         //$stream = $cam->getStream()->get()
-        return $cam;
+        return $user->getCam($camID);
     }
 
 
@@ -160,7 +172,7 @@ class System implements ISystem{
 
         $users = AbstractFactory::getInstance()->createUsers();
 
-        foreach($users as $user){
+        foreach ($users as $user) {
             $this->addUser($user);
         }
     }
@@ -169,10 +181,10 @@ class System implements ISystem{
     {
         Log::getInstance()->put(__FUNCTION__, $this);
 
-        if($this->isStarted() == true) return;
+        if ($this->isStarted() == true) return;
 
         $lock = new Lock(__FUNCTION__);
-        if(!$lock->create()) return;
+        if (!$lock->create()) return;
         //if(!$this->lock->create()) return;
 
         $this->_start();
@@ -181,14 +193,14 @@ class System implements ISystem{
         $this->setStarted(true);
     }
 
-    protected function _start(){
-        foreach($this->users as $user){
+    protected function _start()
+    {
+        foreach ($this->users as $user) {
             /** @var $user IUser */
-            try{
+            try {
                 $user->start();
-            }
-            catch(\Exception $e){
-                Log::getInstance()->put(__FUNCTION__.':'.$user->getID()." ".$e->getMessage(), $this);
+            } catch (Exception $e) {
+                Log::getInstance()->put(__FUNCTION__ . ':' . $user->getID() . " " . $e->getMessage(), $this);
             }
         }
     }
@@ -216,14 +228,14 @@ class System implements ISystem{
         $clear->exec();*/
     }
 
-    protected function _stop(){
-        foreach($this->users as $user){
+    protected function _stop()
+    {
+        foreach ($this->users as $user) {
             /** @var $user IUser */
-            try{
+            try {
                 $user->stop();
-            }
-            catch(\Exception $e){
-                Log::getInstance()->put(__FUNCTION__.':'.$user->getID()." ".$e->getMessage(), $this);
+            } catch (Exception $e) {
+                Log::getInstance()->put(__FUNCTION__ . ':' . $user->getID() . " " . $e->getMessage(), $this);
             }
         }
 
@@ -237,7 +249,7 @@ class System implements ISystem{
         Log::getInstance()->put(__FUNCTION__, $this);
 
         $lock = new Lock(__FUNCTION__);
-        if(!$lock->create()) return;
+        if (!$lock->create()) return;
         $this->stop();
         sleep(1);
         $this->start();
@@ -245,48 +257,50 @@ class System implements ISystem{
     }
 
     /**
-     * update это heartbeat по крону раз в минуту
+     * Update это heartbeat по крону раз в минуту
      */
     final public function update()
     {
-        if(!$this->lock->isLock()) return;
+        if (!$this->lock->isLock()) return;
         Log::getInstance()->put(__FUNCTION__, $this);
         $lock = new Lock(__FUNCTION__);
-        if(!$lock->create()) return;
-        //пользовательский апдейт
+        if (!$lock->create()) return;
+        //пользовательский update
         $this->_update();
 
-        //выполняем очереди комманд.
+        //выполняем очереди команд.
         $this->executeCommands();
         $this->executePermanentCommands();
 
         $lock->delete();
     }
 
-    final private function executeCommands(){
+    final private function executeCommands()
+    {
         //одноразовые команды
-        while(($command = array_shift($this->commandsQueue)) != null){
+        while (($command = array_shift($this->commandsQueue)) != null) {
             /** @var $command ICommand */
             $command->execute();
         }
     }
 
-    final private function executePermanentCommands(){
+    final private function executePermanentCommands()
+    {
         //команды на каждый раз
-        foreach($this->permanentCommands as $command){
+        foreach ($this->permanentCommands as $command) {
             /** @var $command ICommand */
             $command->execute();
         }
     }
 
-    protected function _update(){
-        foreach($this->users as $user){
+    protected function _update()
+    {
+        foreach ($this->users as $user) {
             /** @var $user IUser */
-            try{
+            try {
                 $user->update();
-            }
-            catch(\Exception $e){
-                Log::getInstance()->put(__FUNCTION__.':'.$user->getID()." ".$e->getMessage(), $this);
+            } catch (Exception $e) {
+                Log::getInstance()->put(__FUNCTION__ . ':' . $user->getID() . " " . $e->getMessage(), $this);
             }
         }
     }
@@ -303,15 +317,16 @@ class System implements ISystem{
      * @param $timestamp
      * @param $csvParams
      */
-    final public function event($userID, $camID, $eventName, $timestamp, $csvParams){
-        if(!$this->lock->isLock()) return;
+    final public function event($userID, $camID, $eventName, $timestamp, $csvParams)
+    {
+        if (!$this->lock->isLock()) return;
 
         $user = $this->getUser($userID);
-        if($user==null)
+        if ($user == null)
             $cam = null;
         else
             $cam = $user->getDVR($user->getID())->getCam($camID);
-        if($csvParams == "")
+        if ($csvParams == "")
             $params = array();
         else
             $params = str_getcsv($csvParams);
@@ -328,8 +343,9 @@ class System implements ISystem{
      * @param $timestamp
      * @param array $params
      */
-    protected function _event($user,$cam, $eventName, $timestamp, array $params){
-        if(isset($this->eventHandlers[$eventName])){
+    protected function _event(User $user, Cam $cam, $eventName, $timestamp, array $params)
+    {
+        if (isset($this->eventHandlers[$eventName])) {
             $event = $this->eventHandlers[$eventName];
             /** @var $event Event */
             $event->handle($user, $cam, $timestamp, $params);
@@ -338,11 +354,11 @@ class System implements ISystem{
 
     /**
      * @param Event $event
-     * @return mixed|void
+     * @return void
      */
-    public function addEventHandler(Event $event){
-        $events = null;
-        if(!isset($this->eventHandlers[$event->getName()])){
+    public function addEventHandler(Event $event)
+    {
+        if (!isset($this->eventHandlers[$event->getName()])) {
             $this->eventHandlers[$event->getName()] = new Events($event->getName());
         }
         /** @var Events $events */
@@ -372,15 +388,17 @@ class System implements ISystem{
      * Запущена ли система
      * @return bool
      */
-    public function isStarted(){
+    public function isStarted(): bool
+    {
         return $this->lock->isLock();
     }
 
     /**
      * @param $bool boolean
      */
-    public function setStarted($bool){
-        if($bool){
+    public function setStarted(bool $bool)
+    {
+        if ($bool) {
             $this->lock->create();
         } else {
             $this->lock->delete();

@@ -8,12 +8,15 @@
 
 namespace system2;
 
+use Exception;
+
 /**
  * HTTP interface for vlm
  * Class HttpVlm
  * @package system2
  */
-class HttpVlm extends Vlm{
+class HttpVlm extends Vlm
+{
     protected $ip;
     protected $port;
     protected $url;
@@ -35,28 +38,31 @@ class HttpVlm extends Vlm{
     /**
      * @return string
      */
-    public function getReturn(){
+    public function getReturn(): string
+    {
         return $this->return;
     }
 
     /**
      * @return string
      */
-    protected function getFullUrl(){
-        return "http://{$this->ip}:{$this->port}/{$this->url}";
+    protected function getFullUrl(): string
+    {
+        return "http://$this->ip:$this->port/$this->url";
     }
 
     /**
      * @param $command
      * @return mixed|void
      */
-    protected function _execute($command){
+    protected function _execute($command)
+    {
         $this->return = '';
 
-        try{
+        try {
             //Todo в будущих реализациях VLC (2.1.4 и далее) требуется авторизация.
-            $this->return = file_get_contents($this->getFullUrl().rawurlencode($command));
-        }catch (\Exception $e){
+            $this->return = file_get_contents($this->getFullUrl() . rawurlencode($command));
+        } catch (Exception $e) {
             $this->log($e->getMessage());
             /*echo $e->getMessage()."\n";
             echo $e->getFile()." ".$e->getLine()."\n";*/

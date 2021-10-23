@@ -17,7 +17,7 @@ class TVHlsStream extends HLSVlcStream{
      * @param string $transcode
      * @return string
      */
-    protected function getOutputVlm($transcode = 'transcode{acodec=mp3}:')
+    protected function getOutputVlm(string $transcode = 'transcode{acodec=mp3}:'): string
     {
         return parent::getOutputVlm($transcode);
     }

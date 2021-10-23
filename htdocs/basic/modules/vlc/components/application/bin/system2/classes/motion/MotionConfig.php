@@ -12,32 +12,34 @@ namespace system2;
  * Class MotionConfig
  * @package system2
  */
-class MotionConfig {
+class MotionConfig
+{
 
     /**
-     * @param String $config текстовый конфиг из темплейта
-     * @param array $params какие значения поставить key(motion)=>value
+     * @param String $config Текстовый конфиг from template
+     * @param array $params Какие значения поставить key(motion)=>value
      * @return string
      */
-    public static function parseConfig($config, array $params = array()){
+    public static function parseConfig(String $config, array $params = []): string
+    {
         /**
          * Array
-        (
-        [0] => Array
-        (
-        [0] => {log_level:6}
-        [1] => log_level
-        [2] => 6
-        )
+         * (
+         * [0] => Array
+         * (
+         * [0] => {log_level:6}
+         * [1] => log_level
+         * [2] => 6
+         * )
          */
-        $pattern = "/[{]([a-z_]*)[:]?([a-zA-Z0-9_\-\%\/]*)[}]/";
+        $pattern = "/[{]([a-z_]*)[:]?([a-zA-Z0-9_\-%\/]*)[}]/";
         $matches = array();
         preg_match_all($pattern, $config, $matches, PREG_SET_ORDER);
-        //подготовим масив с дефолными значениями
+        //подготовим массив с default значениями
         $settings = array();
-        foreach($matches as $match){
+        foreach ($matches as $match) {
             $settings['search'][] = $match[0];
-            $settings['replace'][] = isset($params[$match[1]]) ? $params[$match[1]] : $match[2];
+            $settings['replace'][] = $params[$match[1]] ?? $match[2];
         }
 
         return str_replace($settings['search'], $settings['replace'], $config);

@@ -8,18 +8,23 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICam;
+use app\modules\vlc\components\ICommand;
+use Exception;
+
 /**
  * vlm controlled stream
  * Class VlcStream
  * @package system2
  */
-abstract class VlcStream extends Stream {
+abstract class VlcStream extends Stream
+{
 
     /**
-     * @var ICommand
+     * @var ICommand|null
      */
-    private $testInputCommand = null;
-    protected $vlm;
+    private ?ICommand $testInputCommand = null;
+    protected HttpVlm $vlm;
     private $streamName;
 
     /**
@@ -30,60 +35,66 @@ abstract class VlcStream extends Stream {
     {
         parent::__construct($cam);
         $this->streamName = $streamName;
-        $this->vlm = new HttpVlm($this->getVlcName(), 'localhost', HTSTART+$this->cam->getDVR()->getID());
+        $this->vlm = new HttpVlm($this->getVlcName(), 'localhost', HTSTART + $this->cam->getDVR()->getID());
     }
 
     /**
      * Получить полное имя стрима камеры
      * @return string
      */
-    protected function getVlcName(){
-        return 'CAM_'.$this->cam->getID()."_$this->streamName";
+    protected function getVlcName(): string
+    {
+        return 'CAM_' . $this->cam->getID() . "_$this->streamName";
     }
 
     /**
      * @param ICommand $command
      */
-    public function setTestInputCommand(ICommand $command){
+    public function setTestInputCommand(ICommand $command)
+    {
         $this->testInputCommand = $command;
     }
 
     /**
      * @return string
      */
-    protected function getName(){
+    protected function getName(): string
+    {
         return $this->streamName;
     }
 
-    public function create(){
+    public function create()
+    {
         parent::create();
 
-        if(System::getInstance()->getFlag(System::FLAG_STOP)) return;
+        if (System::getInstance()->getFlag(System::FLAG_STOP)) return;
 
         $this->vlm->_new();
         $this->vlm->_setup($this->getInputVlm(), true);
         $this->vlm->_setup($this->getOutputVlm());
     }
 
-    public function delete(){
+    public function delete()
+    {
         $this->vlm->_del();
     }
 
     /**
      * @return bool
      */
-    protected function testInput(){
+    protected function testInput(): bool
+    {
         $url = parse_url($this->getInputVlm());
-        if($url['scheme'] != 'file'){
+        if ($url['scheme'] != 'file') {
             $ip = $url['host'];
             $a = explode('.', $ip);
-            if($a[0] < 224){    //no test for multicast
-                try{
+            if ($a[0] < 224) {    //no test for multicast
+                try {
                     $connection = fsockopen($url['host'], $url['port'], $err_no, $err_str, SOCKET_TIMEOUT);
                     fclose($connection);
                     return true;
-                }catch (\Exception $e){
-                    if($this->testInputCommand != null)
+                } catch (Exception $e) {
+                    if ($this->testInputCommand != null)
                         $this->testInputCommand->execute();
                     return false;
                 }
@@ -95,13 +106,13 @@ abstract class VlcStream extends Stream {
     public function update()
     {
         parent::update();
-        if(!$this->isEnabled()) $this->stop();
-        if(!$this->testInput()) $this->stop();
+        if (!$this->isEnabled()) $this->stop();
+        if (!$this->testInput()) $this->stop();
     }
 
     public function _start()
     {
-        if($this->testInput()){
+        if ($this->testInput()) {
             $this->vlm->_control('play');
         }
     }
@@ -113,11 +124,14 @@ abstract class VlcStream extends Stream {
         $this->vlm->_control('stop');
     }
 
+    /**
+     * @return mixed
+     */
     abstract protected function getInputVlm();
 
     /**
      * @param string $transcode
      * @return mixed
      */
-    abstract protected function getOutputVlm($transcode='');
+    abstract protected function getOutputVlm(string $transcode = '');
 }

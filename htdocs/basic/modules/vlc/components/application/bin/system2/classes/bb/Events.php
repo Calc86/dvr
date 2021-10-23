@@ -7,6 +7,8 @@
  */
 
 namespace system2\bb;
+
+use app\modules\vlc\components\exceptions\MysqlQueryException;
 use system2\Database;
 
 
@@ -21,7 +23,8 @@ use system2\Database;
  * @property integer $time
  * @property string $comment
  */
-class Events {
+class Events
+{
     protected $id;
 
     const MOTION_START = 'motion_start';
@@ -34,27 +37,27 @@ class Events {
     /**
      * @var bool
      */
-    private $isNew;
+    private bool $isNew;
 
-    protected $table = array(
+    protected array $table = [
         "user_id" => 'i',
         "cam_id" => 'i',
         "name" => 's',
         "time" => 'i',
         "comment" => 's',
-    );
+    ];
 
     protected $values = array();
 
     /**
-     * @param $id
-     * @param $name
+     * @param int $id
+     * @param string $name
      */
-    function __construct($id = 0, $name = self::TEST)
+    function __construct(int $id = 0, string $name = self::TEST)
     {
         $this->isNew = ($id == 0);
 
-        foreach($this->table as $col=>$type){
+        foreach ($this->table as $col => $type) {
             $this->values[$col] = null;
         }
 
@@ -74,7 +77,8 @@ class Events {
      * @param $name
      * @param $value
      */
-    public function __set($name, $value){
+    public function __set($name, $value)
+    {
         $this->values[$name] = $value;
     }
 
@@ -90,36 +94,47 @@ class Events {
     /**
      * @return array
      */
-    private function getColNames(){
+    private function getColNames()
+    {
         $names = array();
-        foreach($this->table as $col=>$type){
-            if($this->values[$col] != null){
+        foreach ($this->table as $col => $type) {
+            if ($this->values[$col] != null) {
                 $names[] = $col;
             }
         }
         return $names;
     }
 
-    private function getMarks($count){
+    /**
+     * @param $count
+     * @return false|string
+     */
+    private function getMarks($count)
+    {
         $marks = '';
-        for($i = 0; $i < $count; $i++){
-            $marks.= '?, ';
+        for ($i = 0; $i < $count; $i++) {
+            $marks .= '?, ';
         }
         return substr($marks, 0, -2);
     }
 
-    private function getValues(){
+    /**
+     * @return array
+     * @throws MysqlQueryException
+     */
+    private function getValues(): array
+    {
         $values = array();
-        foreach($this->table as $col=>$type){
-            if($this->values[$col] != null){
-                switch($type){
+        foreach ($this->table as $col => $type) {
+            if ($this->values[$col] != null) {
+                switch ($type) {
                     case 'i':
-                        if(!is_numeric($this->values[$col])) throw Database::createException("$col not numeric");
+                        if (!is_numeric($this->values[$col])) throw Database::createException("$col not numeric");
                         $values[] = addslashes($this->values[$col]);
                         break;
                     case 's':
-                        if(!is_string($this->values[$col])) throw Database::createException("$col not string");
-                        $values[] = "'".addslashes($this->values[$col])."'";
+                        if (!is_string($this->values[$col])) throw Database::createException("$col not string");
+                        $values[] = "'" . addslashes($this->values[$col]) . "'";
                         break;
                 }
             }
@@ -131,8 +146,9 @@ class Events {
     /**
      * @return \mysqli_stmt|null
      */
-    private function prepare(){
-        if($this->isNew){
+    private function prepare()
+    {
+        if ($this->isNew) {
             $names = implode(", ", $this->getColNames());
             $values = implode(", ", $this->getValues());
 
@@ -142,8 +158,9 @@ class Events {
         return null;
     }
 
-    public function save(){
-        if($this->time == null) $this->time = time();
+    public function save()
+    {
+        if ($this->time == null) $this->time = time();
         $q = $this->prepare();
         echo $q;
         Database::getInstance()->query($q);

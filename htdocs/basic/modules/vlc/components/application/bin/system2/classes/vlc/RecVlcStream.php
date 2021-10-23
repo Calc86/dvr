@@ -8,24 +8,27 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICam;
+
 /**
  * Класс для потока записи в файл
  * Class RecVlcStream
  * @package system2
  */
-class RecVlcStream extends VlcReStream {
+class RecVlcStream extends VlcReStream
+{
     /**
-     * @var TimeLock для update
+     * @var TimeLock|null для update
      */
-    private $lock = null;
-    private $timeLock = 0;
-    private $streamPath = '';
+    private ?TimeLock $lock = null;
+    private int $timeLock = 0;
+    private string $streamPath = '';
 
     /**
      * Переменная для хранения старого имени файла
      * @var string
      */
-    protected $oldRec = '';
+    protected string $oldRec = '';
 
     /**
      * @param ICam $cam
@@ -33,7 +36,7 @@ class RecVlcStream extends VlcReStream {
      * @param int $timeLock
      * @param string $streamPath
      */
-    function __construct(ICam $cam, LiveVlcStream $live, $timeLock = TIME_LOCK_RECORD, $streamPath = Path::RECORD)
+    function __construct(ICam $cam, LiveVlcStream $live, $timeLock = TIME_LOCK_RECORD, string $streamPath = Path::RECORD)
     {
         parent::__construct($cam, $live, $streamPath);
 
@@ -43,24 +46,25 @@ class RecVlcStream extends VlcReStream {
     }
 
     /**
-     * возвращает путь файлка в котором будем хранить имя файла для будущего перемещения
+     * Возвращает путь файла в котором будем хранить имя файла для будущего перемещения
      * @return string
      */
-    protected function getRecFilePath(){
-        return Path::getTmpfsPath(Path::TEMP)."/{$this->cam->getID()}_{$this->streamPath}.file";
+    protected function getRecFilePath(): string
+    {
+        return Path::getTmpfsPath(Path::TEMP) . "/{$this->cam->getID()}_$this->streamPath.file";
     }
 
     /**
-     * получить выходную строку для использования в vlm в vlc
+     * Получить выходную строку для использования в vlm в vlc
      * @param string $transcode
      * @return string
      */
-    protected function getOutputVlm($transcode = '')
+    protected function getOutputVlm(string $transcode = ''): string
     {
         $date = date("Ymd");
         $time = date("His");
 
-        $path = $this->streamPath."/{$this->cam->getDVR()->getID()}/$date";
+        $path = $this->streamPath . "/{$this->cam->getDVR()->getID()}/$date";
         Path::getNfsPath($path);    //create dir on NFS
         $realPath = Path::getTmpfsPath($path);
 
@@ -76,15 +80,17 @@ class RecVlcStream extends VlcReStream {
     /**
      * @return string path on ''
      */
-    protected function getNfsPath(){
+    protected function getNfsPath(): string
+    {
         return str_replace(Path::TMPFS, Path::NFS, $this->oldRec);
     }
 
     /**
      * @return string path or '' if no path
      */
-    protected function getTmpfsPath(){
-        if(file_exists($this->getRecFilePath()))
+    protected function getTmpfsPath(): string
+    {
+        if (file_exists($this->getRecFilePath()))
             return trim(file_get_contents($this->getRecFilePath()));
         else
             return '';
@@ -93,16 +99,17 @@ class RecVlcStream extends VlcReStream {
     /**
      *
      */
-    protected function moveToNfs(){
+    protected function moveToNfs()
+    {
         $this->log(__FUNCTION__);
 
         $file = $this->oldRec;
-        if($file == '') return;
-        $avi = $file.".avi";
+        if ($file == '') return;
+        $avi = $file . ".avi";
 
         // change tmpfs to nfs
         $path = $this->getNfsPath();
-        $mp4 = $path.".mp4";
+        $mp4 = $path . ".mp4";
 
         System::getInstance()->addCommand(new MoveVideoCommand($avi, $mp4, $path));
 
@@ -125,7 +132,7 @@ class RecVlcStream extends VlcReStream {
     {
         parent::update();
         //if(!System::getInstance()->getFlag(System::FLAG_STOP))
-        if(!$this->lock->create()) return;    //время не пришло
+        if (!$this->lock->create()) return;    //время не пришло
 
         $this->stop();
         $this->start();

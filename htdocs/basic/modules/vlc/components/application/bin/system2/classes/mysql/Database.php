@@ -8,35 +8,46 @@
 
 namespace system2;
 
+use Exception;
+use mysqli;
+use mysqli_result;
+
 /**
  * Class MysqlException
  * @package system2
  */
-class MysqlException extends \Exception{
-    public function putLog() {}
+class MysqlException extends Exception
+{
+    public function putLog()
+    {
+    }
 }
 
 /**
  * Class MysqlQueryException
  */
-class MysqlQueryException extends MysqlException{}
+class MysqlQueryException extends MysqlException
+{
+}
 
 /**
  * Class Database
  * @package system2
  * mysqli singleton
  */
-class Database {
+class Database
+{
     /**
-     * @var \mysqli
+     * @var mysqli
      */
-    private $db;
-    private static $instance = null;
+    private mysqli $db;
+    private static ?Database $instance = null;
 
     /**
      *
      */
-    private function __construct(){
+    private function __construct()
+    {
         $this->db = open_db(MYHOST, MYUSER, MYPASS, MYDB);
     }
 
@@ -47,26 +58,29 @@ class Database {
     /**
      * @return Database
      */
-    public static function getInstance(){
-        if(self::$instance === null) self::$instance = new self();
+    public static function getInstance(): Database
+    {
+        if (self::$instance === null) self::$instance = new self();
         return self::$instance;
     }
 
     /**
-     * @return \mysqli
+     * @return mysqli
      */
-    public function getDB(){
+    public function getDB(): mysqli
+    {
         return $this->db;
     }
 
     /**
      * @param $query
-     * @return \mysqli_result
+     * @return mysqli_result
      * @throws MysqlQueryException
      */
-    public function query($query){
+    public function query($query): mysqli_result
+    {
         $r = $this->db->query($query);
-        if(!$r) throw new MysqlQueryException($query."; ".$this->db->error);
+        if (!$r) throw new MysqlQueryException($query . "; " . $this->db->error);
         return $r;
     }
 
@@ -74,7 +88,8 @@ class Database {
      * @param $message
      * @return MysqlQueryException
      */
-    public static function createException($message){
+    public static function createException($message): MysqlQueryException
+    {
         return new MysqlQueryException($message);
     }
 }

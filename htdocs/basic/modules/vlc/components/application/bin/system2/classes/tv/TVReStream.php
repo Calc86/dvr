@@ -8,6 +8,8 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICam;
+
 /**
  * Изменяет path стрима
  * Class TVReStream
@@ -24,5 +26,4 @@ class TVReStream extends FlvVlcReStream {
         parent::__construct($cam, $live, $streamName);
         $this->path = '1.flv';
     }
-
 }

@@ -8,24 +8,29 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICam;
+use app\modules\vlc\components\ICamSettings;
+use app\modules\vlc\components\ICamStream;
+use app\modules\vlc\components\IDVR;
+
 /**
  * Задает основной алгоритм работы камеры в системе (потоки и т.д.)
  * Class Cam
  * @package system2
  */
-class Cam implements ICam{
-
-    protected $id = 0;
+class Cam implements ICam
+{
+    protected int $id = 0;
 
     /**
-     * @var ICamSettings
+     * @var ICamSettings|null
      */
-    protected $cs = null;
+    protected ?ICamSettings $cs = null;
 
     /**
      * @var IDVR
      */
-    protected $dvr;
+    protected IDVR $dvr;
     //protected $streams = array();
     /**
      * @var Streams
@@ -51,19 +56,21 @@ class Cam implements ICam{
     /**
      * @return int
      */
-    public function getID(){
+    public function getID(): int
+    {
         return $this->id;
     }
 
     /**
-     * @return ICamStream|Streams
+     * @return ICamStream
      */
-    public function getStream(){
+    public function getStream()
+    {
         return $this->stream;
     }
 
     /**
-     * Создает стримы после запуска демонов
+     * Создает streams после запуска демонов
      */
     final public function create()
     {
@@ -72,7 +79,8 @@ class Cam implements ICam{
         $this->stream->create();
     }
 
-    public function delete(){
+    public function delete()
+    {
         $this->log(__FUNCTION__);
 
         $this->stream->delete();
@@ -109,15 +117,15 @@ class Cam implements ICam{
     /**
      * @return IDVR
      */
-    public function getDVR()
+    public function getDVR(): IDVR
     {
         return $this->dvr;
     }
 
     /**
-     * @return CamSettings|ICamSettings
+     * @return ICamSettings
      */
-    public function getSettings()
+    public function getSettings(): ICamSettings
     {
         return $this->cs;
     }

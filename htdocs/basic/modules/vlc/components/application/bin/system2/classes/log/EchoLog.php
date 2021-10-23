@@ -19,7 +19,7 @@ class EchoLog extends Log {
      * @param string $target
      * @return string
      */
-    public function put($string, $module = "log", $target = "NOTICE")
+    public function put($string, $module, string $target = "NOTICE"): string
     {
         $data = parent::put($string, $module, $target);
         echo $data;

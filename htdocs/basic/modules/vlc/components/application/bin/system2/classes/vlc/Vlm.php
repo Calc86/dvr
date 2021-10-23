@@ -13,8 +13,9 @@ namespace system2;
  * Class Vlm
  * @package system2
  */
-abstract class Vlm {
-    protected $return = '';
+abstract class Vlm
+{
+    protected string $return = '';
     protected $cam;
 
     /**
@@ -29,7 +30,8 @@ abstract class Vlm {
      * Выполнить vlm команду
      * @param $command
      */
-    protected function execute($command){
+    protected function execute($command)
+    {
         $this->log($command);
         $this->_execute($command);
     }
@@ -44,8 +46,9 @@ abstract class Vlm {
     /**
      * vlm new
      */
-    public function _new(){
-        $this->execute("new {$this->cam} broadcast enabled loop");
+    public function _new()
+    {
+        $this->execute("new $this->cam broadcast enabled loop");
     }
 
     /**
@@ -53,12 +56,13 @@ abstract class Vlm {
      * @param $setup
      * @param bool $input
      */
-    public function _setup($setup, $input = false) {
+    public function _setup($setup, bool $input = false)
+    {
 
         $direction = 'output';
-        if($input) $direction = 'input';
+        if ($input) $direction = 'input';
 
-        $command = "setup {$this->cam} $direction $setup";
+        $command = "setup $this->cam $direction $setup";
         $this->execute($command);
     }
 
@@ -66,22 +70,25 @@ abstract class Vlm {
      * vlm control
      * @param $command
      */
-    public function _control($command){
-        $command = "control {$this->cam} $command";
+    public function _control($command)
+    {
+        $command = "control $this->cam $command";
         $this->execute($command);
     }
 
     /**
      * vlm show
      */
-    public function _show(){
-        $this->execute("show {$this->cam}");
+    public function _show()
+    {
+        $this->execute("show $this->cam");
     }
 
     /**
      * vlm del
      */
-    public function _del(){
+    public function _del()
+    {
         $this->execute("del $this->cam");
     }
 

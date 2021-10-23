@@ -8,17 +8,21 @@
 
 namespace system2;
 
+use app\modules\vlc\components\IDVR;
+use app\modules\vlc\components\IUser;
+
 /**
  * Class User
  * @package system2
  */
-class User implements IUser {
-    protected $id;
+class User implements IUser
+{
+    protected int $id;
 
     /**
      * @var array
      */
-    protected $dvrs = array();
+    protected array $dvrs = [];
 
     /**
      * @param $id
@@ -34,7 +38,8 @@ class User implements IUser {
     /**
      * @return int
      */
-    public function getID(){
+    public function getID(): int
+    {
         return $this->id;
     }
 
@@ -42,7 +47,7 @@ class User implements IUser {
     {
         $this->log(__FUNCTION__);
 
-        //todo убрать массив, скомпановать
+        //todo убрать массив, скомпоновать
         $dvr = AbstractFactory::getInstance()->createDvr($this);
         $this->dvrs[$dvr->getID()] = $dvr;
 
@@ -54,7 +59,7 @@ class User implements IUser {
     public function start()
     {
         $this->log(__FUNCTION__);
-        foreach($this->dvrs as $dvr){
+        foreach ($this->dvrs as $dvr) {
             /** @var $dvr IDVR */
             $dvr->start();
         }
@@ -63,7 +68,7 @@ class User implements IUser {
     public function stop()
     {
         $this->log(__FUNCTION__);
-        foreach($this->dvrs as $dvr){
+        foreach ($this->dvrs as $dvr) {
             /** @var $dvr IDVR */
             $dvr->stop();
         }
@@ -72,7 +77,7 @@ class User implements IUser {
     public function restart()
     {
         $this->log(__FUNCTION__);
-        foreach($this->dvrs as $dvr){
+        foreach ($this->dvrs as $dvr) {
             /** @var $dvr IDVR */
             $dvr->restart();
         }
@@ -81,7 +86,7 @@ class User implements IUser {
     public function update()
     {
         $this->log(__FUNCTION__);
-        foreach($this->dvrs as $dvr){
+        foreach ($this->dvrs as $dvr) {
             /** @var $dvr IDVR */
             $dvr->update();
         }
@@ -91,25 +96,25 @@ class User implements IUser {
      * @param $dvrID
      * @return DVR|null
      */
-    public function getDVR($dvrID){
-        if(isset($this->dvrs[$dvrID]))
-            return $this->dvrs[$dvrID];
-        else
-            return null;
+    public function getDVR($dvrID): ?DVR
+    {
+        return $this->dvrs[$dvrID] ?? null;
     }
 
     /**
      * @param $camID
      * @return null|Cam
      */
-    public function getCam($camID){
+    public function getCam($camID): ?Cam
+    {
         return $this->getDVR($this->getID())->getCam($camID);
     }
 
     /**
      * @return array
      */
-    public function getDVRs(){
+    public function getDVRs(): array
+    {
         return $this->dvrs;
     }
 

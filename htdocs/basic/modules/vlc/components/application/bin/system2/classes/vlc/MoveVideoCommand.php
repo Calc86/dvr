@@ -8,21 +8,25 @@
 
 namespace system2;
 
+use app\modules\vlc\components\ICommand;
+use app\modules\vlc\types\BashCommand;
+
 /**
  * Class MoveVideoCommand
  * @package system2
  */
-class MoveVideoCommand implements ICommand {
-    private $avi;
-    private $mp4;
-    private $path;
+class MoveVideoCommand implements ICommand
+{
+    private string $avi;
+    private string $mp4;
+    private string $path;
 
     /**
      * @param $avi string path to avi file on local
      * @param $mp4 string path to mp4 file on nfs
      * @param $path string path on nfs
      */
-    function __construct($avi, $mp4, $path)
+    function __construct(string $avi, string $mp4, string $path)
     {
         $this->avi = $avi;
         $this->mp4 = $mp4;
@@ -34,28 +38,27 @@ class MoveVideoCommand implements ICommand {
      */
     public function execute()
     {
-        //ffmpeg необходим для правильного заполения метаданных, так как у vlc с этим проблемы (по крайней мере у 2.0.10)
-        $ffmpeg = new \BashCommand("ffmpeg -y -i $this->avi -codec copy $this->mp4\n");
+        //ffmpeg необходим для правильного заполнения метаданных, так как у vlc с этим проблемы (по крайней мере у 2.0.10)
+        $ffmpeg = new BashCommand("ffmpeg -y -i $this->avi -codec copy $this->mp4\n");
         Log::getInstance()->put($ffmpeg, __CLASS__);
 
         $ffmpeg->exec();
 
-        //если это какой либо мжпег поток и ffmpeg вышел с ошибкой, но создал нулевой файл
-        // обычно если ffmpeg не может сделать файлик, то размер его 203 байта.... ы(
-        if(file_exists($this->mp4) && (filesize($this->mp4) <= 300)){
+        // Если это какой-либо mjpeg поток и ffmpeg вышел с ошибкой, но создал нулевой файл
+        // обычно если ffmpeg не может сделать файл, то размер его 203 байта.... ы(
+        if (file_exists($this->mp4) && (filesize($this->mp4) <= 300)) {
             unlink($this->mp4);
             Log::getInstance()->put("файл $this->mp4 имеет нулевой размер", __CLASS__);
         }
 
         //если ffmpeg не создал файл или мы удалили нулевой файл
-        if(!file_exists($this->mp4)){
-            $mv = new \BashCommand("mv $this->avi $this->path.avi\n");
+        if (!file_exists($this->mp4)) {
+            $mv = new BashCommand("mv $this->avi $this->path.avi\n");
             Log::getInstance()->put($mv, __CLASS__);
             $mv->exec();
-        }
-        else{
-            //файлик успешно переехал на новое место
-            if(file_exists($this->avi))
+        } else {
+            //файл успешно переехал на новое место
+            if (file_exists($this->avi))
                 unlink($this->avi);
         }
     }
