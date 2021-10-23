@@ -13,6 +13,7 @@ use app\modules\vlc\types\UserID;
 /**
  * Class Log
  * @package system
+ * @deprecated Use common\Log
  */
 class Log
 {

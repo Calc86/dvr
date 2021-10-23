@@ -6,7 +6,7 @@
  * Time: 14:43
  */
 
-namespace system2;
+namespace app\modules\vlc\components\vlc2;
 /*
 
 http://www.newmediaist.com/n/compiling-nginx-source-centos

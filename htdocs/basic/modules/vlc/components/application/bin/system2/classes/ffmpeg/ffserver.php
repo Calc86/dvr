@@ -8,6 +8,7 @@
 
 namespace system2;
 
+use app\modules\vlc\components\common\Daemon;
 use app\modules\vlc\components\IDVR;
 use app\modules\vlc\components\telnet\Telnet;
 

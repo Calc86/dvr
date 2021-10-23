@@ -8,9 +8,15 @@
 
 namespace system2;
 
+use app\modules\vlc\components\common\AbstractFactory;
+use app\modules\vlc\components\common\CamSettings;
+use app\modules\vlc\components\common\DVR;
+use app\modules\vlc\components\common\Streams;
 use app\modules\vlc\components\ICam;
 use app\modules\vlc\components\ICamStream;
 use app\modules\vlc\components\ISystem;
+use app\modules\vlc\components\vlc2\LiveVlcStream;
+use app\modules\vlc\components\vlc2\Vlc;
 
 /**
  * Class TVFactory

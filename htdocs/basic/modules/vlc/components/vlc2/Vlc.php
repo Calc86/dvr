@@ -6,7 +6,7 @@
  * Time: 17:06
  */
 
-namespace system2;
+namespace app\modules\vlc\components\vlc2;
 
 use app\modules\vlc\components\IDVR;
 use app\modules\vlc\components\telnet\Telnet;
@@ -123,7 +123,6 @@ class Vlc extends Daemon{
     /**
      * размонтировать наш nas
      */
-    /** @noinspection PhpUnusedPrivateMethodInspection */
     /*private function un_mount(){
         $nas = new \nas();
         if($nas->is_mount()->get());

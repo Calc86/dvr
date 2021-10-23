@@ -8,6 +8,8 @@
 
 namespace system2;
 
+use app\modules\vlc\components\common\Path;
+use app\modules\vlc\components\common\Stream;
 use app\modules\vlc\components\ICam;
 use app\modules\vlc\components\ICamSettings;
 

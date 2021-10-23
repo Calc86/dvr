@@ -8,6 +8,8 @@
 
 namespace system2;
 
+use app\modules\vlc\components\common\CamSettings;
+
 /**
  * Содержит необходимые поля, которые заполняются из mysql
  * Class BBCamSettings

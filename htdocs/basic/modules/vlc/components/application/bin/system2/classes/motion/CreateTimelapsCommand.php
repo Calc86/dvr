@@ -8,6 +8,7 @@
 
 namespace system2;
 
+use app\modules\vlc\components\common\Log;
 use app\modules\vlc\components\ICommand;
 use app\modules\vlc\types\BashCommand;
 

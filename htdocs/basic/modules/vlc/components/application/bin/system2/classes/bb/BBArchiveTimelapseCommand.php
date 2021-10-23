@@ -8,6 +8,7 @@
 
 namespace system2;
 
+use app\modules\vlc\components\common\EveryTimeCommandDecorator;
 use app\modules\vlc\components\ICam;
 use app\modules\vlc\components\ICommand;
 

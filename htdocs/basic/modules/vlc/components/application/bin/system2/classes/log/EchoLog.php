@@ -8,6 +8,8 @@
 
 namespace system2;
 
+use app\modules\vlc\components\common\Log;
+
 /**
  * Class EchoLog
  * @package system2

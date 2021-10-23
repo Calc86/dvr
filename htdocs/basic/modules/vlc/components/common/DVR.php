@@ -6,7 +6,7 @@
  * Time: 15:43
  */
 
-namespace system2;
+namespace app\modules\vlc\components\common;
 
 use app\modules\vlc\components\ICam;
 use app\modules\vlc\components\IDVR;

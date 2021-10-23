@@ -6,7 +6,7 @@
  * Time: 18:55
  */
 
-namespace system2;
+namespace app\modules\vlc\components\vlc2;
 
 use app\modules\vlc\components\ICam;
 

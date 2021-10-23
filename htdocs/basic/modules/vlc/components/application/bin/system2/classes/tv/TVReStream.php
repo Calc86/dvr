@@ -9,6 +9,8 @@
 namespace system2;
 
 use app\modules\vlc\components\ICam;
+use app\modules\vlc\components\vlc2\FlvVlcReStream;
+use app\modules\vlc\components\vlc2\LiveVlcStream;
 
 /**
  * Изменяет path стрима

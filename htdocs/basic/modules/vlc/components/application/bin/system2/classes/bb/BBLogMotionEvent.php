@@ -8,6 +8,10 @@
 
 namespace system2;
 
+use app\modules\vlc\components\common\Cam;
+use app\modules\vlc\components\common\Event;
+use app\modules\vlc\components\common\User;
+
 /**
  * Class BBMotionEvent
  * @package system2

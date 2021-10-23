@@ -6,7 +6,7 @@
  * Time: 16:35
  */
 
-namespace system2;
+namespace app\modules\vlc\components\vlc2;
 
 use Exception;
 

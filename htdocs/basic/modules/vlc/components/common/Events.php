@@ -6,7 +6,7 @@
  * Time: 15:15
  */
 
-namespace system2;
+namespace app\modules\vlc\components\common;
 
 /**
  * Class Events

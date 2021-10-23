@@ -8,6 +8,8 @@
 
 namespace system2;
 
+use app\modules\vlc\components\vlc2\RecVlcStream;
+
 /**
  * Измененный алгоритм перемещения на NFS, добавление записи в mysql
  * Class BBRecStream

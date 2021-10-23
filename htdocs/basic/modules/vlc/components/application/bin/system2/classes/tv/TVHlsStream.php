@@ -8,6 +8,8 @@
 
 namespace system2;
 
+use app\modules\vlc\components\vlc2\HLSVlcStream;
+
 /**
  * Class TVHlsStream
  * @package system2

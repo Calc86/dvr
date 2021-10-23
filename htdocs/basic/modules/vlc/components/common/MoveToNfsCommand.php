@@ -6,7 +6,7 @@
  * Time: 22:01
  */
 
-namespace system2;
+namespace app\modules\vlc\components\common;
 
 use app\modules\vlc\components\ICommand;
 use app\modules\vlc\types\BashCommand;

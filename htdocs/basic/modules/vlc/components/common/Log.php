@@ -6,7 +6,7 @@
  * Time: 12:52
  */
 
-namespace system2;
+namespace app\modules\vlc\components\common;
 
 /**
  * Class Log

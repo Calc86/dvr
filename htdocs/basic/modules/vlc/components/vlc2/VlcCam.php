@@ -6,7 +6,7 @@
  * Time: 21:30
  */
 
-namespace system2;
+namespace app\modules\vlc\components\vlc2;
 
 /**
  * Простая камера с вещанием прямого потока с камеры и записи его на диск.

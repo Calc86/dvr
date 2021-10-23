@@ -8,6 +8,11 @@
 
 namespace system2;
 
+use app\modules\vlc\components\common\Cam;
+use app\modules\vlc\components\common\Event;
+use app\modules\vlc\components\common\Lock;
+use app\modules\vlc\components\common\Path;
+use app\modules\vlc\components\common\User;
 use app\modules\vlc\components\ICam;
 
 /**

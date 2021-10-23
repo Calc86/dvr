@@ -8,6 +8,9 @@
 
 namespace system2;
 
+use app\modules\vlc\components\common\Lock;
+use app\modules\vlc\components\common\Log;
+
 /**
  * Нужно использовать create, если создается, то время прошло
  * Class TimeLock

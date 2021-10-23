@@ -6,7 +6,7 @@
  * Time: 17:10
  */
 
-namespace system2;
+namespace app\modules\vlc\components\vlc2;
 
 /**
  * Vlm Vlc управление
