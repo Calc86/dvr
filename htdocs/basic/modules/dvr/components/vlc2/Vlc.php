@@ -15,61 +15,40 @@ use app\modules\dvr\components\telnet\Telnet;
 /**
  * Class Vlc
  * Используем VLC в качестве dvr
- * @package system2
  */
-class Vlc extends Daemon{
+class Vlc extends Daemon
+{
+    private const INTERFACE = '-I http --http-host={host} --http-port {http} -I telnet --telnet-port {telnet}  --telnet-password {password}';
+    private const WITH_LOGS = '--extraintf=http:logger --file-logging --log-verbose {verbose} --logfile {file}';
+    private const NO_LOGS = '--extraintf=http';
+    private const SHELL = '{bin} --rtsp-tcp {hw} {daemon} {interface} --repeat --loop --live-caching {live_cache} "
+        ." --network-caching {network_cache} --sout-mux-caching {mux_cache}  --sout-ts-dts-delay {dts_delay} {vlm} "
+        ."--pidfile {pid} {logs}';
+    private const VALGRIND = '{valgrind} -v --trace-children=yes --log-file={log} --error-limit=no --leak-check=full {command}';
 
     /**
      * @var IDVR
      */
     protected IDVR $dvr;
+    protected Config $config;
 
-    private $httpPort;
-    private $telnetPort;
+    private int $httpPort;
+    private int $telnetPort;
 
     /**
      * @param IDVR $dvr
+     * @param string $name
+     * @param Config|null $config
      */
-    function __construct(IDVR $dvr)
+    function __construct(IDVR $dvr, string $name = 'vlc', ?Config $config = null)
     {
         $this->dvr = $dvr;
-        parent::__construct($this->dvr, 'vlc');
+        parent::__construct($this->dvr, $name, $config);
 
-        //TODO: delete magic constants
-        $this->setHttpPort(HTSTART + $this->dvr->getID());
-        $this->setTelnetPort(TLSTART + $this->dvr->getID());
-    }
+        $this->config = $config ?? new Config();
 
-    /**
-     * @param $port
-     */
-    private function setHttpPort($port)
-    {
-        $this->httpPort = $port;
-    }
-
-    /**
-     * @return mixed
-     */
-    private function getHttpPort()
-    {
-        return $this->httpPort;
-    }
-
-    /**
-     * @param $port
-     */
-    private function setTelnetPort($port)
-    {
-        $this->telnetPort = $port;
-    }
-
-    /**
-     * @return mixed
-     */
-    private function getTelnetPort()
-    {
-        return $this->telnetPort;
+        $this->httpPort =  $config->httpPort + $this->dvr->getID();
+        $this->telnetPort = $config->telnetPort + $this->dvr->getID();
     }
 
     /**
@@ -77,19 +56,48 @@ class Vlc extends Daemon{
      */
     public function getCommand(): string
     {
-        $vlc_vlm = '';
+        $vlc_vlm = '';  // todo 20211023 проверить потребность в этих настройках
 
-        //$vlc_ifs = "-I http --http-host ".LIVEHOST." --http-port {$this->getHttpPort()} -I telnet --telnet-port {$this->getTelnetPort()}  --telnet-password ".TLPWD;
-        $vlc_ifs = "-I http --http-host=0.0.0.0 --http-port {$this->getHttpPort()} -I telnet --telnet-port {$this->getTelnetPort()}  --telnet-password ".TLPWD;
-        if(VLC_USE_LOG)
-            $vlc_logs = "--extraintf=http:logger --file-logging --log-verbose 0 --logfile {$this->getLogFile()}";
-        else
-            $vlc_logs = '--extraintf=http';
-        //$vlc_shell = VLCBIN." --rtsp-tcp --ffmpeg-hw --http-reconnect --http-continuous --sout-keep ".VLCD." $vlc_ifs  --repeat --loop --network-caching ".VLCNETCACHE." --sout-mux-caching ".VLCSOUTCACHE." $vlc_vlm --pidfile {$this->getPidFile()} $vlc_logs \n";
-        $vlc_shell = VLCBIN." --rtsp-tcp ".VLCD." $vlc_ifs --repeat --loop --live-caching ".VLC_LIVE_CACHE." --network-caching ".VLCNETCACHE." --sout-mux-caching ".VLCSOUTCACHE."  --sout-ts-dts-delay 400 $vlc_vlm --pidfile {$this->getPidFile()} $vlc_logs ";
+        $params = [
+            'host' => $this->config->host,
+            'http' => $this->httpPort,
+            'telnet' => $this->telnetPort,
+            'password' => $this->config->telnetPassword,
+        ];
+        $vlc_ifs = $this->applyParams($params, self::INTERFACE);
 
-        if($this->isValgrind()){
-            $vlc_shell = "valgrind -v --trace-children=yes --log-file={$this->getValgrindFile()} --error-limit=no --leak-check=full $vlc_shell";
+        $params = [
+            'verbose' => $this->config->verbose,
+            'file' => $this->getLogFile(),
+        ];
+        $vlc_logs = $this->applyParams($params, $this->config->useLog ? self::WITH_LOGS : self::NO_LOGS);
+
+        $hw = $this->config->withFFmpegHw ? '--ffmpeg-hw' : '';
+
+        $params = [
+            'bin' => $this->config->vlcPath,
+            'hw' => $hw,
+            'daemon' => $this->config->daemonOpts,
+            'interface' => $vlc_ifs,
+            'live_cache' => $this->config->liveCache,
+            'network_cache' => $this->config->netCache,
+            'mux_cache' => $this->config->soutCache,
+            'dts_delay' => $this->config->dtsDelay,
+            'vlm' => $vlc_vlm,
+            'pid' => $this->getPidFile(),
+            'logs' => $vlc_logs,
+        ];
+
+        $vlc_shell = $this->applyParams($params, self::SHELL);
+
+        if ($this->isValgrind()) {
+            // утилита по тесту утечек памяти
+            $params = [
+                'valgrind' => 'valgrind',   //todo add to config
+                'log' => $this->getValgrindFile(),
+                'command' => $vlc_shell
+            ];
+            $vlc_shell = $this->applyParams($params, self::VALGRIND);
         }
 
         return $vlc_shell;
@@ -99,34 +107,14 @@ class Vlc extends Daemon{
     {
         $telnet = new Telnet();
 
-        $f = $telnet->connect('localhost', $this->getTelnetPort());
-        if(!$f){
+        $f = $telnet->connect($this->config->host, $this->telnetPort);
+        if (!$f) {
             $this->log("Порт закрыт");
-        }else
-        {
+        } else {
             $this->log("Успешное подключение");
-            $telnet->auth(TLPWD);
+            $telnet->auth($this->config->telnetPassword);
             $telnet->write('shutdown');
             $this->log($telnet->read());
         }
     }
-
-    ////////// VLC Function
-    /**
-     * примонтировать наш nas
-     */
-    /*private function mount(){
-        $nas = new \nas();
-        if(!$nas->is_mount()->get());
-            $nas->mount();
-    }*/
-
-    /**
-     * размонтировать наш nas
-     */
-    /*private function un_mount(){
-        $nas = new \nas();
-        if($nas->is_mount()->get());
-            $nas->un_mount();
-    }*/
 }
