@@ -2,9 +2,10 @@
 
 namespace app\modules\dvr\components\common;
 
+use app\modules\dvr\components\exceptions\CommandException;
+use app\modules\dvr\components\exceptions\StringException;
 use app\modules\dvr\components\interfaces\IDVR;
 use app\modules\dvr\components\types\BashCommand;
-use Exception;
 
 /**
  * Created by PhpStorm.
@@ -33,7 +34,7 @@ abstract class Daemon
     private $pidFile;
     private $configFile;
     private $logFile;
-    private $logrotateFile;
+    private string $logrotateFile;
     private $valgrindFile;  //memory leak
 
     /**
@@ -44,6 +45,7 @@ abstract class Daemon
     /**
      * @param IDVR $dvr
      * @param string $name daemon name
+     * @param DaemonConfig|null $config
      */
     function __construct(IDVR $dvr, string $name = 'daemon', ?DaemonConfig $config = null)
     {
@@ -100,9 +102,9 @@ abstract class Daemon
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    private function getLogrotateFile()
+    private function getLogrotateFile(): string
     {
         return $this->logrotateFile;
     }
@@ -191,8 +193,8 @@ abstract class Daemon
     }
 
     /**
-     * @throws \app\modules\dvr\components\exceptions\CommandException
-     * @throws \app\modules\dvr\components\exceptions\StringException
+     * @throws CommandException
+     * @throws StringException
      */
     final public function start()
     {
@@ -215,6 +217,9 @@ abstract class Daemon
 
     //abstract protected function _start();
 
+    /**
+     * @throws StringException
+     */
     final public function stop()
     {
         $this->log(__FUNCTION__);
@@ -232,35 +237,48 @@ abstract class Daemon
         }
     }
 
+    /**
+     * @throws StringException
+     */
     protected function _stop()
     {
         $this->sigTerm();
     }
 
+    /**
+     * @throws StringException
+     * @throws CommandException
+     */
     public function restart()
     {
         if ($this->isStarted()) $this->stop();
         $this->start();
     }
 
+    /**
+     * @throws StringException
+     */
     public function kill()
     {
         $pid = `cat {$this->getPidFile()}`;
-        if ($pid != 0 && $pid != '')
+        if (!empty($pid))
             (new BashCommand("kill $pid"))->exec();
         $pid = $this->getProcess();
-        if ($pid != 0 && $pid != '')
+        if (!empty($pid))
             (new BashCommand("kill $pid"))->exec();
         if (is_file($this->getPidFile())) unlink($this->getPidFile());
     }
 
+    /**
+     * @throws StringException
+     */
     public function sigTerm()
     {
         $pid = `cat {$this->getPidFile()}`;
-        if ($pid != 0 && $pid != '')
+        if (!empty($pid))
             (new BashCommand("kill -INT $pid"))->exec();
         $pid = $this->getProcess();
-        if ($pid != 0 && $pid != '')
+        if (!empty($pid))
             (new BashCommand("kill -INT $pid"))->exec();
         if (is_file($this->getPidFile())) unlink($this->getPidFile());
     }
@@ -282,6 +300,10 @@ abstract class Daemon
     }*/
 
 
+    /**
+     * @throws StringException
+     * @throws CommandException
+     */
     public function startup()
     {
         $this->log(__FUNCTION__);
@@ -289,6 +311,9 @@ abstract class Daemon
         $this->start();
     }
 
+    /**
+     * @throws StringException
+     */
     public function shutdown()
     {
         $this->log(__FUNCTION__);
@@ -307,11 +332,12 @@ abstract class Daemon
     }
 
     /**
-     * @param $message
+     * @param string $message
+     * @param string|null $module
      */
-    public function log($message)
+    public function log(string $message, string $module = null)
     {
-        Log::getInstance($this->dvr->getID())->put($message, __CLASS__ . "({$this->getName()})");
+        Log::getInstance($this->dvr->getID())->put($message, $module ?? __CLASS__ . "({$this->getName()})");
     }
 
     protected function applyParams(array $params, string $command): string {
@@ -323,13 +349,4 @@ abstract class Daemon
         $replace = array_keys($params);
         return str_replace($search, $replace, $command);
     }
-}
-
-/**
- * Class DaemonException
- * @package system2
- */
-class DaemonException extends Exception
-{
-
 }
