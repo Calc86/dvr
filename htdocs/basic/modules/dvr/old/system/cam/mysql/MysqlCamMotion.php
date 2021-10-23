@@ -22,7 +22,7 @@ class MysqlCamMotion extends CamMotion {
      * @param UserID $dvrID
      * @param CamID $camID
      * @param $ip
-     * @throws \app\modules\vlc\components\exceptions\MysqlQueryException
+     * @throws \app\modules\dvr\\components\exceptions\MysqlQueryException
      */
     function __construct(UserID $dvrID, CamID $camID, $ip)
     {

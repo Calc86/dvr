@@ -45,13 +45,14 @@ abstract class Daemon
      * @param IDVR $dvr
      * @param string $name daemon name
      */
-    function __construct(IDVR $dvr, string $name)
+    function __construct(IDVR $dvr, string $name = 'daemon', ?DaemonConfig $config = null)
     {
         $this->dvr = $dvr;
         $this->name = $name;
 
         $this->log(__FUNCTION__);
 
+        // todo 20211023 move to daemon config all log sile settings
         $this->setLogFile(Path::getLocalPath(Path::LOG . "/{$this->dvr->getID()}") . "/{$this->getName()}.log");
 
         $this->setConfigFile(Path::getLocalPath(Path::ETC . "/{$this->dvr->getID()}") . "/{$this->getName()}.conf");
@@ -189,6 +190,10 @@ abstract class Daemon
         return $this->valgrind;
     }
 
+    /**
+     * @throws \app\modules\dvr\components\exceptions\CommandException
+     * @throws \app\modules\dvr\components\exceptions\StringException
+     */
     final public function start()
     {
         if ($this->isStarted()) {
@@ -307,6 +312,16 @@ abstract class Daemon
     public function log($message)
     {
         Log::getInstance($this->dvr->getID())->put($message, __CLASS__ . "({$this->getName()})");
+    }
+
+    protected function applyParams(array $params, string $command): string {
+        $keys = array_values($params);
+        $search = [];
+        foreach ($keys as $item)
+            $search[] = '{'.$item.'}';
+
+        $replace = array_keys($params);
+        return str_replace($search, $replace, $command);
     }
 }
 

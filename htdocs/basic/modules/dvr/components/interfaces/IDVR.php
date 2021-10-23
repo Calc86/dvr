@@ -11,7 +11,7 @@ namespace app\modules\dvr\components\interfaces;
 /**
  * Интерфейс для Digital Video Recorder
  * Interface IDVR
- * @package system2
+ * Цифровой видео рекордер привязан к пользователю и содержит в себе несколько камер
  */
 interface IDVR extends IControlled, IUnique{
     /**

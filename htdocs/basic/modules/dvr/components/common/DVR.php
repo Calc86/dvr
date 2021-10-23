@@ -15,7 +15,7 @@ use app\modules\dvr\components\types\BashCommand;
 
 /**
  * Class DVR
- * @package system2
+ * Общий контроллер цифрового видео рекордера
  */
 class DVR implements IDVR
 {

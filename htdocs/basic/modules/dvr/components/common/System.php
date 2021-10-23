@@ -212,6 +212,7 @@ class System implements ISystem
         $this->setStarted(false);
 
         $this->setFlag(System::FLAG_STOP);
+        $this->setFlag(System::FLAG_STOP);
 
         //$lock = new Lock(__FUNCTION__);
         //if(!$lock->create()) return;

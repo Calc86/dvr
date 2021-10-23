@@ -1,7 +1,10 @@
 <?php
 /*
- * Скрипт запуска системы при смерте машины
+ * Скрипт запуска системы при смерти машины
  */
+
+use system\Vlc;
+
 require_once dirname(__FILE__) . '/../config.php';
 
 $db = open_db(MYHOST, MYUSER, MYPASS, MYDB);

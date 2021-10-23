@@ -11,7 +11,7 @@ use app\modules\dvr\components\EchoLog;
 
 require_once __DIR__ . '/../config.php';
 
-require_once __DIR__ . '/include.php';
+//require_once __DIR__ . '/include.php';
 
 date_default_timezone_set('Europe/Moscow');
 
