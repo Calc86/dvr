@@ -8,8 +8,8 @@
 
 namespace app\modules\vlc\components\common;
 
-use app\modules\vlc\components\IDVR;
-use app\modules\vlc\components\IUser;
+use app\modules\vlc\components\interfaces\IDVR;
+use app\modules\vlc\components\interfaces\IUser;
 
 /**
  * Class User

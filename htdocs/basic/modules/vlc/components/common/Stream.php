@@ -8,8 +8,8 @@
 
 namespace app\modules\vlc\components\common;
 
-use app\modules\vlc\components\ICam;
-use app\modules\vlc\components\ICamStream;
+use app\modules\vlc\components\interfaces\ICam;
+use app\modules\vlc\components\interfaces\ICamStream;
 
 /**
  * Камера системы имеет разные потоки, локальные и внешние, либо потоки записи/декодирования

@@ -8,7 +8,8 @@
 
 namespace app\modules\vlc\components\common;
 
-use app\modules\vlc\components\ICommand;
+use app\modules\vlc\components\interfaces\ICommand;
+use app\modules\vlc\components\TimeLock;
 
 /**
  * Обертка для команд, которые должны вызываться раз в некоторое время, а не каждый раз

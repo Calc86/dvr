@@ -5,6 +5,9 @@
  * Операция на 1 файл в среднем должна занимать 1 минутку
  */
 
+use app\modules\vlc\components\mysql\MysqlQueryException;
+use app\modules\vlc\components\nas\Nas;
+
 require_once dirname(__FILE__) . '/../config.php';
 
 $db = open_db(MYHOST, MYUSER, MYPASS, MYDB);

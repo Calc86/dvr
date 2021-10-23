@@ -2,12 +2,12 @@
 
 namespace app\modules\vlc\components\vlc;
 
-use app\modules\vlc\types\CamName;
-use app\modules\vlc\types\CamPrefix;
-use app\modules\vlc\types\OrgName;
-use app\modules\vlc\types\Url;
-use app\modules\vlc\types\UserID;
-use app\modules\vlc\types\VLMCommand;
+use app\modules\vlc\components\types\CamName;
+use app\modules\vlc\components\types\CamPrefix;
+use app\modules\vlc\components\types\OrgName;
+use app\modules\vlc\components\types\Url;
+use app\modules\vlc\components\types\UserID;
+use app\modules\vlc\components\types\VLMCommand;
 use Exception;
 use SimpleXMLElement;
 

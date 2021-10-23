@@ -10,7 +10,7 @@ namespace system2;
 
 use app\modules\vlc\components\common\Daemon;
 use app\modules\vlc\components\common\System;
-use app\modules\vlc\components\ICommand;
+use app\modules\vlc\components\interfaces\ICommand;
 
 /**
  * Проверяет запущен ли демон, если нет, перезапускает его

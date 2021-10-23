@@ -9,7 +9,7 @@
 namespace app\modules\vlc\components\common;
 
 
-use app\modules\vlc\types\BashCommand;
+use app\modules\vlc\components\types\BashCommand;
 
 /**
  * Class Lock

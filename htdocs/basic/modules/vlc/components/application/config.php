@@ -1,6 +1,8 @@
 <?php
 
 //установки для дебага
+use app\modules\vlc\components\mysql\MysqlQueryException;
+
 ini_set('display_errors',1);
 ini_set('register_globals','Off');
 

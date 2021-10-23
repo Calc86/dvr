@@ -23,7 +23,7 @@ rtmp {
 }
 */
 
-use app\modules\vlc\components\ICam;
+use app\modules\vlc\components\interfaces\ICam;
 
 
 /**

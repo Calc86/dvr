@@ -2,8 +2,8 @@
 
 namespace app\modules\vlc\components\vlc;
 
-use app\modules\vlc\types\Port;
-use app\modules\vlc\types\UserID;
+use app\modules\vlc\components\types\Port;
+use app\modules\vlc\components\types\UserID;
 
 /**
  * Привязка управления vlm к нашей системе, системе организаций

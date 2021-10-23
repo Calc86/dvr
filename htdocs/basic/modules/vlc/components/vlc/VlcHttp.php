@@ -2,11 +2,11 @@
 
 namespace app\modules\vlc\components\vlc;
 
-use app\modules\vlc\types\IP;
-use app\modules\vlc\types\Port;
-use app\modules\vlc\types\Url;
-use app\modules\vlc\types\VLMCommand;
-use app\modules\vlc\types\YesNo;
+use app\modules\vlc\components\types\IP;
+use app\modules\vlc\components\types\Port;
+use app\modules\vlc\components\types\Url;
+use app\modules\vlc\components\types\VLMCommand;
+use app\modules\vlc\components\types\YesNo;
 use Exception;
 
 /**

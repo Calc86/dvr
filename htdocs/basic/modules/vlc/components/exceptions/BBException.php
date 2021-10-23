@@ -2,6 +2,7 @@
 
 namespace app\modules\vlc\components\exceptions;
 
+use app\modules\vlc\components\mysql\Database;
 use Exception;
 
 class BBException extends Exception{

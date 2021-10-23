@@ -6,6 +6,9 @@
     а должны быть кратны 16
     Берет стоп кадр с камеры и отдает его в брауезр (или в motion)
  */
+
+use app\modules\vlc\components\mysql\Database;
+
 require("/home/vlc/vlc/bin/config.php");
 
 set_time_limit(10);

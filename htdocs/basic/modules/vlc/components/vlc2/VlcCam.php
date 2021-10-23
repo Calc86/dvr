@@ -8,6 +8,9 @@
 
 namespace app\modules\vlc\components\vlc2;
 
+use app\modules\vlc\components\common\Cam;
+use app\modules\vlc\components\common\Streams;
+
 /**
  * Простая камера с вещанием прямого потока с камеры и записи его на диск.
  * Class VlcCam

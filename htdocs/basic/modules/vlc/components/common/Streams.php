@@ -8,7 +8,7 @@
 
 namespace app\modules\vlc\components\common;
 
-use app\modules\vlc\components\ICamStream;
+use app\modules\vlc\components\interfaces\ICamStream;
 
 /**
  * Class Streams

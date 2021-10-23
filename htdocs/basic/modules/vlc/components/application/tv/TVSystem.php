@@ -11,7 +11,7 @@ namespace system2;
 use app\modules\vlc\components\common\Log;
 use app\modules\vlc\components\common\Path;
 use app\modules\vlc\components\common\System;
-use app\modules\vlc\types\BashCommand;
+use app\modules\vlc\components\types\BashCommand;
 
 /**
  * Class TVSystem

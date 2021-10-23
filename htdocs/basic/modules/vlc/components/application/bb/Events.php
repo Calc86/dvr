@@ -9,7 +9,7 @@
 namespace system2\bb;
 
 use app\modules\vlc\components\exceptions\MysqlQueryException;
-use system2\Database;
+use app\modules\vlc\components\mysql\Database;
 
 
 /**
@@ -144,16 +144,16 @@ class Events
     }
 
     /**
-     * @return \mysqli_stmt|null
+     * @return string|null
+     * @throws MysqlQueryException
      */
-    private function prepare()
+    private function prepare(): ?string
     {
         if ($this->isNew) {
             $names = implode(", ", $this->getColNames());
             $values = implode(", ", $this->getValues());
 
-            $q = "insert into events ($names) values($values)\n";
-            return $q;
+            return "insert into events ($names) values($values)\n";
         }
         return null;
     }

@@ -10,8 +10,9 @@ namespace app\modules\vlc\components\motion;
 
 use app\modules\vlc\components\common\Path;
 use app\modules\vlc\components\common\Stream;
-use app\modules\vlc\components\ICam;
-use app\modules\vlc\components\ICamSettings;
+use app\modules\vlc\components\interfaces\ICam;
+use app\modules\vlc\components\interfaces\ICamSettings;
+use app\modules\vlc\components\TimeLock;
 
 /**
  * Stream для программы motion(Детектор движения), по умолчанию создает тучу картинок...

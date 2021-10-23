@@ -3,6 +3,13 @@
  * глупый файл для обрезки видео раз в 10 минут
  * заглушка для восстановления вещания раз в во время или остановки, если в базе поменялось значение
  */
+
+use app\modules\vlc\components\mysql\MysqlQueryException;
+use app\modules\vlc\components\types\CamID;
+use app\modules\vlc\components\types\CamPrefix;
+use app\modules\vlc\components\types\UserID;
+use app\modules\vlc\components\vlc\CamControlArchive;
+
 require_once dirname(__FILE__) . '/../config.php';
 
 $db = open_db(MYHOST, MYUSER, MYPASS, MYDB);

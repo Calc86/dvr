@@ -8,9 +8,9 @@
 
 namespace app\modules\vlc\components\common;
 
-use app\modules\vlc\components\ICommand;
-use app\modules\vlc\components\ISystem;
-use app\modules\vlc\components\IUser;
+use app\modules\vlc\components\interfaces\ICommand;
+use app\modules\vlc\components\interfaces\ISystem;
+use app\modules\vlc\components\interfaces\IUser;
 use Exception;
 
 /**

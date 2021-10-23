@@ -2,6 +2,8 @@
 
 namespace app\modules\vlc\components\types;
 
+use app\modules\vlc\components\exceptions\StringException;
+
 class String extends Type{
     /**
      * @return string

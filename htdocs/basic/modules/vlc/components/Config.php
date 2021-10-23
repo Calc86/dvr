@@ -2,7 +2,8 @@
 
 namespace app\modules\vlc\components;
 
-use app\modules\vlc\types\CamPrefix;
+use app\modules\vlc\components\mysql\MysqlQueryException;
+use app\modules\vlc\components\types\CamPrefix;
 
 /**
  *
@@ -130,13 +131,13 @@ class Config {
         if(!$this->uid) return '';
         $buf = '';
 
-        $this->log = file_get_contents(ETC."/templates/logrotate.tmp.conf");
+        $log = file_get_contents(ETC."/templates/logrotate.tmp.conf");
 
         //$search =  $this->get_search();
 
         $search =  array('{log}','{user-id}');
         $replace = array(LOG,$this->uid);
 
-        return str_replace($search, $replace, $this->log);
+        return str_replace($search, $replace, $log);
     }
 }

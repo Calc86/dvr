@@ -9,7 +9,7 @@
 namespace app\modules\vlc\components\ffmpeg;
 
 use app\modules\vlc\components\common\Daemon;
-use app\modules\vlc\components\IDVR;
+use app\modules\vlc\components\interfaces\IDVR;
 use app\modules\vlc\components\telnet\Telnet;
 
 /**

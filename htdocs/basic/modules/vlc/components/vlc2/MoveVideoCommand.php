@@ -8,8 +8,9 @@
 
 namespace app\modules\vlc\components\vlc2;
 
-use app\modules\vlc\components\ICommand;
-use app\modules\vlc\types\BashCommand;
+use app\modules\vlc\components\common\Log;
+use app\modules\vlc\components\interfaces\ICommand;
+use app\modules\vlc\components\types\BashCommand;
 
 /**
  * Class MoveVideoCommand

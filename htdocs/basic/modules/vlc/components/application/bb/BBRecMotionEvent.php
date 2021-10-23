@@ -13,7 +13,8 @@ use app\modules\vlc\components\common\Event;
 use app\modules\vlc\components\common\Lock;
 use app\modules\vlc\components\common\Path;
 use app\modules\vlc\components\common\User;
-use app\modules\vlc\components\ICam;
+use app\modules\vlc\components\interfaces\ICam;
+use app\modules\vlc\components\motion\Motion;
 
 /**
  * Class BBRecMotionEvent

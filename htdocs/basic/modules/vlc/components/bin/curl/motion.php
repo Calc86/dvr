@@ -5,6 +5,9 @@
     также в будущем планируется исползовать для ресайза картинок от камер, так как они могут быть свосем уебищьными,
     а должны быть кратны 16
  */
+
+use app\modules\vlc\components\mysql\Database;
+
 require("/home/vlc/vlc/bin/config.php");
 
 set_time_limit(10);

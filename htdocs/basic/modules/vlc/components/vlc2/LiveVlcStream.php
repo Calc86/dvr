@@ -8,7 +8,7 @@
 
 namespace app\modules\vlc\components\vlc2;
 
-use app\modules\vlc\components\ICam;
+use app\modules\vlc\components\interfaces\ICam;
 
 /**
  * HTTP vlc stream

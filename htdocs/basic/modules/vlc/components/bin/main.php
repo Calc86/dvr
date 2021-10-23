@@ -6,16 +6,19 @@
  * Time: 14:25
  */
 
+use app\modules\vlc\components\common\Path;
+use app\modules\vlc\components\EchoLog;
+
 require_once __DIR__ . '/../config.php';
 
 require_once __DIR__ . '/include.php';
 
 date_default_timezone_set('Europe/Moscow');
 
-\system2\EchoLog::getInstance()->put(__FILE__, "main");
+EchoLog::getInstance()->put(__FILE__, "main");
 
 //if(file_exists(DIR.'/../tv')){
-if(file_exists(\system2\Path::getRoot().'/../tv')){
+if(file_exists(Path::getRoot().'/../tv')){
     $factory = \system2\TVFactory::getInstance();
 
 }

@@ -9,8 +9,10 @@
 namespace system2;
 
 use app\modules\vlc\components\common\Path;
-use app\modules\vlc\components\ICommand;
-use app\modules\vlc\types\BashCommand;
+use app\modules\vlc\components\interfaces\ICommand;
+use app\modules\vlc\components\mysql\Database;
+use app\modules\vlc\components\mysql\MysqlQueryException;
+use app\modules\vlc\components\types\BashCommand;
 
 /**
  * Удалить записи из mysql старше 30 дней, так же удалить файлы связанные с ними

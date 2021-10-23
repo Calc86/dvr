@@ -8,9 +8,9 @@
 
 namespace system2;
 
-use app\modules\vlc\components\ICam;
-use app\modules\vlc\components\ICamStream;
-use app\modules\vlc\components\ICommand;
+use app\modules\vlc\components\interfaces\ICam;
+use app\modules\vlc\components\interfaces\ICamStream;
+use app\modules\vlc\components\interfaces\ICommand;
 
 /**
  * Class BBTestInputFailSaveCommand

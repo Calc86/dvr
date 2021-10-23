@@ -9,7 +9,7 @@
 namespace app\modules\vlc\components\ffmpeg;
 
 use app\modules\vlc\components\common\Daemon;
-use app\modules\vlc\components\IDVR;
+use app\modules\vlc\components\interfaces\IDVR;
 
 /**
  * Class Vlc
@@ -33,7 +33,7 @@ class FFmpeg extends Daemon
      * @param $output
      * @param string $name
      */
-    function __construct(IDVR $dvr, $input, $output, string $name = 'ffmpeg')
+    function __construct(IDVR $dvr, string $input, $output, string $name = 'ffmpeg')
     {
         $this->dvr = $dvr;
         $this->input = $input;

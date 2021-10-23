@@ -8,10 +8,10 @@
 
 namespace app\modules\vlc\components\common;
 
-use app\modules\vlc\components\ICam;
-use app\modules\vlc\components\IDVR;
-use app\modules\vlc\components\IUser;
-use app\modules\vlc\types\BashCommand;
+use app\modules\vlc\components\interfaces\ICam;
+use app\modules\vlc\components\interfaces\IDVR;
+use app\modules\vlc\components\interfaces\IUser;
+use app\modules\vlc\components\types\BashCommand;
 
 /**
  * Class DVR

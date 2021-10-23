@@ -4,10 +4,10 @@ namespace app\modules\vlc\components\vlc;
 
 use app\modules\vlc\components\exceptions\MysqlQueryException;
 use app\modules\vlc\components\exceptions\PathException;
-use app\modules\vlc\types\CamID;
-use app\modules\vlc\types\CamPrefix;
-use app\modules\vlc\types\UserID;
-use app\modules\vlc\types\YesNo;
+use app\modules\vlc\components\types\CamID;
+use app\modules\vlc\components\types\CamPrefix;
+use app\modules\vlc\components\types\UserID;
+use app\modules\vlc\components\types\YesNo;
 
 /**
  * Class обертка для класса vlc, так как rpc почему-то вызывается не с прямыми параметрами, а в виде массива

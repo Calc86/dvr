@@ -8,6 +8,8 @@
 
 namespace system2;
 
+use app\modules\vlc\components\mysql\Database;
+use app\modules\vlc\components\mysql\MysqlQueryException;
 use app\modules\vlc\components\vlc2\RecVlcStream;
 
 /**

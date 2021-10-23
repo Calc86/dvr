@@ -2,20 +2,22 @@
 
 namespace app\modules\vlc\components\vlc;
 
+use app\modules\vlc\components\Config;
 use app\modules\vlc\components\exceptions\MysqlQueryException;
 use app\modules\vlc\components\exceptions\PathException;
+use app\modules\vlc\components\mysql\Database;
 use app\modules\vlc\components\nas\Nas;
 use app\modules\vlc\components\telnet\Telnet;
-use app\modules\vlc\types\BashCommand;
-use app\modules\vlc\types\CamID;
-use app\modules\vlc\types\CamPrefix;
-use app\modules\vlc\types\IP;
-use app\modules\vlc\types\Path;
-use app\modules\vlc\types\Port;
-use app\modules\vlc\types\UserID;
-use app\modules\vlc\types\VLMInput;
-use app\modules\vlc\types\WebProto;
-use app\modules\vlc\types\YesNo;
+use app\modules\vlc\components\types\BashCommand;
+use app\modules\vlc\components\types\CamID;
+use app\modules\vlc\components\types\CamPrefix;
+use app\modules\vlc\components\types\IP;
+use app\modules\vlc\components\types\Path;
+use app\modules\vlc\components\types\Port;
+use app\modules\vlc\components\types\UserID;
+use app\modules\vlc\components\types\VLMInput;
+use app\modules\vlc\components\types\WebProto;
+use app\modules\vlc\components\types\YesNo;
 use Exception;
 
 /**
@@ -33,7 +35,7 @@ class Vlc
      */
     protected array $dirs = array();
     /**
-     * @var config Класс для генерации конфиг файлов
+     * @var Config Класс для генерации конфиг файлов
      */
     protected $config;
     /**
@@ -96,15 +98,15 @@ class Vlc
     }
 
     /**
-     * @param \config $config
+     * @param Config $config
      */
-    public function setConfig($config)
+    public function setConfig(Config $config)
     {
         $this->config = $config;
     }
 
     /**
-     * @return \config
+     * @return Config
      */
     public function getConfig()
     {

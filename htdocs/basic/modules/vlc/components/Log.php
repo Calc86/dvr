@@ -8,7 +8,7 @@
 
 namespace app\modules\vlc\components;
 
-use app\modules\vlc\types\UserID;
+use app\modules\vlc\components\types\UserID;
 
 /**
  * Class Log

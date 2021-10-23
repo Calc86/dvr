@@ -4,6 +4,8 @@
  * 
  */
 
+use app\modules\vlc\components\mysql\MysqlQueryException;
+
 require_once dirname(__FILE__) . '/../config.php';
 
 $db = open_db(MYHOST, MYUSER, MYPASS, MYDB);

@@ -8,8 +8,8 @@
 
 namespace app\modules\vlc\components\interfaces;
 
-use system2\Event;
-use system2\Lock;
+use app\modules\vlc\components\common\Event;
+use app\modules\vlc\components\common\Lock;
 
 /**
  * Общий интерфейс системы

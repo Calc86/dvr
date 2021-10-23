@@ -2,17 +2,17 @@
 
 namespace app\modules\vlc\components\vlc;
 
-use app\modules\vlc\types\CamID;
-use app\modules\vlc\types\CamPrefix;
-use app\modules\vlc\types\IP;
-use app\modules\vlc\types\Path;
-use app\modules\vlc\types\Port;
-use app\modules\vlc\types\UserID;
-use app\modules\vlc\types\VLMCommand;
-use app\modules\vlc\types\VLMInput;
-use app\modules\vlc\types\VLMOutput;
-use app\modules\vlc\types\WebProto;
-use app\modules\vlc\types\YesNo;
+use app\modules\vlc\components\types\CamID;
+use app\modules\vlc\components\types\CamPrefix;
+use app\modules\vlc\components\types\IP;
+use app\modules\vlc\components\types\Path;
+use app\modules\vlc\components\types\Port;
+use app\modules\vlc\components\types\UserID;
+use app\modules\vlc\components\types\VLMCommand;
+use app\modules\vlc\components\types\VLMInput;
+use app\modules\vlc\components\types\VLMOutput;
+use app\modules\vlc\components\types\WebProto;
+use app\modules\vlc\components\types\YesNo;
 
 class CamControl extends CamVlm
 {

@@ -9,8 +9,11 @@
 namespace system2;
 
 use app\modules\vlc\components\common\EveryTimeCommandDecorator;
-use app\modules\vlc\components\ICam;
-use app\modules\vlc\components\ICommand;
+use app\modules\vlc\components\interfaces\ICam;
+use app\modules\vlc\components\interfaces\ICommand;
+use app\modules\vlc\components\motion\TimelapseCommand;
+use app\modules\vlc\components\mysql\Database;
+use app\modules\vlc\components\mysql\MysqlQueryException;
 
 /**
  * Занести Timelapse в базу данных

@@ -11,8 +11,8 @@ namespace app\modules\vlc\components\motion;
 use app\modules\vlc\components\common\BashCommand2;
 use app\modules\vlc\components\common\Log;
 use app\modules\vlc\components\common\Path;
-use app\modules\vlc\components\ICam;
-use app\modules\vlc\components\ICommand;
+use app\modules\vlc\components\interfaces\ICam;
+use app\modules\vlc\components\interfaces\ICommand;
 
 /**
  * Class TimelapseCommand

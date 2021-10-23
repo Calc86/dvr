@@ -8,7 +8,10 @@
 
 namespace app\modules\vlc\components\vlc2;
 
-use app\modules\vlc\components\ICam;
+use app\modules\vlc\components\common\Path;
+use app\modules\vlc\components\common\System;
+use app\modules\vlc\components\interfaces\ICam;
+use app\modules\vlc\components\TimeLock;
 
 /**
  * Класс для потока записи в файл

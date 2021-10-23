@@ -8,8 +8,10 @@
 
 namespace app\modules\vlc\components\vlc2;
 
-use app\modules\vlc\components\ICam;
-use app\modules\vlc\components\ICommand;
+use app\modules\vlc\components\common\Stream;
+use app\modules\vlc\components\common\System;
+use app\modules\vlc\components\interfaces\ICam;
+use app\modules\vlc\components\interfaces\ICommand;
 use Exception;
 
 /**

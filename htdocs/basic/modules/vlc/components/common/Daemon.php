@@ -2,8 +2,8 @@
 
 namespace app\modules\vlc\components\common;
 
-use app\modules\vlc\components\IDVR;
-use app\modules\vlc\types\BashCommand;
+use app\modules\vlc\components\interfaces\IDVR;
+use app\modules\vlc\components\types\BashCommand;
 use Exception;
 
 /**

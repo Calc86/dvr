@@ -8,13 +8,13 @@
 
 namespace app\modules\vlc\components\common;
 
-use app\modules\vlc\components\ICam;
-use app\modules\vlc\components\ICamSettings;
-use app\modules\vlc\components\ICamStream;
-use app\modules\vlc\components\ICommand;
-use app\modules\vlc\components\IDVR;
-use app\modules\vlc\components\ISystem;
-use app\modules\vlc\components\IUser;
+use app\modules\vlc\components\interfaces\ICam;
+use app\modules\vlc\components\interfaces\ICamSettings;
+use app\modules\vlc\components\interfaces\ICamStream;
+use app\modules\vlc\components\interfaces\ICommand;
+use app\modules\vlc\components\interfaces\IDVR;
+use app\modules\vlc\components\interfaces\ISystem;
+use app\modules\vlc\components\interfaces\IUser;
 
 /**
  * Основной класс для создания других классов

@@ -2,11 +2,11 @@
 
 namespace app\modules\vlc\components\nas;
 
-use app\modules\vlc\types\BashCommand;
-use app\modules\vlc\types\BashResult;
-use app\modules\vlc\types\IP;
-use app\modules\vlc\types\Path;
-use app\modules\vlc\types\YesNo;
+use app\modules\vlc\components\types\BashCommand;
+use app\modules\vlc\components\types\BashResult;
+use app\modules\vlc\components\types\IP;
+use app\modules\vlc\components\types\Path;
+use app\modules\vlc\components\types\YesNo;
 
 /**
  *

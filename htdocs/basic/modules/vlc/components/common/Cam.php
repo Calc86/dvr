@@ -8,10 +8,10 @@
 
 namespace app\modules\vlc\components\common;
 
-use app\modules\vlc\components\ICam;
-use app\modules\vlc\components\ICamSettings;
-use app\modules\vlc\components\ICamStream;
-use app\modules\vlc\components\IDVR;
+use app\modules\vlc\components\interfaces\ICam;
+use app\modules\vlc\components\interfaces\ICamSettings;
+use app\modules\vlc\components\interfaces\ICamStream;
+use app\modules\vlc\components\interfaces\IDVR;
 
 /**
  * Задает основной алгоритм работы камеры в системе (потоки и т.д.)

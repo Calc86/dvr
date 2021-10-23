@@ -8,7 +8,7 @@
 
 namespace app\modules\vlc\components\common;
 
-use app\modules\vlc\components\ICamSettings;
+use app\modules\vlc\components\interfaces\ICamSettings;
 
 /**
  * Основные настройки, которые необходимы для нашей системы

@@ -10,7 +10,7 @@ namespace app\modules\vlc\components\ffmpeg;
 
 
 use app\modules\vlc\components\common\Stream;
-use app\modules\vlc\components\ICam;
+use app\modules\vlc\components\interfaces\ICam;
 
 /**
  *

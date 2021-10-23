@@ -3,6 +3,9 @@
  * Скрипт запуска vlc без всяких файлов
  */
 
+use app\modules\vlc\components\types\UserID;
+use app\modules\vlc\components\vlc\Vlc;
+
 require_once dirname(__FILE__) . '/../config.php';
 
 $db = open_db(MYHOST, MYUSER, MYPASS, MYDB);

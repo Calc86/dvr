@@ -12,9 +12,9 @@ use app\modules\vlc\components\common\AbstractFactory;
 use app\modules\vlc\components\common\CamSettings;
 use app\modules\vlc\components\common\DVR;
 use app\modules\vlc\components\common\Streams;
-use app\modules\vlc\components\ICam;
-use app\modules\vlc\components\ICamStream;
-use app\modules\vlc\components\ISystem;
+use app\modules\vlc\components\interfaces\ICam;
+use app\modules\vlc\components\interfaces\ICamStream;
+use app\modules\vlc\components\interfaces\ISystem;
 use app\modules\vlc\components\vlc2\LiveVlcStream;
 use app\modules\vlc\components\vlc2\Vlc;
 

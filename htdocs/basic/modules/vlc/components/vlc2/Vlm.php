@@ -8,6 +8,8 @@
 
 namespace app\modules\vlc\components\vlc2;
 
+use app\modules\vlc\components\common\Log;
+
 /**
  * Vlm Vlc управление
  * Class Vlm

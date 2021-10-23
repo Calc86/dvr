@@ -3,10 +3,11 @@
 namespace app\modules\vlc\components\vlc;
 
 use app\modules\vlc\components\exceptions\MysqlQueryException;
-use app\modules\vlc\types\CamID;
-use app\modules\vlc\types\CamPrefix;
-use app\modules\vlc\types\UserID;
-use app\modules\vlc\types\YesNo;
+use app\modules\vlc\components\mysql\Database;
+use app\modules\vlc\components\types\CamID;
+use app\modules\vlc\components\types\CamPrefix;
+use app\modules\vlc\components\types\UserID;
+use app\modules\vlc\components\types\YesNo;
 
 class CamControlArchive extends CamControl
 {

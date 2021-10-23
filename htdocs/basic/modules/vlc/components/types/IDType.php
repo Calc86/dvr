@@ -2,6 +2,8 @@
 
 namespace app\modules\vlc\components\types;
 
+use app\modules\vlc\components\exceptions\NullIDException;
+
 class IDType extends Integer{
     public function get()
     {
