@@ -37,21 +37,21 @@ class BBFactory extends AbstractFactory
     {
         $system = parent::createSystem();
 
-        $e = new BBLogMotionEvent(Motion::EVENT_MOTION_START);
+        $e = new BBLogMotionEvent(Motion::EVENT_START);
         $system->addEventHandler($e);
 
-        $e = new BBLogMotionEvent(Motion::EVENT_MOTION_STOP);
+        $e = new BBLogMotionEvent(Motion::EVENT_STOP);
         $system->addEventHandler($e);
 
-        $e = new BBLogMotionEvent(Motion::EVENT_MOTION_DETECTED);
+        $e = new BBLogMotionEvent(Motion::EVENT_DETECTED);
         $system->addEventHandler($e);
 
         $e = new BBLogMotionEvent(Motion::EVENT_CAMERA_LOSS);
         $system->addEventHandler($e);
 
-        $recMotionEvent = new BBRecMotionEvent(Motion::EVENT_MOTION_START);
+        $recMotionEvent = new BBRecMotionEvent(Motion::EVENT_START);
         $system->addEventHandler($recMotionEvent);
-        $recMotionEvent = new BBRecMotionEvent(Motion::EVENT_MOTION_STOP);
+        $recMotionEvent = new BBRecMotionEvent(Motion::EVENT_STOP);
         $system->addEventHandler($recMotionEvent);
 
         //удалить записи старше 30 дней при каждом update

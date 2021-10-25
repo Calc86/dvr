@@ -12,12 +12,9 @@ use app\modules\dvr\components\interfaces\ICam;
 
 /**
  * Получает выход с live vlc потока (локальный)
- * Class VlcReStream
- * @package system2
  */
 abstract class VlcReStream extends VlcStream
 {
-
     /**
      * @var LiveVlcStream
      */
@@ -37,7 +34,7 @@ abstract class VlcReStream extends VlcStream
     /**
      * @return string
      */
-    protected function getInputVlm()
+    protected function getInputVlm(): string
     {
         return $this->live->getOutUrl();
     }

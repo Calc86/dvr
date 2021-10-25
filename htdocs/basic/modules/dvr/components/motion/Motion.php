@@ -18,20 +18,17 @@ use app\modules\dvr\components\interfaces\IDVR;
  */
 class Motion extends Daemon
 {
+    private const SHELL = '{bin} -c {config} -p {pid} {log}';
 
-    const EVENT_MOTION_START = 'motion_start';
-    const EVENT_MOTION_STOP = 'motion_stop';
-    const EVENT_MOTION_DETECTED = 'motion_detected';
+    const EVENT_START = 'motion_start';
+    const EVENT_STOP = 'motion_stop';
+    const EVENT_DETECTED = 'motion_detected';
     const EVENT_CAMERA_LOSS = 'motion_camera_lost';
 
     const TIMELAPSE = 'timelapse';
 
-    /**
-     * @var array of CamMotion
-     */
-    //private $camMotions = array();
-
-    protected $dvr;
+    protected IDVR $dvr;
+    protected Config $config;
 
     /**
      * Набор id камер
@@ -42,9 +39,12 @@ class Motion extends Daemon
     /**
      * @param IDVR $dvr
      * @param array $cams_id
+     * @param Config|null $config
      */
-    function __construct(IDVR $dvr, array $cams_id)
+    function __construct(IDVR $dvr, array $cams_id, ?Config $config = null)
     {
+        $this->config = $config ?? new Config();
+
         $this->dvr = $dvr;
         $this->cams_id = $cams_id;
         parent::__construct($this->dvr, "motion");
@@ -92,10 +92,10 @@ class Motion extends Daemon
 
         // Global options
         //TODO: избавиться от магических констант
-        $settings['webcontrol_port'] = MOTION_HTTP_PORT + $this->dvr->getID();
-        $settings['webcontrol_localhost'] = MOTION_HTTP_LOCALHOST;
-        $settings['webcontrol_html_output'] = MOTION_HTTP_HTML;
-        $settings['webcontrol_authentication'] = MOTION_HTTP_USER . ":" . MOTION_HTTP_PASS;
+        $settings['webcontrol_port'] = $this->config->httpPort + $this->dvr->getID();
+        $settings['webcontrol_localhost'] = $this->config->motionHttpLocalhost;
+        $settings['webcontrol_html_output'] = $this->config->html;
+        $settings['webcontrol_authentication'] = $this->config->user . ":" . $this->config->password;
 
         $f = fopen($this->getConfigFile(), "w+");
         fwrite($f, MotionConfig::parseConfig($config, $settings));
@@ -110,12 +110,20 @@ class Motion extends Daemon
     protected function getCommand(): string
     {
         $this->writeConfig();
-        if (MOTION_USE_LOG)
+        if ($this->config->useLog)
             $log = "-l {$this->getLogFile()}";
         else
             $log = '-l /dev/null';
 
-        return "motion -c {$this->getConfigFile()} -p {$this->getPidFile()} $log";
+        $params = [
+            'bin' => $this->config->motionPath,
+            'config' => $this->getConfigFile(),
+            'pid' => $this->getPidFile(),
+            'log' => $log,
+        ];
+
+        return $this->applyParams($params, self::SHELL);
+        //return "motion -c {$this->getConfigFile()} -p {$this->getPidFile()} $log";
     }
 
     /*public function _stop()

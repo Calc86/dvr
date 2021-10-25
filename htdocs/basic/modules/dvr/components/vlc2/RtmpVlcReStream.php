@@ -28,12 +28,9 @@ use app\modules\dvr\components\interfaces\ICam;
 
 /**
  * rtmp stream to nginx or other
- * Class RtmpVlcReStream
- * @package system2
  */
 class RtmpVlcReStream extends VlcReStream
 {
-
     /**
      * @param ICam $cam
      * @param LiveVlcStream $live

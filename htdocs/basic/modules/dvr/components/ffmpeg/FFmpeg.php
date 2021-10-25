@@ -12,28 +12,25 @@ use app\modules\dvr\components\common\Daemon;
 use app\modules\dvr\components\interfaces\IDVR;
 
 /**
- * Class Vlc
- * Используем VLC в качестве dvr
- * @package system2
+ *
  */
 class FFmpeg extends Daemon
 {
-
     /**
      * @var IDVR
      */
     protected IDVR $dvr;
 
     private string $input;
-    private $output;
+    private string $output;
 
     /**
      * @param IDVR $dvr
      * @param string $input
-     * @param $output
+     * @param string $output
      * @param string $name
      */
-    function __construct(IDVR $dvr, string $input, $output, string $name = 'ffmpeg')
+    function __construct(IDVR $dvr, string $input, string $output, string $name = 'ffmpeg')
     {
         $this->dvr = $dvr;
         $this->input = $input;
@@ -46,9 +43,7 @@ class FFmpeg extends Daemon
      */
     protected function getCommand(): string
     {
-        $ffmpeg = "ffmpeg $this->input $this->output >> {$this->getLogFile()} & ";
-
-        return $ffmpeg;
+        return "ffmpeg $this->input $this->output >> {$this->getLogFile()} & ";
     }
 
     /*protected function _stop()

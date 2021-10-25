@@ -15,8 +15,6 @@ use app\modules\dvr\components\TimeLock;
 
 /**
  * Класс для потока записи в файл
- * Class RecVlcStream
- * @package system2
  */
 class RecVlcStream extends VlcReStream
 {
@@ -104,7 +102,7 @@ class RecVlcStream extends VlcReStream
      */
     protected function moveToNfs()
     {
-        $this->log(__FUNCTION__);
+        $this->log(__METHOD__);
 
         $file = $this->oldRec;
         if ($file == '') return;

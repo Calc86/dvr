@@ -4,6 +4,7 @@ namespace app\modules\dvr\components\common;
 
 use app\modules\dvr\components\exceptions\CommandException;
 use app\modules\dvr\components\exceptions\StringException;
+use app\modules\dvr\components\Helpers;
 use app\modules\dvr\components\interfaces\IDVR;
 use app\modules\dvr\components\types\BashCommand;
 
@@ -31,11 +32,11 @@ abstract class Daemon
         return $this->dvr;
     }
 
-    private $pidFile;
-    private $configFile;
-    private $logFile;
+    private string $pidFile;
+    private string $configFile;
+    private string $logFile;
     private string $logrotateFile;
-    private $valgrindFile;  //memory leak
+    private string $valgrindFile;  //memory leak
 
     /**
      * @var bool
@@ -86,9 +87,9 @@ abstract class Daemon
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getConfigFile()
+    public function getConfigFile(): string
     {
         return $this->configFile;
     }
@@ -118,9 +119,9 @@ abstract class Daemon
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getLogFile()
+    public function getLogFile(): string
     {
         return $this->logFile;
     }
@@ -150,9 +151,9 @@ abstract class Daemon
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getValgrindFile()
+    public function getValgrindFile(): string
     {
         return $this->valgrindFile;
     }
@@ -166,9 +167,9 @@ abstract class Daemon
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getPidFile()
+    public function getPidFile(): string
     {
         return $this->pidFile;
     }
@@ -341,12 +342,6 @@ abstract class Daemon
     }
 
     protected function applyParams(array $params, string $command): string {
-        $keys = array_values($params);
-        $search = [];
-        foreach ($keys as $item)
-            $search[] = '{'.$item.'}';
-
-        $replace = array_keys($params);
-        return str_replace($search, $replace, $command);
+        return Helpers::applyParams($params, $command);
     }
 }

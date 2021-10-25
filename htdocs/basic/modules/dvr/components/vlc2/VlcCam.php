@@ -13,8 +13,6 @@ use app\modules\dvr\components\common\Streams;
 
 /**
  * Простая камера с вещанием прямого потока с камеры и записи его на диск.
- * Class VlcCam
- * @package system2
  */
 class VlcCam extends Cam
 {

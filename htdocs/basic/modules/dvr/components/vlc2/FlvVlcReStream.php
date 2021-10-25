@@ -10,12 +10,6 @@ namespace app\modules\dvr\components\vlc2;
 
 use app\modules\dvr\components\interfaces\ICam;
 
-define(
-    'VLC_FLV_STREAM_TRANSCODE_STRING',
-//'transcode{vcodec=FLV1,vb=4096,fps=25,deinterlace,scale=1,acodec=mp3,samplerate=44100,ab=128}:'
-    'transcode{vcodec=FLV1,vb=4096,fps=25,scale=1,acodec=mp3,samplerate=44100,ab=128}:'
-);
-
 /**
  * Ретранслировать live поток в FLV
  * Class FlvVlcReStream
@@ -23,6 +17,8 @@ define(
  */
 class FlvVlcReStream extends VlcReStream
 {
+    const TRANSCODE = 'transcode{vcodec=FLV1,vb=4096,fps=25,scale=1,acodec=mp3,samplerate=44100,ab=128}:';
+
     protected string $path = 'stream.flv';
 
     /**
@@ -35,20 +31,13 @@ class FlvVlcReStream extends VlcReStream
         parent::__construct($cam, $live, $streamName);
     }
 
-    /**
-     * @param string $transcode
-     * @return string
-     */
-    protected function getOutputVlm(string $transcode = VLC_FLV_STREAM_TRANSCODE_STRING): string
+    protected function getOutputVlm(string $transcode = self::TRANSCODE): string
     {
         //return parent::getOutputVlm("transcode{vcodec=FLV1,acodec=mp3,vb=200,deinterlace,fps=25,samplerate=44100,ab=32}:");
         //return parent::getOutputVlm("transcode{vcodec=FLV1,acodec=mp3,deinterlace,fps=25,samplerate=44100}:");
         return "#{$transcode}http{dst=*:$this->getPort()/$this->path}";
     }
 
-    /**
-     * @return int
-     */
     private function getPort(): int
     {
         return VLC_RE_FLV_PORT_START + $this->cam->getID();

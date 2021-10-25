@@ -6,19 +6,13 @@ use app\modules\dvr\components\interfaces\ICam;
 
 /**
  * Получить Flv поток из любой url, даже из файла
- * Class UrlFlvVlcStream
- * @package system2
  */
 class UrlFlvVlcStream extends VlcStream
 {
-    private $url;
+    private string $url;
+    private string $path;
 
-    /**
-     * @param ICam $cam
-     * @param $url
-     * @param string $streamName
-     */
-    function __construct(ICam $cam, $url, string $streamName = 'l_flv')
+    function __construct(ICam $cam, string $url, string $streamName = 'l_flv')
     {
         parent::__construct($cam, $streamName);
         $this->path = 'stream.flv';
@@ -26,9 +20,9 @@ class UrlFlvVlcStream extends VlcStream
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    protected function getInputVlm()
+    protected function getInputVlm(): string
     {
         return $this->url;
     }
@@ -37,7 +31,7 @@ class UrlFlvVlcStream extends VlcStream
      * @param string $transcode
      * @return string
      */
-    protected function getOutputVlm(string $transcode = VLC_FLV_STREAM_TRANSCODE_STRING): string
+    protected function getOutputVlm(string $transcode = FlvVlcReStream::TRANSCODE): string
     {
         //return parent::getOutputVlm("transcode{vcodec=FLV1,acodec=mp3,vb=200,deinterlace,fps=25,samplerate=44100,ab=32}:");
         //return parent::getOutputVlm("transcode{vcodec=FLV1,acodec=mp3,deinterlace,fps=25,samplerate=44100}:");
@@ -49,7 +43,6 @@ class UrlFlvVlcStream extends VlcStream
      */
     protected function getPort(): int
     {
-        return VLC_L_FLV_PORT_START + $this->cam->getID();
+        return VLC_L_FLV_PORT_START + $this->cam->getID();  // todo 20211025 change to Config
     }
-
 }

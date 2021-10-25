@@ -11,11 +11,11 @@ namespace app\modules\dvr\components\common;
 use app\modules\dvr\components\interfaces\ICamStream;
 
 /**
- * Class Streams
- * @package system2
+ * Предполагаю, что это композиция для объединения нескольких Streams в один общий интерфейс
  */
 class Streams extends Stream
 {
+    /** @var Stream[] */
     private array $streams = [];
 
     /**
@@ -25,19 +25,16 @@ class Streams extends Stream
     public function addStream(ICamStream $stream, string $name = '')
     {
         if ($name != '')
-            $this->streams[$name] = $stream;
+            $this->streams[$name] = $stream;    // Todo 20211025 подумать об этой логике
         else
             $this->streams[] = $stream;
     }
 
-    /**
-     * @param $name
-     * @return null|Stream
-     */
-    public function get($name): ?Stream
+    public function get(string $name): ?Stream
     {
-        if (isset($this->streams[$name])) return $this->streams[$name];
-        return null;
+        return $this->streams[$name] ?? null;
+//        if (isset($this->streams[$name])) return $this->streams[$name];
+//        return null;
     }
 
     public function create()
@@ -49,6 +46,9 @@ class Streams extends Stream
         }
     }
 
+    /**
+     * @return void
+     */
     public function _start()
     {
         foreach ($this->streams as $stream) {

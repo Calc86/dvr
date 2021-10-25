@@ -9,10 +9,9 @@
 namespace app\modules\dvr\components\interfaces;
 
 /**
- * Поток с камеры (любой, будь то live, запись, либо какие то routine при update
- * Interface ICamStream
- * @package system2
+ * Поток с камеры (любой, будь то live, запись, либо какие-то операции(routine) при обновлении(update)
  */
-interface ICamStream extends IControlled, ICreate, IDelete{
+interface ICamStream extends IControlled, ICreate, IDelete
+{
 
 }

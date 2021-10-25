@@ -20,6 +20,7 @@
       <w>fopen</w>
       <w>fstab</w>
       <w>fwrite</w>
+      <w>htstart</w>
       <w>idvr</w>
       <w>keyint</w>
       <w>lhttp</w>
@@ -45,6 +46,7 @@
       <w>timelapse</w>
       <w>timelock</w>
       <w>tlpwd</w>
+      <w>tlstart</w>
       <w>tmpfs</w>
       <w>transcode</w>
       <w>umount</w>

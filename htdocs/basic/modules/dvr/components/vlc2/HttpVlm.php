@@ -8,59 +8,63 @@
 
 namespace app\modules\dvr\components\vlc2;
 
+use app\modules\dvr\components\Helpers;
 use Exception;
 
 /**
  * HTTP interface for vlm
- * Class HttpVlm
- * @package system2
+ *
+ * https://wiki.videolan.org/VLC_HTTP_requests/
+ * vlm_cmd.xml:
+ * < execute VLM command <cmd>
+ * ?command=<cmd>
+ * > get the error message from <cmd>
  */
 class HttpVlm extends Vlm
 {
-    protected $ip;
-    protected $port;
-    protected $url;
+    private const VLM_COMMAND_URL = 'requests/vlm_cmd.xml?command=';
 
-    /**
-     * @param $camName
-     * @param $ip
-     * @param $port
-     */
-    public function __construct($camName, $ip, $port)
+    protected string $scheme = 'http';
+    protected string $host;
+    protected int $port;
+    protected string $url = self::VLM_COMMAND_URL;
+
+    public function __construct(string $camName, string $host, int $port)
     {
         parent::__construct($camName);
 
-        $this->ip = $ip;
+        $this->host = $host;
         $this->port = $port;
-        $this->url = 'requests/vlm_cmd.xml?command=';
     }
 
-    /**
-     * @return string
-     */
     public function getReturn(): string
     {
         return $this->return;
     }
 
-    /**
-     * @return string
-     */
     protected function getFullUrl(): string
     {
-        return "http://$this->ip:$this->port/$this->url";
+        $params = [
+            'scheme' => $this->scheme,
+            'host' => $this->host,
+            'port' => $this->port,
+            'url' => $this->url,
+        ];
+        $fullUrl = '{scheme}://{host}:{port}/{url}';
+        return Helpers::applyParams($params, $fullUrl);
+        //return "http://$this->host:$this->port/$this->url";
     }
 
     /**
      * @param $command
-     * @return mixed|void
+     * @return void
      */
     protected function _execute($command)
     {
         $this->return = '';
 
         try {
-            //Todo в будущих реализациях VLC (2.1.4 и далее) требуется авторизация.
+            //Todo 2014**** в будущих реализациях VLC (2.1.4 и далее) требуется авторизация.
             $this->return = file_get_contents($this->getFullUrl() . rawurlencode($command));
         } catch (Exception $e) {
             $this->log($e->getMessage());

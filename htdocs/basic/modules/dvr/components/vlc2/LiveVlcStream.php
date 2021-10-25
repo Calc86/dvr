@@ -8,23 +8,18 @@
 
 namespace app\modules\dvr\components\vlc2;
 
+use app\modules\dvr\components\Helpers;
 use app\modules\dvr\components\interfaces\ICam;
 
 /**
  * HTTP vlc stream
- * Class LiveVlcStream
- * @package system2
  */
 class LiveVlcStream extends VlcStream
 {
     protected string $mime = 'video/mp4';
     protected string $path = 'path.mp4';
 
-    /**
-     * @param ICam $cam
-     * @param string $streamName
-     */
-    function __construct(ICam $cam, $streamName = 'live')
+    function __construct(ICam $cam, string $streamName = 'live')
     {
         parent::__construct($cam, $streamName);
     }
@@ -38,7 +33,7 @@ class LiveVlcStream extends VlcStream
     }
 
     /**
-     * @param string $transcode
+     * @param string $transcode https://wiki.videolan.org/Documentation:Streaming_HowTo/Advanced_Streaming_Using_the_Command_Line/#transcode
      * @return string
      */
     protected function getOutputVlm(string $transcode = ''): string
@@ -63,7 +58,14 @@ class LiveVlcStream extends VlcStream
      */
     public function getOutUrl(string $ip = 'localhost'): string
     {
-        return "http://$ip:$this->getPort()/$this->path";
+        $params = [
+            'scheme' => 'http',
+            'host' => $ip,
+            'port' => $this->getPort(),
+            'path' => $this->path,
+        ];
+        return Helpers::applyParams($params, Helpers::URL);
+//        return "http://$ip:$this->getPort()/$this->path";
     }
 
     public function update()
@@ -72,17 +74,11 @@ class LiveVlcStream extends VlcStream
         $this->start();
     }
 
-    /**
-     * @param string $path
-     */
     public function setPath(string $path)
     {
         $this->path = $path;
     }
 
-    /**
-     * @param string $mime
-     */
     public function setMime(string $mime)
     {
         $this->mime = $mime;

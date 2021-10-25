@@ -13,8 +13,6 @@ use app\modules\dvr\components\interfaces\ICam;
 
 /**
  * Http live-streaming from vlc
- * Class HLSVlcStream
- * @package system2
  */
 class HLSVlcStream extends VlcReStream
 {
@@ -40,7 +38,8 @@ class HLSVlcStream extends VlcReStream
         $dvrID = $this->cam->getDVR()->getID();
         $path = $this->getPath();
         //$transcode = 'transcode{vcodec=FLV1,vb=4096,fps=25,scale=1,acodec=mp3,samplerate=44100,ab=128}:';
-        return "#{$transcode}std{access=livehttp{seglen=5,delsegs=true,numsegs=15,splitanywhere=true,index=$path/stream-$camID.m3u8,index-url=http://$liveHost/lhttp/$dvrID/stream-$camID-########.ts},mux=ts{use-key-frames},dst=$path/stream-$camID-########.ts}";
+        $scheme = 'http';   // todo 20211025
+        return "#{$transcode}std{access=livehttp{seglen=5,delsegs=true,numsegs=15,splitanywhere=true,index=$path/stream-$camID.m3u8,index-url=$scheme://$liveHost/lhttp/$dvrID/stream-$camID-########.ts},mux=ts{use-key-frames},dst=$path/stream-$camID-########.ts}";
         //$transcode = 'transcode{acodec=mp3}:';
         //return "#{$transcode}std{access=livehttp{seglen=5,delsegs=true,numsegs=15,index=$path/stream-{$camID}.m3u8,index-url=http://$liveHost/lhttp/{$dvrID}/stream-{$camID}-########.ts},mux=ts{use-key-frames},dst=$path/stream-$camID-########.ts}";
     }

@@ -13,9 +13,7 @@ use app\modules\dvr\components\interfaces\IDVR;
 use app\modules\dvr\components\telnet\Telnet;
 
 /**
- * Class Vlc
- * Используем VLC в качестве dvr
- * @package system2
+ * @deprecated заготовка под использование ffserver
  */
 class FFserver extends Daemon
 {
@@ -23,7 +21,7 @@ class FFserver extends Daemon
     /**
      * @var IDVR
      */
-    protected $dvr;
+    protected IDVR $dvr;
 
     /**
      * @param IDVR $dvr
@@ -32,7 +30,7 @@ class FFserver extends Daemon
     function __construct(IDVR $dvr, string $name = 'ffserver')
     {
         $this->dvr = $dvr;
-        parent::__construct($this->dvr, 'vlc');
+        parent::__construct($this->dvr, 'ffserver');
     }
 
     public function _start()

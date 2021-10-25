@@ -10,6 +10,8 @@ namespace app\modules\dvr\components\ffmpeg;
 
 
 use app\modules\dvr\components\common\Stream;
+use app\modules\dvr\components\exceptions\CommandException;
+use app\modules\dvr\components\exceptions\StringException;
 use app\modules\dvr\components\interfaces\ICam;
 
 /**
@@ -33,11 +35,18 @@ class NginxStream extends Stream
         $this->ffmpeg = new FFmpeg($this->cam->getDVR(), "-re -i $input", "$output/$name");
     }
 
+    /**
+     * @throws StringException
+     * @throws CommandException
+     */
     public function _start()
     {
         $this->ffmpeg->start();
     }
 
+    /**
+     * @throws StringException
+     */
     public function stop()
     {
         parent::stop();

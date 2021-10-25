@@ -12,18 +12,16 @@ use app\modules\dvr\components\common\Log;
 
 /**
  * Vlm Vlc управление
- * Class Vlm
- * @package system2
+ *
+ * https://wiki.videolan.org/Documentation:Streaming_HowTo/VLM/
+ *
  */
 abstract class Vlm
 {
     protected string $return = '';
-    protected $cam;
+    protected string $cam;
 
-    /**
-     * @param $camName
-     */
-    function __construct($camName)
+    function __construct(string $camName)
     {
         $this->cam = $camName;
     }
@@ -61,18 +59,13 @@ abstract class Vlm
     public function _setup($setup, bool $input = false)
     {
 
-        $direction = 'output';
-        if ($input) $direction = 'input';
+        $direction = $input ? 'input' : 'output';
 
         $command = "setup $this->cam $direction $setup";
         $this->execute($command);
     }
 
-    /**
-     * vlm control
-     * @param $command
-     */
-    public function _control($command)
+    public function _control(string $command)
     {
         $command = "control $this->cam $command";
         $this->execute($command);
@@ -97,10 +90,12 @@ abstract class Vlm
     /**
      * write message to log
      * @param $message
+     * @param string|null $module
      * @return void
      */
-    public function log($message)
+    public function log($message, string $module = null)
     {
-        Log::getInstance()->put($message, __CLASS__);
+        $module = $module ?? get_called_class();
+        Log::getInstance()->put($message, $module);
     }
 }

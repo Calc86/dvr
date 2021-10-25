@@ -36,12 +36,12 @@ abstract class Stream implements ICamStream
 
     public function create()
     {
-        $this->log(get_class($this) . ":" . __FUNCTION__);
+        $this->log(get_class($this) . ":" . __METHOD__);
     }
 
     public function delete()
     {
-        $this->log(__FUNCTION__);
+        $this->log(__METHOD__);
     }
 
     final public function start()
@@ -52,28 +52,31 @@ abstract class Stream implements ICamStream
         //если стрим disabled, то не стартуем
         if (!$this->isEnabled()) return;
 
-        $this->log(__FUNCTION__);
+        $this->log(__METHOD__);
 
         $this->_start();
     }
 
+    /**
+     * @return mixed
+     */
     abstract public function _start();
 
     public function stop()
     {
-        $this->log(__FUNCTION__);
+        $this->log(__METHOD__);
     }
 
     public function restart()
     {
-        $this->log(__FUNCTION__);
+        $this->log(__METHOD__);
         $this->stop();
         $this->start();
     }
 
     public function update()
     {
-        $this->log(__FUNCTION__);
+        $this->log(__METHOD__);
     }
 
     /**

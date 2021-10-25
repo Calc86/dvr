@@ -32,7 +32,7 @@ class BBRecMotionEvent extends Event
     {
         $stream = $cam->getStream()->get(Path::MOTION);
         if ($stream != null) {
-            if ($this->getName() == Motion::EVENT_MOTION_START) {
+            if ($this->getName() == Motion::EVENT_START) {
                 $this->setMotion(true, $cam);
                 /** @var BBCamSettings $cs */
                 $cs = $cam->getSettings();
@@ -41,7 +41,7 @@ class BBRecMotionEvent extends Event
                 $stream->start();
             }
 
-            if ($this->getName() == Motion::EVENT_MOTION_STOP) {
+            if ($this->getName() == Motion::EVENT_STOP) {
                 $this->setMotion(false, $cam);
                 $stream->stop();
             }

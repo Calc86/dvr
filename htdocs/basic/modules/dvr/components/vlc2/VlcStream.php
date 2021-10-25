@@ -16,37 +16,41 @@ use Exception;
 
 /**
  * vlm controlled stream
- * Class VlcStream
- * @package system2
  */
 abstract class VlcStream extends Stream
 {
+    private const CAM_PREFIX = 'CAM_';
 
     /**
      * @var ICommand|null
      */
     private ?ICommand $testInputCommand = null;
     protected HttpVlm $vlm;
-    private $streamName;
+    private string $streamName;
 
     /**
      * @param ICam $cam
-     * @param $streamName
+     * @param string $streamName
      */
-    public function __construct(ICam $cam, $streamName)
+    public function __construct(ICam $cam, string $streamName)
     {
         parent::__construct($cam);
         $this->streamName = $streamName;
-        $this->vlm = new HttpVlm($this->getVlcName(), 'localhost', HTSTART + $this->cam->getDVR()->getID());
+        $this->vlm = new HttpVlm(
+            $this->getVlcName(),
+            'localhost',   // todo 20211025 change to Config host
+            HTSTART + $this->cam->getDVR()->getID() // todo 20211025 change to Config port
+        );
     }
 
     /**
      * Получить полное имя стрима камеры
+     *
      * @return string
      */
     protected function getVlcName(): string
     {
-        return 'CAM_' . $this->cam->getID() . "_$this->streamName";
+        return self::CAM_PREFIX . $this->cam->getID() . "_$this->streamName";
     }
 
     /**
@@ -89,7 +93,7 @@ abstract class VlcStream extends Stream
         $url = parse_url($this->getInputVlm());
         if ($url['scheme'] != 'file') {
             $ip = $url['host'];
-            $a = explode('.', $ip);
+            $a = explode('.', $ip); // todo 20211025 check domain name
             if ($a[0] < 224) {    //no test for multicast
                 try {
                     $connection = fsockopen($url['host'], $url['port'], $err_no, $err_str, SOCKET_TIMEOUT);
@@ -101,6 +105,8 @@ abstract class VlcStream extends Stream
                     return false;
                 }
             }
+        } else {
+            return realpath($url['path']) !== false;
         }
         return true;
     }
@@ -112,6 +118,9 @@ abstract class VlcStream extends Stream
         if (!$this->testInput()) $this->stop();
     }
 
+    /**
+     * @return void
+     */
     public function _start()
     {
         if ($this->testInput()) {
