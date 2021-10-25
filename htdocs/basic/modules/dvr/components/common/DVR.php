@@ -8,6 +8,8 @@
 
 namespace app\modules\dvr\components\common;
 
+use app\modules\dvr\components\exceptions\CommandException;
+use app\modules\dvr\components\exceptions\StringException;
 use app\modules\dvr\components\interfaces\ICam;
 use app\modules\dvr\components\interfaces\IDVR;
 use app\modules\dvr\components\interfaces\IUser;
@@ -16,6 +18,8 @@ use app\modules\dvr\components\types\BashCommand;
 /**
  * Class DVR
  * Общий контроллер цифрового видео рекордера
+ *
+ * содержит демонов и камеры
  */
 class DVR implements IDVR
 {
@@ -26,10 +30,13 @@ class DVR implements IDVR
     protected IUser $user;
 
     /**
-     * @var array
+     * @var Daemon[]
      */
     private array $daemons = [];
 
+    /**
+     * @var ICam[]
+     */
     private array $cams = [];
 
     /**
@@ -88,6 +95,10 @@ class DVR implements IDVR
         return $ids;
     }
 
+    /**
+     * @throws StringException
+     * @throws CommandException
+     */
     public function start()
     {
         $this->log(__FUNCTION__);
@@ -96,6 +107,9 @@ class DVR implements IDVR
         $this->startCams();
     }
 
+    /**
+     * @throws StringException
+     */
     public function stop()
     {
         $this->log(__FUNCTION__);
@@ -104,6 +118,10 @@ class DVR implements IDVR
         $this->stopDaemons();
     }
 
+    /**
+     * @throws StringException
+     * @throws CommandException
+     */
     public function restart()
     {
         $this->log(__FUNCTION__);
@@ -121,18 +139,19 @@ class DVR implements IDVR
         $this->startCams();
     }
 
+    /**
+     * @throws StringException
+     */
     public function update()
     {
         $this->log(__FUNCTION__);
 
         foreach ($this->cams as $cam) {
-            /** @var $cam ICam */
             $cam->update();
         }
 
         //вставить в лог дату и время
         foreach ($this->daemons as $d) {
-            /** @var Daemon $d */
             $date = new BashCommand("echo `date` >> {$d->getLogFile()}");
             $date->exec();
         }
@@ -152,27 +171,31 @@ class DVR implements IDVR
     {
         $this->log(__FUNCTION__);
         foreach ($this->cams as $cam) {
-            /** @var $cam ICam */
             $cam->create();
             $cam->start();
         }
     }
 
+    /**
+     * @throws CommandException
+     * @throws StringException
+     */
     private function startDaemons()
     {
         $this->log(__FUNCTION__);
 
         foreach ($this->daemons as $daemon) {
-            /** @var $daemon Daemon */
             $daemon->start();
         }
     }
 
+    /**
+     * @throws StringException
+     */
     private function stopDaemons()
     {
         $this->log(__FUNCTION__);
         foreach ($this->daemons as $daemon) {
-            /** @var $daemon Daemon */
             $daemon->stop();
         }
     }
@@ -182,7 +205,6 @@ class DVR implements IDVR
         $this->log(__FUNCTION__);
 
         foreach ($this->cams as $cam) {
-            /** @var $cam ICam */
             $cam->stop();
             $cam->delete();
         }
