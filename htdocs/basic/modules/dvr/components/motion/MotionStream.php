@@ -8,11 +8,9 @@
 
 namespace app\modules\dvr\components\motion;
 
-use app\modules\dvr\components\common\Path;
 use app\modules\dvr\components\common\Stream;
 use app\modules\dvr\components\interfaces\ICam;
 use app\modules\dvr\components\interfaces\ICamSettings;
-use app\modules\dvr\components\TimeLock;
 
 /**
  * Stream для программы motion(Детектор движения), по умолчанию создает тучу картинок...
@@ -22,8 +20,8 @@ use app\modules\dvr\components\TimeLock;
 class MotionStream extends Stream
 {
 
-    private array $config = [];
-    private $lock;
+    private array $motionConfig = [];
+//    private $lock;
 
     /**
      * @param ICam $cam
@@ -33,13 +31,13 @@ class MotionStream extends Stream
     {
         parent::__construct($cam);
 
-        $this->lock = new TimeLock($this->cam->getID() . '_timelaps', TIME_LOCK_TIMELAPSE);
+//        $this->lock = new TimeLock($this->cam->getID() . '_timelaps', TIME_LOCK_TIMELAPSE);
 
         //create config file
         $motionUrl = $cs->getStopProto() . "://" . $cs->getIp() . ":" . $cs->getStopPort() . "/" . $cs->getStopPath();
         $this->addConfig('netcam_url', $motionUrl);
 
-        $proxyUrl = "http://localhost/out/snap.php?cid={$this->cam->getID()}";
+        $proxyUrl = "http://localhost/out/snap.php?cid={$this->cam->getID()}";  // todo 20211025 change host
         $this->addConfig('netcam_proxy', $proxyUrl);
 
         /*if($s['stop_user'] != ''){
@@ -47,19 +45,25 @@ class MotionStream extends Stream
             $this->addConfig('netcam_userpass', $userPass);
         }*/
 
-        $targetDir = Path::getTmpfsPath(Path::IMAGE . '/' . $this->cam->getDVR()->getUser()->getID() . '/' . $this->cam->getID());
+        $targetDir = $this->config->getTmpfsPath(
+            $this->config->image
+            . DIRECTORY_SEPARATOR . $this->cam->getDVR()->getUser()->getID()
+            . DIRECTORY_SEPARATOR . $this->cam->getID());
         $this->addConfig('target_dir', $targetDir);
 
         $path = dirname((new Motion($this->cam->getDVR(), array()))->getConfigFile());
-        $threadPath = $path . "/thread_" . $cam->getID() . ".conf";
+        $threadPath = $path .
+            DIRECTORY_SEPARATOR . "thread_" . $cam->getID() . ".conf";
 
-        $threadTemplatePath = Path::getPath(Path::getRoot(), Path::ETC) . "/templates/thread.conf";
+        $threadTemplatePath = $this->config->getPath(
+            $this->config->getRoot(), $this->config->etc)
+            . DIRECTORY_SEPARATOR . "/templates/thread.conf";
         $thread = file_get_contents($threadTemplatePath);
         $f = fopen($threadPath, "w+");
         fwrite($f, MotionConfig::parseConfig(
             $thread,
             array_merge(
-                $this->config,
+                $this->motionConfig,
                 array(
                     MotionHttpConfigCmd::P_STREAM_PORT => MOTION_STREAM_PORT + $cam->getID(),
                     MotionHttpConfigCmd::P_STREAM_LOCALHOST => MOTION_STREAM_LOCALHOST,
@@ -88,7 +92,7 @@ class MotionStream extends Stream
      */
     public function getConfig(): array
     {
-        return $this->config;
+        return $this->motionConfig;
     }
 
     /**
@@ -98,16 +102,17 @@ class MotionStream extends Stream
      */
     public function addConfig(String $name, String $value)
     {
-        $this->config[$name] = $value;
+        $this->motionConfig[$name] = $value;
     }
 
-    /**
-     * @return string
-     */
-    private function getImagesPath(): string
-    {
-        return '/' . $this->cam->getDVR()->getUser()->getID() . '/' . $this->cam->getID();
-    }
+//    /**
+//     * @return string
+//     */
+//    private function getImagesPath(): string
+//    {
+//        return DIRECTORY_SEPARATOR . $this->cam->getDVR()->getUser()->getID()
+//            . DIRECTORY_SEPARATOR . $this->cam->getID();
+//    }
 
     /*public function update()
     {
@@ -127,6 +132,9 @@ class MotionStream extends Stream
         //System::getInstance()->addCommand($move);
     }*/
 
+    /**
+     * @return void
+     */
     public function _start()
     {
         //создаем timelock

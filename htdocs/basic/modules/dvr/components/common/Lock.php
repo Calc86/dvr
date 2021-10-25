@@ -9,6 +9,9 @@
 namespace app\modules\dvr\components\common;
 
 
+use app\modules\dvr\components\exceptions\CommandException;
+use app\modules\dvr\components\exceptions\StringException;
+use app\modules\dvr\components\SystemConfig;
 use app\modules\dvr\components\types\BashCommand;
 
 /**
@@ -19,6 +22,7 @@ class Lock
 {
     private string $path;
     private string $fName;
+    private SystemConfig $config;
 
     const EXTENSION = '.lock';
 
@@ -27,12 +31,14 @@ class Lock
      */
     function __construct(string $fName)
     {
-
+        $this->config = new SystemConfig();
         $this->fName = $fName . Lock::EXTENSION;
 
         Log::getInstance()->put(__FUNCTION__, __CLASS__ . "-" . $this->fName);
 
-        $this->path = Path::getTmpfsPath(Path::LOCKS) . "/" . $this->fName;
+        $this->path = $this->config->getTmpfsPath(
+            $this->config->lock)
+            . DIRECTORY_SEPARATOR . $this->fName;
     }
 
     /**
@@ -62,11 +68,13 @@ class Lock
 
     /**
      *
+     * @throws CommandException|StringException
      */
     public static function resetAll()
     {
+        $config = new SystemConfig();   // todo 20211025
         Log::getInstance()->put(__FUNCTION__, __CLASS__);
-        $reset = new BashCommand("ls " . Path::getTmpfsPath(Path::LOCKS) . "/*" . Lock::EXTENSION . " | xargs rm");
+        $reset = new BashCommand("ls " . $config->getTmpfsPath($config->lock) . "/*" . Lock::EXTENSION . " | xargs rm");
         $reset->exec();
     }
 
@@ -87,7 +95,7 @@ class Lock
             if ($wait > $maxTimeout)
                 return false;
         }
-        return false;
+        //return false;
     }
 
     /**

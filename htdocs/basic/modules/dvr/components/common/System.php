@@ -8,9 +8,12 @@
 
 namespace app\modules\dvr\components\common;
 
+use app\modules\dvr\components\exceptions\CommandException;
+use app\modules\dvr\components\exceptions\StringException;
 use app\modules\dvr\components\interfaces\ICommand;
 use app\modules\dvr\components\interfaces\ISystem;
 use app\modules\dvr\components\interfaces\IUser;
+use app\modules\dvr\components\SystemConfig;
 use Exception;
 
 /**
@@ -23,6 +26,7 @@ class System implements ISystem
      * @var ?ISystem
      */
     private static ?ISystem $instance = null;
+    protected SystemConfig $config;
 
     /**
      * Команды вызываемые в конце update один раз метода, устанавливаются через addCommand();
@@ -63,7 +67,8 @@ class System implements ISystem
     {
         Log::getInstance()->put(__FUNCTION__, $this);
 
-        Path::createAll();
+        $this->config->createAll();
+//        Path::createAll();
 
         $this->lock = new Lock('system');
 
@@ -135,6 +140,8 @@ class System implements ISystem
 
     /**
      * @param $flag
+     * @noinspection PhpUnused
+     * todo 20211025 check
      */
     protected function resetFlag($flag)
     {
@@ -205,6 +212,10 @@ class System implements ISystem
         }
     }
 
+    /**
+     * @throws StringException
+     * @throws CommandException
+     */
     final public function stop()
     {
         Log::getInstance()->put(__FUNCTION__, $this);
@@ -245,6 +256,10 @@ class System implements ISystem
         //(new \BashCommand('php '.BIN.'util/rec-pts.php'))->exec();*/
     }
 
+    /**
+     * @throws StringException
+     * @throws CommandException
+     */
     final public function restart()
     {
         Log::getInstance()->put(__FUNCTION__, $this);
@@ -279,7 +294,8 @@ class System implements ISystem
     final private function executeCommands()
     {
         //одноразовые команды
-        while (($command = array_shift($this->commandsQueue)) != null) {
+        /** @noinspection PhpAssignmentInConditionInspection */
+        while (($command = array_shift($this->commandsQueue)) != null) {    // todo 20211025 check
             /** @var $command ICommand */
             $command->execute();
         }
@@ -306,6 +322,9 @@ class System implements ISystem
         }
     }
 
+    /**
+     * @return void
+     */
     public function control()
     {
 
@@ -381,6 +400,9 @@ class System implements ISystem
     /*protected function _recPts(){
 
     }*/
+    /**
+     * @return void
+     */
     public function clear()
     {
     }

@@ -30,7 +30,7 @@ class BBRecMotionEvent extends Event
      */
     public function handle($user, $cam, $timestamp, array $params)
     {
-        $stream = $cam->getStream()->get(Path::MOTION);
+        $stream = $cam->getStream()->get($this->config->motion);
         if ($stream != null) {
             if ($this->getName() == Motion::EVENT_START) {
                 $this->setMotion(true, $cam);

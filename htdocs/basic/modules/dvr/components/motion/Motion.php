@@ -28,7 +28,7 @@ class Motion extends Daemon
     const TIMELAPSE = 'timelapse';
 
     protected IDVR $dvr;
-    protected Config $config;
+    protected \app\modules\dvr\components\common\DaemonConfig $config;
 
     /**
      * Набор id камер
@@ -52,7 +52,8 @@ class Motion extends Daemon
 
     private function writeConfig()
     {
-        $motionTemplatePath = Path::getPath(Path::getRoot(), Path::ETC) . "/templates/motion.conf";
+        $motionTemplatePath = $this->config->getPath(
+            $this->config->getRoot(), $this->config->etc) . "/templates/motion.conf";
         //$threadTemplatePath = Path::getLocalPath(Path::ETC)."/templates/thread.conf";
         $config = file_get_contents($motionTemplatePath);
         //$thread = file_get_contents($threadTemplatePath);

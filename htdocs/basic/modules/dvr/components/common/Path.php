@@ -8,10 +8,14 @@
 
 namespace app\modules\dvr\components\common;
 
+use app\modules\dvr\components\SystemConfig;
+
 /**
  * Class Path
  * @package system2
  * Управление нашими путями
+ *
+ * @deprecated 20211025 Use SystemConfig
  */
 class Path
 {

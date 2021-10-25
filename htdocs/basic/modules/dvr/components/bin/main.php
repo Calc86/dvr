@@ -9,7 +9,7 @@
 use app\modules\dvr\components\common\Path;
 use app\modules\dvr\components\EchoLog;
 
-require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../Сonfig.php';
 
 //require_once __DIR__ . '/include.php';
 

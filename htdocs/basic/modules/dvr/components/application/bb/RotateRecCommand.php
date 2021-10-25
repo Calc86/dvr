@@ -8,10 +8,11 @@
 
 namespace system2;
 
-use app\modules\dvr\components\common\Path;
+use app\modules\dvr\components\exceptions\StringException;
 use app\modules\dvr\components\interfaces\ICommand;
 use app\modules\dvr\components\mysql\Database;
 use app\modules\dvr\components\mysql\MysqlQueryException;
+use app\modules\dvr\components\SystemConfig;
 use app\modules\dvr\components\types\BashCommand;
 
 /**
@@ -20,13 +21,20 @@ use app\modules\dvr\components\types\BashCommand;
  * @package system2
  */
 class RotateRecCommand implements ICommand {
+    private SystemConfig $config;
+
+    public function __construct()
+    {
+        $this->config = new SystemConfig(); // todo 20211025
+    }
+
     /**
      * @return void
-     * @throws MysqlQueryException
+     * @throws MysqlQueryException|StringException
      */
     public function execute()
     {
-        $time = time() - RECORDS_KEEP * 24 * 60 * 60;
+        $time = time() - $this->config->recordsTTL * 24 * 60 * 60;
         $q_files = "select file from archive where date_end < $time";
         $q_delete = "delete from archive where date_end < $time";
         $r = Database::getInstance()->query($q_files);
@@ -42,7 +50,7 @@ class RotateRecCommand implements ICommand {
 
         Database::getInstance()->query($q_delete);
 
-        $path = Path::getNfsPath(Path::RECORD);
+        $path = $this->config->getNfsPath($this->config->record);
         $keep = RECORDS_KEEP + 1;
         $files = new BashCommand("find $path/* -mtime +$keep -exec rm {} \;");
         //echo $files."\n";

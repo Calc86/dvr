@@ -30,7 +30,7 @@ class Vlc extends Daemon
      * @var IDVR
      */
     protected IDVR $dvr;
-    protected Config $config;
+    protected \app\modules\dvr\components\common\DaemonConfig $config;
 
     private int $httpPort;
     private int $telnetPort;

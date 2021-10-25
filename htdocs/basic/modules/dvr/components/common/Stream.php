@@ -10,6 +10,7 @@ namespace app\modules\dvr\components\common;
 
 use app\modules\dvr\components\interfaces\ICam;
 use app\modules\dvr\components\interfaces\ICamStream;
+use app\modules\dvr\components\SystemConfig;
 
 /**
  * Камера системы имеет разные потоки, локальные и внешние, либо потоки записи/декодирования
@@ -20,6 +21,7 @@ abstract class Stream implements ICamStream
 {
 
     private bool $enabled = true;
+    protected SystemConfig $config;
 
     /**
      * @var ICam
@@ -32,6 +34,7 @@ abstract class Stream implements ICamStream
     function __construct(ICam $cam)
     {
         $this->cam = $cam;
+        $this->config = new SystemConfig(); // todo 20211025 add confgi to constructor or singleton
     }
 
     public function create()

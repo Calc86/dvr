@@ -49,7 +49,8 @@ class HLSVlcStream extends VlcReStream
      */
     protected function getPath(): string
     {
-        return Path::getTmpfsPath(Path::LIVE_HTTP . '/' . $this->cam->getDVR()->getUser()->getID());
+        return $this->config->getTmpfsPath($this->config->liveHttp
+            . DIRECTORY_SEPARATOR . $this->cam->getDVR()->getUser()->getID());
     }
 
     public function stop()

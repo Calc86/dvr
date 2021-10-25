@@ -9,6 +9,7 @@
 namespace app\modules\dvr\components\common;
 
 use app\modules\dvr\components\interfaces\ICommand;
+use app\modules\dvr\components\SystemConfig;
 use app\modules\dvr\components\types\BashCommand;
 
 /**
@@ -19,7 +20,7 @@ use app\modules\dvr\components\types\BashCommand;
  */
 class MoveToNfsCommand implements ICommand
 {
-
+    private SystemConfig $config;
     private string $pathFrom;
     private string $pathTo;
 
@@ -29,8 +30,9 @@ class MoveToNfsCommand implements ICommand
      */
     function __construct(string $pathFrom, string $pathTo)
     {
+        $this->config = new SystemConfig(); // todo 20211025
         $this->pathFrom = $pathFrom;
-        $this->pathTo = Path::getNfsPath(dirname($pathTo)) . "/" . basename($pathTo);
+        $this->pathTo = $this->config->getNfsPath(dirname($pathTo)) . "/" . basename($pathTo);
     }
 
     /**

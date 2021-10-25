@@ -6,7 +6,7 @@ use app\modules\dvr\components\mysql\MysqlQueryException;
 use app\modules\dvr\components\types\CamPrefix;
 
 /**
- *
+ * @deprecated from System 1
  */
 class Config {
     protected $uid;

@@ -16,13 +16,16 @@ use app\modules\dvr\components\types\BashCommand;
  */
 abstract class Daemon
 {
-
-    /**
-     * @var string Daemon name
-     */
+    /** @var string Daemon name */
     private string $name;
-
+    /** @var DaemonConfig */
+    protected DaemonConfig $config;
     private IDVR $dvr;
+    private string $pidFile;
+    private string $configFile;
+    private string $logFile;
+    private string $logrotateFile;
+    private string $valgrindFile;  //memory leak
 
     /**
      * @return IDVR
@@ -32,11 +35,6 @@ abstract class Daemon
         return $this->dvr;
     }
 
-    private string $pidFile;
-    private string $configFile;
-    private string $logFile;
-    private string $logrotateFile;
-    private string $valgrindFile;  //memory leak
 
     /**
      * @var bool
@@ -50,21 +48,41 @@ abstract class Daemon
      */
     function __construct(IDVR $dvr, string $name = 'daemon', ?DaemonConfig $config = null)
     {
+        $this->config = new DaemonConfig();
         $this->dvr = $dvr;
         $this->name = $name;
 
         $this->log(__FUNCTION__);
 
-        // todo 20211023 move to daemon config all log sile settings
-        $this->setLogFile(Path::getLocalPath(Path::LOG . "/{$this->dvr->getID()}") . "/{$this->getName()}.log");
+        //$this->setLogFile(Path::getLocalPath(Path::LOG . "/{$this->dvr->getID()}") . "/{$this->getName()}.log");
+        $this->logFile = $this->config->getLocalPath(
+            $this->config->log
+            . DIRECTORY_SEPARATOR . "{$this->dvr->getID()}")
+            . DIRECTORY_SEPARATOR . "$this->name.log";
 
-        $this->setConfigFile(Path::getLocalPath(Path::ETC . "/{$this->dvr->getID()}") . "/{$this->getName()}.conf");
+       // $this->setConfigFile(Path::getLocalPath(Path::ETC . "/{$this->dvr->getID()}") . "/{$this->getName()}.conf");
+        $this->configFile = $this->config->getLocalPath(
+            $this->config->etc
+            . DIRECTORY_SEPARATOR . "{$this->dvr->getID()}")
+            . DIRECTORY_SEPARATOR . "$this->name.conf";
 
-        $this->setPidFile(Path::getLocalPath(Path::PROCESS . "/{$this->dvr->getID()}") . "/{$this->getName()}.pid");
+        //$this->setPidFile(Path::getLocalPath(Path::PROCESS . "/{$this->dvr->getID()}") . "/{$this->getName()}.pid");
+        $this->pidFile = $this->config->getLocalPath(
+            $this->config->proc
+            . DIRECTORY_SEPARATOR . "{$this->dvr->getID()}")
+            . DIRECTORY_SEPARATOR . "$this->name.pid";
 
-        $this->setLogrotateFile(Path::getLocalPath(Path::ETC . "/{$this->dvr->getID()}") . "/{$this->getName()}.conf");
+        //$this->setLogrotateFile(Path::getLocalPath(Path::ETC . "/{$this->dvr->getID()}") . "/{$this->getName()}.conf");
+        $this->logrotateFile = $this->config->getLocalPath(
+            $this->config->etc
+            . DIRECTORY_SEPARATOR . "{$this->dvr->getID()}")
+            . DIRECTORY_SEPARATOR . "$this->name.conf";
 
-        $this->setValgrindFile(Path::getLocalPath(Path::LOG . "/{$this->dvr->getID()}") . "/{$this->getName()}.valgrind");
+        //$this->setValgrindFile(Path::getLocalPath(Path::LOG . "/{$this->dvr->getID()}") . "/{$this->getName()}.valgrind");
+        $this->valgrindFile = $this->config->getLocalPath(
+            $this->config->log
+            . DIRECTORY_SEPARATOR . "{$this->dvr->getID()}")
+            . DIRECTORY_SEPARATOR . "$this->name.valgrind";
     }
 
     /**
@@ -79,14 +97,6 @@ abstract class Daemon
     }
 
     /**
-     * @param $configFile
-     */
-    private function setConfigFile($configFile)
-    {
-        $this->configFile = $configFile;
-    }
-
-    /**
      * @return string
      */
     public function getConfigFile(): string
@@ -95,27 +105,11 @@ abstract class Daemon
     }
 
     /**
-     * @param $logFile
-     */
-    private function setLogFile($logFile)
-    {
-        $this->logFile = $logFile;
-    }
-
-    /**
      * @return string
      */
     private function getLogrotateFile(): string
     {
         return $this->logrotateFile;
-    }
-
-    /**
-     * @param $logrotateFile
-     */
-    private function setLogrotateFile($logrotateFile)
-    {
-        $this->logrotateFile = $logrotateFile;
     }
 
     /**
@@ -143,27 +137,11 @@ abstract class Daemon
     }
 
     /**
-     * @param mixed $valgrindFile
-     */
-    private function setValgrindFile($valgrindFile)
-    {
-        $this->valgrindFile = $valgrindFile;
-    }
-
-    /**
      * @return string
      */
     public function getValgrindFile(): string
     {
         return $this->valgrindFile;
-    }
-
-    /**
-     * @param $pidFile
-     */
-    private function setPidFile($pidFile)
-    {
-        $this->pidFile = $pidFile;
     }
 
     /**
@@ -200,7 +178,7 @@ abstract class Daemon
     final public function start()
     {
         if ($this->isStarted()) {
-            $this->log($this->getName() . " для пользователя {$this->dvr->getID()} уже запущен или мертв", __CLASS__);
+            $this->log($this->name . " для пользователя {$this->dvr->getID()} уже запущен или мертв", __CLASS__);
 
             return;
         }
@@ -226,7 +204,7 @@ abstract class Daemon
         $this->log(__FUNCTION__);
 
         if (!$this->isStarted()) {
-            $this->log($this->getName() . " not started", __CLASS__);
+            $this->log($this->name . " not started", __CLASS__);
             return;
         }
 
@@ -338,7 +316,7 @@ abstract class Daemon
      */
     public function log(string $message, string $module = null)
     {
-        Log::getInstance($this->dvr->getID())->put($message, $module ?? __CLASS__ . "({$this->getName()})");
+        Log::getInstance($this->dvr->getID())->put($message, $module ?? __CLASS__ . "($this->name)");
     }
 
     protected function applyParams(array $params, string $command): string {

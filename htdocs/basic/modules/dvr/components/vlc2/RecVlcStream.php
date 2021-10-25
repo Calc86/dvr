@@ -8,7 +8,6 @@
 
 namespace app\modules\dvr\components\vlc2;
 
-use app\modules\dvr\components\common\Path;
 use app\modules\dvr\components\common\System;
 use app\modules\dvr\components\interfaces\ICam;
 use app\modules\dvr\components\TimeLock;
@@ -19,11 +18,11 @@ use app\modules\dvr\components\TimeLock;
 class RecVlcStream extends VlcReStream
 {
     /**
-     * @var TimeLock|null для update
+     * @var TimeLock для update
      */
-    private ?TimeLock $lock = null;
-    private int $timeLock = 0;
-    private string $streamPath = '';
+    private TimeLock $lock;
+//    private int $timeLock = 0;
+    private string $streamName;
 
     /**
      * Переменная для хранения старого имени файла
@@ -35,13 +34,13 @@ class RecVlcStream extends VlcReStream
      * @param ICam $cam
      * @param LiveVlcStream $live
      * @param int $timeLock
-     * @param string $streamPath
+     * @param string $streamName
      */
-    function __construct(ICam $cam, LiveVlcStream $live, $timeLock = TIME_LOCK_RECORD, string $streamPath = Path::RECORD)
+    function __construct(ICam $cam, LiveVlcStream $live, $timeLock = TIME_LOCK_RECORD, string $streamName = 'rec')
     {
-        parent::__construct($cam, $live, $streamPath);
+        parent::__construct($cam, $live, $streamName);
 
-        $this->streamPath = $streamPath;
+        $this->streamName = $streamName;
 
         $this->lock = new TimeLock($this->getVlcName(), $timeLock);
     }
@@ -52,7 +51,8 @@ class RecVlcStream extends VlcReStream
      */
     protected function getRecFilePath(): string
     {
-        return Path::getTmpfsPath(Path::TEMP) . "/{$this->cam->getID()}_$this->streamPath.file";
+        return $this->config->getTmpfsPath($this->config->tmp)
+            . DIRECTORY_SEPARATOR . "{$this->cam->getID()}_$this->streamName.file";
     }
 
     /**
@@ -65,9 +65,9 @@ class RecVlcStream extends VlcReStream
         $date = date("Ymd");
         $time = date("His");
 
-        $path = $this->streamPath . "/{$this->cam->getDVR()->getID()}/$date";
-        Path::getNfsPath($path);    //create dir on NFS
-        $realPath = Path::getTmpfsPath($path);
+        $path = $this->streamName . DIRECTORY_SEPARATOR . "{$this->cam->getDVR()->getID()}/$date";
+        $this->config->getNfsPath($path);    //create dir on NFS
+        $realPath = $this->config->getTmpfsPath($path);
 
         $filePath = "$realPath/{$this->cam->getID()}_$time";
 
@@ -83,7 +83,7 @@ class RecVlcStream extends VlcReStream
      */
     protected function getNfsPath(): string
     {
-        return str_replace(Path::TMPFS, Path::NFS, $this->oldRec);
+        return str_replace($this->config->tmpFs, $this->config->nfs, $this->oldRec);
     }
 
     /**

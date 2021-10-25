@@ -168,10 +168,10 @@ class BBFactory extends AbstractFactory
         $rec->setTestInputCommand(new BBTestInputFailSaveCommand($cam, $rec));
         $stream->addStream($rec);
 
-        $mtn = new BBRecStream($cam, $live, TIME_LOCK_RECORD, Path::MOTION);
+        $mtn = new BBRecStream($cam, $live, TIME_LOCK_RECORD, $this->config->motion);
         $mtn->setEnabled($cs->live && $cs->mtn && BBRecMotionEvent::isMotion($cam));
         $mtn->setTestInputCommand(new BBTestInputFailSaveCommand($cam, $mtn));
-        $stream->addStream($mtn, Path::MOTION);
+        $stream->addStream($mtn, $this->config->motion);
 
         //motion flv stream
         $flv = new UrlFlvVlcStream($cam, "http://localhost:" . (MOTION_STREAM_PORT + $cam->getID()));

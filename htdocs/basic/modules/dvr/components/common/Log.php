@@ -8,6 +8,8 @@
 
 namespace app\modules\dvr\components\common;
 
+use app\modules\dvr\components\SystemConfig;
+
 /**
  * Class Log
  * @package system2
@@ -21,6 +23,7 @@ class Log
     private int $userID;
     private string $logPath;
     private static ?Log $instance = null;
+    private SystemConfig $config;
 
     /**
      * @param int $userID
@@ -45,8 +48,11 @@ class Log
     {
         if ($userID != null) $this->setUserID($userID);
         else $this->userID = 0;
+        $this->config = new SystemConfig();
 
-        $this->setLogPath(Path::getLocalPath(Path::LOG) . "/system.log");
+        $this->setLogPath(
+            $this->config->getLocalPath($this->config->log)
+            . DIRECTORY_SEPARATOR . "system.log");
     }
 
     /**

@@ -10,9 +10,9 @@ namespace app\modules\dvr\components\motion;
 
 use app\modules\dvr\components\common\BashCommand2;
 use app\modules\dvr\components\common\Log;
-use app\modules\dvr\components\common\Path;
 use app\modules\dvr\components\interfaces\ICam;
 use app\modules\dvr\components\interfaces\ICommand;
+use app\modules\dvr\components\SystemConfig;
 
 /**
  * Class TimelapseCommand
@@ -24,6 +24,7 @@ class TimelapseCommand implements ICommand
      * @var ICam
      */
     private ICam $cam;
+    private SystemConfig $config;
 
     private int $startTime;
     private int $endTime;
@@ -33,6 +34,7 @@ class TimelapseCommand implements ICommand
      */
     function __construct(ICam $cam)
     {
+        $this->config = new SystemConfig();
         $this->cam = $cam;
     }
 
@@ -44,7 +46,7 @@ class TimelapseCommand implements ICommand
         $userID = $this->cam->getDVR()->getUser()->getID();
         $camID = $this->cam->getID();
 
-        return Path::IMAGE . "/$userID/$camID";
+        return $this->config->image . DIRECTORY_SEPARATOR . "$userID/$camID";
     }
 
     /**
@@ -52,7 +54,7 @@ class TimelapseCommand implements ICommand
      */
     public function getTmpPath(): string
     {
-        return Path::getTmpfsPath($this->getImagesPath());
+        return $this->config->getTmpfsPath($this->getImagesPath());
     }
 
     /**
@@ -60,7 +62,7 @@ class TimelapseCommand implements ICommand
      */
     public function getNfsPath(): string
     {
-        return Path::getNfsPath($this->getImagesPath());
+        return $this->config->getNfsPath($this->getImagesPath());
     }
 
     /**

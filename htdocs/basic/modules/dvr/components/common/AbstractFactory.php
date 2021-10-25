@@ -15,6 +15,7 @@ use app\modules\dvr\components\interfaces\ICommand;
 use app\modules\dvr\components\interfaces\IDVR;
 use app\modules\dvr\components\interfaces\ISystem;
 use app\modules\dvr\components\interfaces\IUser;
+use app\modules\dvr\components\SystemConfig;
 
 /**
  * Основной класс для создания других классов
@@ -23,6 +24,7 @@ use app\modules\dvr\components\interfaces\IUser;
  */
 abstract class AbstractFactory
 {
+    protected SystemConfig $config;
     private static ?AbstractFactory $instance = null;
 
     /**
@@ -35,7 +37,11 @@ abstract class AbstractFactory
      */
     public static function getInstance(): ?AbstractFactory
     {
-        if (self::$instance == null) self::$instance = new static;
+        if (self::$instance == null) {
+            self::$instance = new static;
+            self::$instance->config = new SystemConfig();   // todo 20211025
+        }
+
         return self::$instance;
     }
 
