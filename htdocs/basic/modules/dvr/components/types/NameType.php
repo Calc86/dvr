@@ -2,4 +2,4 @@
 
 namespace app\modules\dvr\components\types;
 
-class NameType extends String{}
+class NameType extends MyString{}

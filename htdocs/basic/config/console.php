@@ -12,6 +12,13 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
         '@tests' => '@app/tests',
+        '@dvr/data' => '/mnt/data'
+    ],
+    'modules' => [
+        'dvr' => [
+            'class' => \app\modules\dvr\Module::class,
+            'controllerNamespace' => 'app\modules\dvr\commands',
+        ],
     ],
     'components' => [
         'cache' => [

@@ -2,4 +2,4 @@
 
 namespace app\modules\dvr\components\types;
 
-class Command extends String{}
+class Command extends MyString{}

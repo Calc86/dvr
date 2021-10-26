@@ -48,7 +48,7 @@ abstract class Daemon
      */
     function __construct(IDVR $dvr, string $name = 'daemon', ?DaemonConfig $config = null)
     {
-        $this->config = new DaemonConfig();
+        $this->config = $config ?? new DaemonConfig();
         $this->dvr = $dvr;
         $this->name = $name;
 

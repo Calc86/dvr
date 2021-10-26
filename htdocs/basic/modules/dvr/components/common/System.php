@@ -67,6 +67,7 @@ class System implements ISystem
     {
         Log::getInstance()->put(__FUNCTION__, $this);
 
+        $this->config = new SystemConfig(); // todo 20211026
         $this->config->createAll();
 //        Path::createAll();
 

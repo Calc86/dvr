@@ -13,6 +13,8 @@ use yii\base\Model;
 class SystemConfig extends Model
 {
     const PERMISSIONS = 0750;
+
+    public string $tz = 'Europe/Moscow';    // todo 20211126 UTC
     // Paths
     public string $root = '@dvr/data';   // todo 20211025
     /** @var string Путь к локальной файловой системе */
@@ -63,7 +65,7 @@ class SystemConfig extends Model
     public function createAll()
     {
         foreach ($this->dirs as $target => $array) {
-            $basePath = DIR . "/$target";
+            $basePath = $this->root . "/$target";
             if (strpos($target, "/") != FALSE) {
                 $basePath = $target;
             }

@@ -2,4 +2,4 @@
 
 namespace app\modules\dvr\components\types;
 
-class IP extends String{}
+class IP extends MyString{}

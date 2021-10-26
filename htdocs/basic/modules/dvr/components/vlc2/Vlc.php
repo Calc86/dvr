@@ -15,13 +15,18 @@ use app\modules\dvr\components\telnet\Telnet;
 /**
  * Class Vlc
  * Используем VLC в качестве dvr
+ *
+ * https://wiki.videolan.org/VLC_command-line_help/
  */
 class Vlc extends Daemon
 {
     private const INTERFACE = '-I http --http-host={host} --http-port {http} -I telnet --telnet-port {telnet}  --telnet-password {password}';
     private const WITH_LOGS = '--extraintf=http:logger --file-logging --log-verbose {verbose} --logfile {file}';
     private const NO_LOGS = '--extraintf=http';
-    private const SHELL = '{bin} --rtsp-tcp {hw} {daemon} {interface} --repeat --loop --live-caching {live_cache} "
+//    private const SHELL = '{bin} --rtsp-tcp {hw} {daemon} {interface} --repeat --loop --live-caching {live_cache} "
+//        ." --network-caching {network_cache} --sout-mux-caching {mux_cache}  --sout-ts-dts-delay {dts_delay} {vlm} "
+//        ."--pidfile {pid} {logs}';
+    private const SHELL = '{bin} {hw} {daemon} {interface} --repeat --loop --live-caching {live_cache} "
         ." --network-caching {network_cache} --sout-mux-caching {mux_cache}  --sout-ts-dts-delay {dts_delay} {vlm} "
         ."--pidfile {pid} {logs}';
     private const VALGRIND = '{valgrind} -v --trace-children=yes --log-file={log} --error-limit=no --leak-check=full {command}';
@@ -43,12 +48,11 @@ class Vlc extends Daemon
     function __construct(IDVR $dvr, string $name = 'vlc', ?Config $config = null)
     {
         $this->dvr = $dvr;
-        parent::__construct($this->dvr, $name, $config);
-
         $this->config = $config ?? new Config();
+        parent::__construct($this->dvr, $name, $this->config);
 
-        $this->httpPort =  $config->httpPort + $this->dvr->getID();
-        $this->telnetPort = $config->telnetPort + $this->dvr->getID();
+        $this->httpPort =  $this->config->httpPort + $this->dvr->getID();
+        $this->telnetPort = $this->config->telnetPort + $this->dvr->getID();
     }
 
     /**
@@ -111,7 +115,7 @@ class Vlc extends Daemon
         if (!$f) {
             $this->log("Порт закрыт");
         } else {
-            $this->log("Успешное подключение");
+            $this->log("Успешное подключение {$this->config->host}, $this->telnetPort");
             $telnet->auth($this->config->telnetPassword);
             $telnet->write('shutdown');
             $this->log($telnet->read());

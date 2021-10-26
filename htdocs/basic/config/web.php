@@ -13,7 +13,11 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-
+    'modules' => [
+        'dvr' => [
+            'class' => \app\modules\dvr\Module::class
+        ],
+    ],
     'components' => [
         'request' => [
             'class' => NginxRequest::class,

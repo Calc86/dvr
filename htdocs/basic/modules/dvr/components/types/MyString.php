@@ -4,7 +4,7 @@ namespace app\modules\dvr\components\types;
 
 use app\modules\dvr\components\exceptions\StringException;
 
-class String extends Type{
+class MyString extends Type{
     /**
      * @return string
      * @throws StringException

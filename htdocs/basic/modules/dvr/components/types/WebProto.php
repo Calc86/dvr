@@ -2,4 +2,4 @@
 
 namespace app\modules\dvr\components\types;
 
-class WebProto extends String{}
+class WebProto extends MyString{}

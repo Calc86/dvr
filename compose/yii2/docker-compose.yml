@@ -22,6 +22,7 @@ services:
       - ./htdocs:/var/www/html/
       - ./run:/var/run/
       - ./tmp/yii-http:/tmp
+      - ./data:/mnt/data/
     environment:
       YII_DEFAULT_ADMIN: ${YII_DEFAULT_ADMIN}
       YII_DEFAULT_PASS: ${YII_DEFAULT_PASS}
@@ -48,6 +49,7 @@ services:
       - ./etc/supervisor/conf.d:/etc/supervisor/conf.d
       - ./etc/cron.d:/etc/cron.d
       - ./log/:/var/log/
+      - ./data:/mnt/data/
     environment:
       SUPERVISORD_PASSWORD: ${SUPERVISORD_PASSWORD}
       DB: ${MYSQL_DB}

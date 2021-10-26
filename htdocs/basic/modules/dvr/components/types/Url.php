@@ -2,4 +2,4 @@
 
 namespace app\modules\dvr\components\types;
 
-class Url extends String{};
+class Url extends MyString{};
