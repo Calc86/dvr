@@ -6,21 +6,22 @@
  * Time: 14:25
  */
 
-use app\modules\dvr\components\common\Path;
+//use app\modules\dvr\components\common\Path;
 use app\modules\dvr\components\EchoLog;
+use app\modules\dvr\components\SystemConfig;
 
 require_once __DIR__ . '/../Сonfig.php';
 
 //require_once __DIR__ . '/include.php';
 
 date_default_timezone_set('Europe/Moscow');
+$config = new SystemConfig();
 
 EchoLog::getInstance()->put(__FILE__, "main");
 
 //if(file_exists(DIR.'/../tv')){
-if(file_exists(Path::getRoot().'/../tv')){
+if(file_exists($config->getRoot().'/../tv')){
     $factory = \system2\TVFactory::getInstance();
-
 }
 else{
     $factory = \system2\BBFactory::getInstance();
