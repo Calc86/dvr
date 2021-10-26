@@ -80,7 +80,7 @@ class Config extends DaemonConfig
     /**
      * @var string Interface for streaming
      */
-    public string $host = '0.0.0.0';
+    public string $host = /*localhost';*/ '0.0.0.0';
 
     /**
      * @var int --log-verbose 0

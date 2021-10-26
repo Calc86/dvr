@@ -27,6 +27,7 @@ abstract class VlcStream extends Stream
     private ?ICommand $testInputCommand = null;
     protected HttpVlm $vlm;
     private string $streamName;
+    //protected Config $config;
 
     /**
      * @param ICam $cam
@@ -35,11 +36,13 @@ abstract class VlcStream extends Stream
     public function __construct(ICam $cam, string $streamName)
     {
         parent::__construct($cam);
+        $this->config = new Config();   //todo 20211026
+
         $this->streamName = $streamName;
         $this->vlm = new HttpVlm(
             $this->getVlcName(),
-            'localhost',   // todo 20211025 change to Config host
-            HTSTART + $this->cam->getDVR()->getID() // todo 20211025 change to Config port
+            $this->config->host,
+            $this->config->httpPort + $this->cam->getDVR()->getID()
         );
     }
 

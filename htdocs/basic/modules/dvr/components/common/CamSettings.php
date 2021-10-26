@@ -20,8 +20,8 @@ class CamSettings implements ICamSettings
     protected int $id = 0;
     protected string $liveProto = 'http';
     protected string $stopProto = 'http';
-    protected string $ip = 'localhost';
-    protected string $livePort = '1111';
+    protected ?string $ip = 'localhost';
+    protected ?string $livePort = '1111';
     protected string $stopPort = '1111';
     protected string $livePath = '';
     protected string $stopPath = '';
@@ -124,9 +124,9 @@ class CamSettings implements ICamSettings
     }
 
     /**
-     * @param string $ip
+     * @param string|null $ip
      */
-    public function setIp(string $ip)
+    public function setIp(?string $ip)
     {
         $this->ip = $ip;
     }
@@ -140,9 +140,9 @@ class CamSettings implements ICamSettings
     }
 
     /**
-     * @param string $livePort
+     * @param string|null $livePort
      */
-    public function setLivePort(string $livePort)
+    public function setLivePort(?string $livePort)
     {
         $this->livePort = $livePort;
     }

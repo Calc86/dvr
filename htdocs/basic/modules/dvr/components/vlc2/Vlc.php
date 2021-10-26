@@ -9,6 +9,7 @@
 namespace app\modules\dvr\components\vlc2;
 
 use app\modules\dvr\components\common\Daemon;
+use app\modules\dvr\components\common\DaemonConfig;
 use app\modules\dvr\components\interfaces\IDVR;
 use app\modules\dvr\components\telnet\Telnet;
 
@@ -17,6 +18,12 @@ use app\modules\dvr\components\telnet\Telnet;
  * Используем VLC в качестве dvr
  *
  * https://wiki.videolan.org/VLC_command-line_help/
+ *
+ * todo !! Password for Web interface has not been set.
+
+Please use --http-password, or set a password in
+
+Preferences > All > Main interfaces > Lua > Lua HTTP > Password.
  */
 class Vlc extends Daemon
 {
@@ -28,14 +35,14 @@ class Vlc extends Daemon
 //        ."--pidfile {pid} {logs}';
     private const SHELL = '{bin} {hw} {daemon} {interface} --repeat --loop --live-caching {live_cache} "
         ." --network-caching {network_cache} --sout-mux-caching {mux_cache}  --sout-ts-dts-delay {dts_delay} {vlm} "
-        ."--pidfile {pid} {logs}';
+        ."--pidfile {pid} {logs}';  // убрал параметр --rtsp-tcp
     private const VALGRIND = '{valgrind} -v --trace-children=yes --log-file={log} --error-limit=no --leak-check=full {command}';
 
     /**
      * @var IDVR
      */
     protected IDVR $dvr;
-    protected \app\modules\dvr\components\common\DaemonConfig $config;
+    protected DaemonConfig $config;
 
     private int $httpPort;
     private int $telnetPort;

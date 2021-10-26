@@ -3,6 +3,7 @@
 namespace app\modules\dvr\components\application\factory;
 
 use app\modules\dvr\components\common\AbstractFactory;
+use app\modules\dvr\components\common\CamSettings;
 use app\modules\dvr\components\common\DVR;
 use app\modules\dvr\components\common\Streams;
 use app\modules\dvr\components\interfaces\ICam;
@@ -17,7 +18,30 @@ class FileStreamFactory extends AbstractFactory
 {
     protected function createCams(DVR $dvr): array
     {
-        return [];
+        //return [];
+        $files = [
+            'file:///mnt/data/test/test_video1.mp4',
+            'file:///mnt/data/test/test_video2.mp4',
+            'file:///mnt/data/test/test_video3.mp4',
+        ];
+
+        $i = 100;
+        $cams = [];
+        foreach ($files as $url) {
+            $el = parse_url($url);
+
+            $cs = new CamSettings();
+
+            $cs->setId(++$i);
+            $cs->setLiveProto($el['scheme']);
+            $cs->setIp($el['host']);
+            $cs->setLivePort($el['port']);
+            $cs->setLivePath('');
+
+            //$dvr->addCam(AbstractFactory::getInstance()->createCam($dvr, $cs));
+            $cams[] = $this->createCam($dvr, $cs);
+        }
+        return $cams;
     }
 
     protected function createDaemons(DVR $dvr): array
