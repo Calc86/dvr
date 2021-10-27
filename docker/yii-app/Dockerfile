@@ -118,3 +118,6 @@ COPY status.conf /etc/apache2/mods-available/
 RUN apt install vlc -y
 
 RUN apt install ffmpeg -y
+
+# for onvif
+RUN apt-get install -y libxml2-dev && docker-php-ext-install soap && docker-php-ext-enable soap

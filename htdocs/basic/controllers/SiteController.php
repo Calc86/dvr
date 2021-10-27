@@ -2,8 +2,18 @@
 
 namespace app\controllers;
 
+use app\modules\dvr\components\onvif\wsdl\CapabilityCategory;
+use app\modules\dvr\components\onvif\wsdl\GetAccessPolicy;
+use app\modules\dvr\components\onvif\wsdl\GetCapabilities;
+use app\modules\dvr\components\onvif\wsdl\GetDeviceInformation;
+use app\modules\dvr\components\onvif\wsdl\GetHostname;
+use app\modules\dvr\components\onvif\wsdl\GetSystemLog;
+use app\modules\dvr\components\onvif\wsdl\SystemLogType;
+use app\modules\dvr\components\onvif\WsdlOnvif;
+use Rockyjvec\Onvif\Onvif;
 use Yii;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
@@ -52,6 +62,38 @@ class SiteController extends Controller
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
+    }
+
+    public function actionTest() {
+//        $pass = 'Visual';
+//        $created = gmdate('Y-m-d\TH:i:s\Z');
+//        $nonce = mt_rand();
+//        $passdigest = base64_encode( pack('H*', sha1( pack('H*', $nonce) . pack('a*',$created).  pack('a*',$pass))));
+//        var_dump($passdigest);
+//        die();
+//        $r = Onvif::Discovery();
+//        print_r($r);
+//        $generator = new \Wsdl2PhpGenerator\Generator();
+//        $input = Yii::getAlias('@app/modules/dvr/components/onvif/devicemgmt.wsdl');
+//        $output = Yii::getAlias('@app/modules/dvr/components/onvif/wsdl');
+//        $namespaceName = 'app\modules\dvr\components\onvif\wsdl';
+//        $generator->generate(
+//            new \Wsdl2PhpGenerator\Config(array(
+//                'inputFile' => $input,
+//                'outputDir' => $output,
+//                'namespaceName' => $namespaceName,
+//            ))
+//        );
+//        die();
+        $o = new WsdlOnvif("http://10.1.1.250/onvif/device_service", 'admin', 'Visual');
+        $o2 = new Onvif("http://10.1.1.250/onvif/device_service", 'admin', 'Vddisual');
+        $data = $o->device->GetAccessPolicy(new GetAccessPolicy());
+        //$data = $o->device->GetDeviceInformation(new GetDeviceInformation());
+        echo json_encode(ArrayHelper::toArray($data));
+//        die();
+//        $o = new Onvif("http://10.1.1.250/onvif/device_service", 'admin', 'Visual');
+//        echo json_encode(ArrayHelper::toArray($o->device->GetCapabilities()));
+        die();
     }
 
     /**

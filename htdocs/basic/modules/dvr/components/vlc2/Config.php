@@ -85,7 +85,7 @@ class Config extends DaemonConfig
     /**
      * @var int --log-verbose 0
      */
-    public int $verbose = 0;
+    public int $verbose = 10;
 
     /**
      * @var int  --sout-ts-dts-delay=<integer>
@@ -95,4 +95,6 @@ class Config extends DaemonConfig
      * allows for some buffering inside the client decoder.
      */
     public int $dtsDelay = 400; // оставим как и было
+
+    public string $httpPassword = 'qwerty';
 }

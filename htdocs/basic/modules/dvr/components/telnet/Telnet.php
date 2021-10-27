@@ -26,7 +26,7 @@ class Telnet
     {
         $err_no = 0;
         $err_str = '';
-        @$this->f = fsockopen($host, $port, $err_no, $err_str, 1);
+        $this->f = fsockopen($host, $port, $err_no, $err_str, 1);
         $this->wait();
         if ($this->f) {
             stream_set_timeout($this->f, 1);
@@ -60,5 +60,9 @@ class Telnet
     {
         fputs($this->f, $cmd . "\r\n");
         $this->wait();
+    }
+
+    public function disconnect() {
+        $this->write('quit');
     }
 }

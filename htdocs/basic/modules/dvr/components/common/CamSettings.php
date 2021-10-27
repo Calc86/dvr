@@ -110,6 +110,8 @@ class CamSettings implements ICamSettings
         $a = explode('.', $ip);
         if ($a[0] >= 224) $ip = '@' . $ip;
 
+        //var_dump($this); die();
+
         if ($this->liveProto == 'file')
             return "$this->liveProto://$this->livePath";
         return "$this->liveProto://$ip:$this->livePort/$this->livePath";

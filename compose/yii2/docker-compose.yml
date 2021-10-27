@@ -18,7 +18,10 @@ services:
     user: "${UID}:${GID}"
     ports:
       - ${HTTP_PORT}:80
-      - 8101:8101
+      - 8101:8101 #http interface
+      - 9101:9101 #output cam1 port
+      - 44301:44301 #telnet interface
+      - 8801:81
     volumes:
       - ./htdocs:/var/www/html/
       - ./run:/var/run/
@@ -116,9 +119,9 @@ services:
       - ${RABBIT_PORT}:5672
       - ${RABBIT_MQTT_PORT}:1883
       - ${RABBIT_MQTT_WEB_PORT}:15675
-    volumes:
-      - ./datadir/rabbitmq/:/var/lib/rabbitmq
-      - ./etc/rabbitmq/:/etc/rabbitmq/
+    #volumes:
+     # - ./datadir/rabbitmq/:/var/lib/rabbitmq
+     # - ./etc/rabbitmq/:/etc/rabbitmq/
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBIT_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBIT_PASS}

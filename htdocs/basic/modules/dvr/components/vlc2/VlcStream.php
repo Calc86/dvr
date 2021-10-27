@@ -25,7 +25,7 @@ abstract class VlcStream extends Stream
      * @var ICommand|null
      */
     private ?ICommand $testInputCommand = null;
-    protected HttpVlm $vlm;
+    protected Vlm $vlm;
     private string $streamName;
     //protected Config $config;
 
@@ -43,6 +43,11 @@ abstract class VlcStream extends Stream
             $this->getVlcName(),
             $this->config->host,
             $this->config->httpPort + $this->cam->getDVR()->getID()
+        );
+        $this->vlm = new TelnetVlm(
+            $this->getVlcName(),
+            $this->config->host,
+            $this->config->telnetPort + $this->cam->getDVR()->getID()
         );
     }
 

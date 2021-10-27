@@ -13,6 +13,16 @@ use app\modules\dvr\components\interfaces\ICam;
 
 /**
  * HTTP vlc stream
+ *
+ * todo 20211027 check
+ * del all
+new bg broadcast loop enabled
+setup bg option audio-language=ru
+setup bg option keep-all
+setup bg input "http://127.0.0.127"
+setup bg output #standard{access=http,mux=ts,dst=0.0.0.0:8181}
+control bg play
+
  */
 class LiveVlcStream extends VlcStream
 {
@@ -22,6 +32,7 @@ class LiveVlcStream extends VlcStream
     function __construct(ICam $cam, string $streamName = 'live')
     {
         parent::__construct($cam, $streamName);
+        $this->path = 'cam_'.$cam->getID();
     }
 
     /**
@@ -41,15 +52,14 @@ class LiveVlcStream extends VlcStream
         //$transcode = "transcode{width=320,height=240,fps=25,vcodec=h264,vb=256,venc=x264{aud,profile=baseline,level=30,keyint=30,ref=1},acodec=mp3,ab=96}:";
         //$transcode = "transcode{width=320,height=240,fps=25,vcodec=h264,vb=256,venc=x264{aud,profile=baseline,level=30,keyint=30,ref=1},acodec=mp3,ab=96}:";
 
-        return "#{$transcode}std{access=http{mime=$this->mime},mux=ts{use-key-frames},dst=*:$this->getPort()/$this->path}";
+        return "#{$transcode}std{access=http{mime=$this->mime},mux=ts{use-key-frames},dst=*:{$this->getPort()}/$this->path}";
     }
 
     /**
-     * @return int
+     * @return int|mixed
      */
-    protected function getPort(): int
-    {
-        return VLC_STREAM_PORT_START + $this->cam->getID();
+    protected function getPort() {
+        return $this->config->streamPort + $this->cam->getID();
     }
 
     /**
@@ -74,10 +84,10 @@ class LiveVlcStream extends VlcStream
         $this->start();
     }
 
-    public function setPath(string $path)
-    {
-        $this->path = $path;
-    }
+//    public function setPath(string $path)
+//    {
+//        $this->path = $path;
+//    }
 
     public function setMime(string $mime)
     {

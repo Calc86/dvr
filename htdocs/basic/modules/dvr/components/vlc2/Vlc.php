@@ -28,14 +28,15 @@ Preferences > All > Main interfaces > Lua > Lua HTTP > Password.
 class Vlc extends Daemon
 {
     private const INTERFACE = '-I http --http-host={host} --http-port {http} -I telnet --telnet-port {telnet}  --telnet-password {password}';
-    private const WITH_LOGS = '--extraintf=http:logger --file-logging --log-verbose {verbose} --logfile {file}';
+    //private const WITH_LOGS = '--extraintf=http:logger --file-logging --log-verbose {verbose} --logfile {file}';
+    private const WITH_LOGS = '--extraintf=http --file-logging --log-verbose {verbose} --logfile {file}';   // logger deprecated
     private const NO_LOGS = '--extraintf=http';
 //    private const SHELL = '{bin} --rtsp-tcp {hw} {daemon} {interface} --repeat --loop --live-caching {live_cache} "
 //        ." --network-caching {network_cache} --sout-mux-caching {mux_cache}  --sout-ts-dts-delay {dts_delay} {vlm} "
 //        ."--pidfile {pid} {logs}';
-    private const SHELL = '{bin} {hw} {daemon} {interface} --repeat --loop --live-caching {live_cache} "
+    private const SHELL = "{bin} {hw} {daemon} {interface} --http-password {password} --repeat --loop --live-caching {live_cache} "
         ." --network-caching {network_cache} --sout-mux-caching {mux_cache}  --sout-ts-dts-delay {dts_delay} {vlm} "
-        ."--pidfile {pid} {logs}';  // убрал параметр --rtsp-tcp
+        ."--pidfile {pid} {logs}";  // убрал параметр --rtsp-tcp
     private const VALGRIND = '{valgrind} -v --trace-children=yes --log-file={log} --error-limit=no --leak-check=full {command}';
 
     /**
@@ -97,6 +98,7 @@ class Vlc extends Daemon
             'vlm' => $vlc_vlm,
             'pid' => $this->getPidFile(),
             'logs' => $vlc_logs,
+            'password' => $this->config->httpPassword,
         ];
 
         $vlc_shell = $this->applyParams($params, self::SHELL);
