@@ -83,6 +83,17 @@ class Config extends DaemonConfig
     public string $host = /*localhost';*/ '0.0.0.0';
 
     /**
+     * @var string host for m3u8
+     * like dvr-dev.localhost http://dvr-dev.localhost/lhttp/1/stream-101.m3u8
+     */
+    public string $nginxHost = 'localhost';
+
+    /**
+     * @var int port from nginx $nginxHost
+     */
+    public int $livePort = 81;
+
+    /**
      * @var int --log-verbose 0
      */
     public int $verbose = 10;

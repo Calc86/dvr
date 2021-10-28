@@ -1,0 +1,6 @@
+new bg broadcast loop enabled
+setup bg option audio-language=ru
+setup bg option keep-all
+setup bg input file:///mnt/data/test/test_video1.ts
+setup bg output #std{access=http,mux=ts,dst=0.0.0.0:9001/path}
+control bg play

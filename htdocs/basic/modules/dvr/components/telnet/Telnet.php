@@ -2,6 +2,9 @@
 
 namespace app\modules\dvr\components\telnet;
 
+/**
+ * @deprecated 20211028 deprecated, use Telnet2
+ */
 class Telnet
 {
     /**
@@ -26,10 +29,10 @@ class Telnet
     {
         $err_no = 0;
         $err_str = '';
-        $this->f = fsockopen($host, $port, $err_no, $err_str, 1);
+        $this->f = fsockopen($host, $port, $err_no, $err_str, 10);  // todo 20211027 timeout
         $this->wait();
         if ($this->f) {
-            stream_set_timeout($this->f, 1);
+            stream_set_timeout($this->f, 10);  // todo 20211027 timeout
         }
         return (!!$this->f);
     }
@@ -45,10 +48,10 @@ class Telnet
 
     }
 
-    public function read(): string
+    public function read(): string  //todo 20211027 not working
     {
         $buf = '';
-        while (($ln = fread($this->f, 128)) != 0)   // todo ?? 20211022 file_get_content
+        while (($ln = fread($this->f, 10240)) != 0)   // todo ?? 20211022 file_get_content
             $buf .= $ln;
         return $buf;
     }
@@ -58,7 +61,7 @@ class Telnet
      */
     public function write($cmd)
     {
-        fputs($this->f, $cmd . "\r\n");
+        $r = fputs($this->f, $cmd . "\r\n");
         $this->wait();
     }
 

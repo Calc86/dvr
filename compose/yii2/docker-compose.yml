@@ -7,9 +7,11 @@ services:
     #network_mode: "bridge"  # "host" not for macOs
     ports:
       - 80:80
+      - 81:81
     volumes:
       - ~/etc/nginx:/etc/nginx/
       - ~/etc/nginx/conf.d:/etc/nginx/conf.d
+      - ./data:/mnt/data/
   yii-http:
     container_name: ${PREFIX}-yii
     image: bnet/yii-app:${YII_APP_VER}  # 1.0

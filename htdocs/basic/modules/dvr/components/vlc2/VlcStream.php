@@ -8,6 +8,7 @@
 
 namespace app\modules\dvr\components\vlc2;
 
+use app\modules\dvr\components\common\Log;
 use app\modules\dvr\components\common\Stream;
 use app\modules\dvr\components\common\System;
 use app\modules\dvr\components\interfaces\ICam;
@@ -110,6 +111,7 @@ abstract class VlcStream extends Stream
                 } catch (Exception $e) {
                     if ($this->testInputCommand != null)
                         $this->testInputCommand->execute();
+                    Log::getInstance()->put($e->getMessage(), __METHOD__);
                     return false;
                 }
             }
@@ -126,6 +128,9 @@ abstract class VlcStream extends Stream
         if (!$this->testInput()) $this->stop();
     }
 
+
+
+
     /**
      * @return void
      */
@@ -133,6 +138,9 @@ abstract class VlcStream extends Stream
     {
         if ($this->testInput()) {
             $this->vlm->_control('play');
+        } else {
+            Log::getInstance()->put("can not run stream {$this->getInputVlm()}", __METHOD__);
+            // todo 20211027 error log
         }
     }
 
