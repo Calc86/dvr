@@ -17,7 +17,7 @@ class VlmCommand extends Command
     protected const VLM_CONTROL = 'control {name} {command}';
     protected const VLM_SHOW = 'show {name}';
     protected const VLM_DELETE = 'del {name}';
-    protected const VLM_OPTION = 'setup bg option {option}';
+    protected const VLM_OPTION = 'setup {name} option {option}';
 
     public const COMMAND_PLAY = 'play';
 

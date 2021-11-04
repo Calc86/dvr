@@ -3,6 +3,9 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/datadir" />
+      <excludeFolder url="file://$MODULE_DIR$/data/tmpfs" />
+      <excludeFolder url="file://$MODULE_DIR$/data/local/log" />
+      <excludeFolder url="file://$MODULE_DIR$/data/local/proc" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

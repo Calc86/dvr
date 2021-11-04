@@ -2,6 +2,7 @@
 
 namespace dvr\system\common;
 
+use dvr\system\Helpers;
 use yii\base\Model;
 
 /**
@@ -15,20 +16,20 @@ class Telnet extends Model
     protected $connection;
     /** @var int Таймер ожидания после каждой операции */
     protected int $wait = 1000;
-    public string $host;
-    public int $port;
+    public string $host = '0.0.0.0';
+    public int $port = 0;
     protected int $readBufSize = 10 * 1024;
     protected bool $template = true;
 
     protected const NEW_LINE = "\r\n";
 
-    public function __construct(string $host, int $port)
-    {
-        parent::__construct();
-
-        $this->host = $host;
-        $this->port = $port;
-    }
+//    public function __construct(string $host = '0.0.0.0', int $port = 0)
+//    {
+//        parent::__construct();
+//
+//        $this->host = $host;
+//        $this->port = $port;
+//    }
 
 
     protected function wait()

@@ -6,6 +6,7 @@ use dvr\system\common\Auth;
 use dvr\system\common\BashCommand;
 use dvr\system\common\Daemon;
 use dvr\system\common\Dvr;
+use dvr\system\common\Output;
 use dvr\system\common\Path;
 use dvr\system\common\Source;
 use dvr\system\common\SystemException;
@@ -18,6 +19,9 @@ use yii\base\InvalidConfigException;
  */
 class Vlc extends Dvr
 {
+    const OUT_LIVE = 'live';
+    const OUT_HLS = 'hls';
+
     private const INTERFACE = '-I http --http-host={host} --http-port {http} -I telnet --telnet-port {telnet}  --telnet-password {password}';
     private const WITH_LOGS = '--extraintf=http --file-logging --log-verbose {verbose} --logfile {file}';   // logger deprecated
     private const NO_LOGS = '--extraintf=http';
@@ -52,13 +56,16 @@ class Vlc extends Dvr
     {
         $this->portHttp = $this->requestPort();
         $this->portTelnet = $this->requestPort();
-        $this->command = $this->buildCommand();
         /** @var VlcTelnet $telnetTemplate */
         $telnetTemplate = Yii::$app->get(VlcTelnet::DEFAULT);
         $this->telnet = $telnetTemplate->copy($this->host, $this->portTelnet);
+        $this->command = $this->buildCommand();
+
         $commands = [];
-        foreach ($this->commands as $command)
+        foreach ($this->commands as $command) {
             $commands[$command] = new VlmTelnetCommand($this->telnet, $command, $command);
+        }
+
         $this->commands = $commands;
 
         parent::init();
@@ -125,7 +132,6 @@ class Vlc extends Dvr
         $s = new VlmSource(
             $name,
             $uri,
-            $this->telnet,
             VlmTelnetCommand::from($this->telnet, VlmCommand::create($name)),
             VlmTelnetCommand::from($this->telnet, VlmCommand::del($name))
         );
@@ -133,14 +139,27 @@ class Vlc extends Dvr
         return $s;
     }
 
-    public function createOutputs(): void
+    /**
+     * @throws SystemException
+     */
+    public function createOutput(Source $source, string $type): Output
     {
-        // TODO: Implement createOutputs() method.
+        switch ($type) {
+            case self::OUT_LIVE:
+                $o = new NetworkVlcOutput($this->telnet, $source, $this->requestPort());
+                $this->outputs[] = $o;
+                return $o;
+            case self::OUT_HLS:
+                // todo hls
+                break;
+        }
+        throw new SystemException("unknown output type ".$type);
     }
 
     public function start()
     {
         $this->command->execute();
+        sleep(5);   // todo wait for network connection
         //echo $this->command->cmd;
 
         parent::start();

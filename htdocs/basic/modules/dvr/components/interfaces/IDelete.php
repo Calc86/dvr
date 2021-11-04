@@ -12,6 +12,7 @@ namespace app\modules\dvr\components\interfaces;
  * Интерфейс позволяет выполнять команды удаления
  * Interface IDelete
  * @package system2
+ * @deprecated
  */
 interface IDelete {
     public function delete();

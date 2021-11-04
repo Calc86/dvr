@@ -2,8 +2,6 @@
 
 namespace dvr\system\common;
 
-use yii\base\Model;
-
 /**
  * @property-read string $localUri
  */

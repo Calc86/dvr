@@ -3,6 +3,7 @@
 namespace dvr\system\common;
 
 use app\modules\dvr\components\vlc2\Config;
+use Yii;
 use yii\base\Model;
 
 class SystemConfig extends Model
@@ -24,6 +25,6 @@ class SystemConfig extends Model
 
         static::$app = $this;
 
-        $this->dataPath = \Yii::getAlias($this->dataPath);
+        $this->dataPath = Yii::getAlias($this->dataPath);
     }
 }

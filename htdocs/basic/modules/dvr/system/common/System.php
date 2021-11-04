@@ -26,6 +26,7 @@ class System extends Model implements IPath
     {
         $this->path = $path ?? new Path();
         $this->name = $name;
+        parent::__construct();
     }
 
     public function getRamFS(): string

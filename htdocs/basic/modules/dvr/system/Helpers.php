@@ -2,6 +2,9 @@
 
 namespace dvr\system;
 
+use Yii;
+use yii\console\Application;
+
 /**
  * Static helpers functions
  */
@@ -17,5 +20,20 @@ class Helpers
 
         $replace = array_values($params);
         return str_replace($search, $replace, $command);
+    }
+
+    public static function log(string $msg, string $category): void
+    {
+        if(Yii::$app instanceof Application) {
+            $format = "[{date}] {category}: {msg}\n";
+
+            echo self::applyParams([
+                'date' => date("Y:m:d H:i:s"),
+                'category' => $category,
+                'msg' => $msg,
+            ], $format);
+        } else {
+            Yii::debug($msg, $category);
+        }
     }
 }

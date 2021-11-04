@@ -4,7 +4,6 @@ namespace dvr\system\vlc;
 
 use dvr\system\common\SystemException;
 use dvr\system\common\Telnet;
-use phpDocumentor\Reflection\Types\Static_;
 
 /**
  * TODO check prompt from vlc after auth
@@ -29,7 +28,10 @@ class VlcTelnet extends Telnet
 
     public function copy(?string $host, int $port) : self
     {
-        $telnet = new static($host, $port);
+        $telnet = new static();
+        $telnet->host = $host;
+        $telnet->port = $port;
         $telnet->password = $this->password;
+        return $telnet;
     }
 }

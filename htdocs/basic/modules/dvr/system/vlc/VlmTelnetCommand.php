@@ -3,6 +3,7 @@
 namespace dvr\system\vlc;
 
 use dvr\system\common\SystemException;
+use dvr\system\Helpers;
 
 /**
  *
@@ -25,8 +26,9 @@ class VlmTelnetCommand extends VlmCommand
     {
         $this->telnet->connect();
         $this->telnet->auth();
-        $this->telnet->write($this->cmd);
+        Helpers::log($this->telnet->write($this->cmd), __METHOD__);
         $this->telnet->disconnect();
+        Helpers::log($this->cmd, __METHOD__);
     }
 
     public static function from(VlcTelnet $telnet, VlmCommand $command): self

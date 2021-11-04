@@ -87,7 +87,7 @@ abstract class Dvr extends Model implements IPath
 
     abstract public function createSource(string $name, string $uri, ?Auth $auth = null): Source;
 
-    abstract public function createOutputs(): void;
+    abstract public function createOutput(Source $source, string $type): Output;
 
     protected function addPort(int $port): int
     {
@@ -106,6 +106,10 @@ abstract class Dvr extends Model implements IPath
         foreach ($this->sources as $source) {
             $source->create();
             $source->start();
+        }
+        foreach ($this->outputs as $output) {
+            $output->create();
+            $output->start();
         }
     }
 

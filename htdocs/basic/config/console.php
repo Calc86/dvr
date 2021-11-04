@@ -1,5 +1,7 @@
 <?php
 
+use app\modules\dvr\Module;
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -12,11 +14,14 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
         '@tests' => '@app/tests',
-        '@dvr/data' => '/mnt/data'
+        '@dvr/data' => '/mnt/data',
+        '@data' => '/mnt/data',
+        //                     modules/dvr/system/common/System.php
+        '@dvr/system' => '@app/modules/dvr/system',
     ],
     'modules' => [
         'dvr' => [
-            'class' => \app\modules\dvr\Module::class,
+            'class' => Module::class,
             'controllerNamespace' => 'app\modules\dvr\commands',
         ],
     ],

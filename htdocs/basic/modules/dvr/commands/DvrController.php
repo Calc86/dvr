@@ -2,38 +2,43 @@
 
 namespace app\modules\dvr\commands;
 
-use app\modules\dvr\components\application\factory\FileStreamFactory;
-use app\modules\dvr\components\common\AbstractFactory;
-use app\modules\dvr\components\common\System;
-use app\modules\dvr\components\EchoLog;
-use app\modules\dvr\components\interfaces\ISystem;
+use dvr\system\common\System;
+use dvr\system\common\SystemException;
+use dvr\system\vlc\Vlc;
 use yii\console\Controller;
 
-/**
- * Основной контроллер для управления системой записи
- *
- * from htdocs/basic/modules/dvr/components/bin/main.php
- */
 class DvrController extends Controller
 {
-    private AbstractFactory $factory;
-    private ISystem $system;
+    private System $system;
 
+    /**
+     * @throws SystemException
+     */
     public function init()
     {
         parent::init();
-        // init console log
-        EchoLog::getInstance();
-        $this->factory = FileStreamFactory::getInstance();
 
-        $this->system = $this->factory->createSystem();
+        $this->system = new System();
+        $dvr = new Vlc($this->system);
+        $this->system->addDvr($dvr);
+        // file input
+        $s1 = $dvr->createSource('test', 'file:///mnt/data/test/104.mp4');
+        // http output
+        $o1 = $dvr->createOutput($s1, Vlc::OUT_LIVE);
     }
 
-    public function actionStart() {
+    public function actionStart()
+    {
         $this->system->start();
     }
 
-    public function actionStop() {
+    public function actionStop()
+    {
         $this->system->stop();
+    }
+
+    public function actionStatus()
+    {
+        $this->system->status();
     }
 }

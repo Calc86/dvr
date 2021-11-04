@@ -6,25 +6,22 @@ use dvr\system\common\FileSource;
 use dvr\system\common\SystemException;
 
 /**
- *
+ * @deprecated вся логика в Outputs
  */
 class VlmSource extends FileSource
 {
-    protected VlcTelnet $telnet;
     protected VlmCommand $create;
     protected VlmCommand $delete;
 
     public function __construct(
         string $name,
         string $uri,
-        VlcTelnet $telnet,
         VlmCommand $create,
         VlmCommand $delete
     )
     {
         parent::__construct($name, $uri);
 
-        $this->telnet = $telnet;
         $this->create = $create;
         $this->delete = $delete;
     }
@@ -45,7 +42,7 @@ class VlmSource extends FileSource
      */
     function delete(): void
     {
-        $this->telnet->execute($this->delete);
+        $this->delete->execute();
     }
 
     /**
@@ -53,6 +50,6 @@ class VlmSource extends FileSource
      */
     function create(): void
     {
-        $this->telnet->execute($this->create);
+        $this->create->execute();
     }
 }
