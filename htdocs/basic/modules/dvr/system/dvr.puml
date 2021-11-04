@@ -1,0 +1,168 @@
+@startuml
+' todo check motion
+class User {
+    int id
+}
+interface IPath {
+    string getRamFS() (ramDisk)
+    string getLocal() (system)
+    string getNfs() (storage)
+    string getTmp()
+    string getProc() (pid)
+    string getLog()
+}
+class Path
+class System {
+    Общий класс управления системой,
+    не привязан к машине
+    --
+    string name
+}
+class SystemConfig {
+    int dvrPorts
+    string dataPath
+    Map<string(dvr.name), Config> configs
+}
+class Config {
+    int controlTelnetPorts
+    int controlHttpPorts
+    int streamPorts
+    Auth authorization
+}
+class Dvr {
+    Запускается на отдельной машине
+    ..
+    bool useRam
+    string name
+    string host
+    int port
+    List<Source> sources
+    Map<Source, Output> outputs
+    --
+    void createCams()
+    void createStreams()
+    int requestPort()
+    --
+    void start()
+    void stop()
+}
+class Vlc
+class FFmpeg
+class MStream
+class Source {
+    Ссылка на камеру, поток или файл
+    ..
+    Auth authorization
+    ' Cam stream
+    int id
+    string getURI()
+    void stop()
+    void play()
+    void delete()
+}
+class Output {
+    Source source (Мы должны знать родителя, Output local)
+    ' Output output (если используем наш стрим)
+    int name
+    ' codec
+    string video (как кодировать видео)
+    ' codec
+    string audio (как кодировать звук)
+    List<Event> subscriptions
+    --
+    string getURI() (ссылка для внешнего мира)
+    string getLocalURI() (ссылка внурти контейнра)
+}
+
+class NetworkOutput
+class FileOutput {
+    void clear()
+}
+class NetworkVlcOutput {
+    string audio
+    string video
+}
+class FileSource
+class NetworkSource
+class Event
+class RecVlcOutput {
+    void rotate()
+}
+class Auth {
+    ' key
+    string username (null|key)
+    ' value
+    string password (token)
+    string getAuth()
+
+}
+class QueryAuth
+class HeaderAuth
+class Command
+class VlmTelnetCommand
+class VlmHttpCommand
+class Telnet
+class Http
+class BashCommand
+class VlcTelnet {
+    Обработка prompt/auth и других команд
+}
+class Daemon {
+    string name
+    bool isStarted()
+    void start()
+    void stop()
+    void kill()
+    int getPid()
+    void restart()
+}
+
+Vlc *-- Daemon
+System "*" *-- "1" User
+Dvr o-- User
+'Vlc *-- VlcTelnet
+'Vlc *-- Http
+'Source <|-- Output
+Telnet <|-- VlcTelnet
+Dvr "*" *-- "1" Auth
+Config *-- Auth
+Command <|-- VlmHttpCommand
+Command <|-- VlmTelnetCommand
+Command <|-- BashCommand
+VlmTelnetCommand *-- Telnet
+VlmHttpCommand *-- Http
+VlcTelnet *-- Auth
+Http *-- Auth
+Command *-- EventCommand
+Event <|-- EventCommand
+
+Auth <|-- HeaderAuth
+Auth <|-- QueryAuth
+System "*" *-- "1" Dvr
+Dvr "*" *-- "1" Source
+Dvr "*" *-- "1" Output
+' Stream o-- Cam
+System *-- SystemConfig
+Dvr o-- SystemConfig
+Dvr <|-- Vlc
+Dvr <|-- FFmpeg
+Dvr <|-- MStream
+Source <|-- FileSource
+Source *-- Auth
+Source <|-- NetworkSource
+System "*" *-- "1" Event
+Output <|-- FileOutput
+Output <|-- NetworkOutput
+NetworkOutput <|-- NetworkVlcOutput
+FileOutput <|-- FileVlcOutput
+FileOutput <|-- SnapFFmpegOutput
+FileVlcOutput <|-- RecVlcOutput
+FileVlcOutput <|-- HlsVlcOutput
+SystemConfig *-- Config
+IPath <|-- System
+IPath <|-- Dvr
+IPath <|-- Path
+System *-- Path
+Output o-- Source
+
+@enduml
