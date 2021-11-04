@@ -3,6 +3,7 @@
 namespace dvr\system\vlc;
 
 use dvr\system\common\NetworkOutput;
+use dvr\system\common\Output;
 use dvr\system\common\Source;
 use dvr\system\common\SystemException;
 use dvr\system\Helpers;
@@ -26,6 +27,7 @@ class NetworkVlcOutput extends NetworkOutput
 
     public function __construct(VlcTelnet $telnet, Source $source, int $port, ?string $vlm = null)
     {
+        if($source instanceof Output) $this->hasInput = true;
         $this->host = '0.0.0.0';
         $this->port = $port;
 
@@ -42,7 +44,11 @@ class NetworkVlcOutput extends NetworkOutput
             VlmCommand::control($this->name, VlmCommand::COMMAND_PLAY)
         );
 
-        // todo input
+        $this->commands['new'] = VlmTelnetCommand::from(
+            $telnet,
+            VlmCommand::create($this->name)
+        );
+
         $this->commands['input'] = VlmTelnetCommand::from(
             $telnet,
             VlmCommand::input($this->name, $source->uri)
@@ -109,8 +115,13 @@ class NetworkVlcOutput extends NetworkOutput
      */
     function create(): void
     {
-        // input
-        $this->commands['input']->execute();
+
+        if(!$this->hasInput) {
+            // new
+            $this->commands['new']->execute();
+            // input
+            $this->commands['input']->execute();
+        }
         // output
         $this->commands['output']->execute();
     }

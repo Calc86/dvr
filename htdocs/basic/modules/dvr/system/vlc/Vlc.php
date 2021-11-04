@@ -131,9 +131,7 @@ class Vlc extends Dvr
     {
         $s = new VlmSource(
             $name,
-            $uri,
-            VlmTelnetCommand::from($this->telnet, VlmCommand::create($name)),
-            VlmTelnetCommand::from($this->telnet, VlmCommand::del($name))
+            $uri
         );
         $this->sources[] = $s;
         return $s;
