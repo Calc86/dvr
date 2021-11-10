@@ -2,6 +2,7 @@
 
 namespace dvr\system\common;
 
+use dvr\system\Helpers;
 use yii\base\Model;
 
 /**
@@ -124,5 +125,10 @@ abstract class Dvr extends Model implements IPath
     public function status()
     {
 
+    }
+
+    public function requirePath(string $path) {
+        // /mnt/data/hls/test/
+        Helpers::mkDir($path);
     }
 }

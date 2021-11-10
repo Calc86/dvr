@@ -11,13 +11,13 @@ use dvr\system\Helpers;
  */
 class VlmCommand extends Command
 {
-    protected const VLM_NEW = 'new {name} broadcast enabled loop';
-    protected const VML_SETUP_IN = 'setup {name} input {uri}';
-    protected const VLM_SETUP_OUT = 'setup {name} output {vlm}';
-    protected const VLM_CONTROL = 'control {name} {command}';
-    protected const VLM_SHOW = 'show {name}';
-    protected const VLM_DELETE = 'del {name}';
-    protected const VLM_OPTION = 'setup {name} option {option}';
+    protected const VLM_NEW = 'new {vlm_name} broadcast enabled loop';
+    protected const VML_SETUP_IN = 'setup {vlm_name} input {uri}';
+    protected const VLM_SETUP_OUT = 'setup {vlm_name} output {vlm}';
+    protected const VLM_CONTROL = 'control {vlm_name} {command}';
+    protected const VLM_SHOW = 'show {vlm_name}';
+    protected const VLM_DELETE = 'del {vlm_name}';
+    protected const VLM_OPTION = 'setup {vlm_name} option {option}';
 
     public const COMMAND_PLAY = 'play';
 
@@ -29,7 +29,7 @@ class VlmCommand extends Command
         parent::__construct();
 
         $this->name = $name;
-        $params['name'] = $this->name;
+        $params['vlm_name'] = $this->name;
         $this->cmd = Helpers::applyParams($params, $cmd);
     }
 

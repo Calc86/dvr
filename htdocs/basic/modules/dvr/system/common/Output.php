@@ -7,7 +7,7 @@ namespace dvr\system\common;
  */
 abstract class Output extends Source
 {
-    protected string $name;
+    public string $name;
     protected ?string $video;
     protected ?string $audio;
     protected ?Source $source;

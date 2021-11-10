@@ -19,8 +19,10 @@ use yii\base\InvalidConfigException;
  */
 class Vlc extends Dvr
 {
-    const OUT_LIVE = 'live';
+    const OUT_HTTP = 'live';
     const OUT_HLS = 'hls';
+    const OUT_HLS2 = 'hls2';
+    const OUT_REC = 'rec';
 
     private const INTERFACE = '-I http --http-host={host} --http-port {http} -I telnet --telnet-port {telnet}  --telnet-password {password}';
     private const WITH_LOGS = '--extraintf=http --file-logging --log-verbose {verbose} --logfile {file}';   // logger deprecated
@@ -39,13 +41,13 @@ class Vlc extends Dvr
     protected bool $useLog = true;
     protected int $logLevel = 0;    // 0-10?
     //protected VlcTelnet $telnet;
-    /** @var Source[]  */
+    /** @var Source[] */
     protected array $sources = [];
     protected VlcTelnet $telnet;
 
     /** @var VlmCommand[] by name */
     protected array $commands = [
-        'stop',
+        'shutdown',
         'status'
     ];
 
@@ -142,22 +144,56 @@ class Vlc extends Dvr
      */
     public function createOutput(Source $source, string $type): Output
     {
+        $path = Yii::getAlias('@data/' . $type);
+        $this->requirePath($path . DIRECTORY_SEPARATOR . $source->name);
         switch ($type) {
-            case self::OUT_LIVE:
-                $o = new NetworkVlcOutput($this->telnet, $source, $this->requestPort());
-                $this->outputs[] = $o;
-                return $o;
+            case self::OUT_HTTP:
+                $out = VlcOutput::http(
+                    $this->telnet,
+                    $source,
+                    $this->requestPort()
+                );
+                $this->outputs[] = $out;
+                return $out;
             case self::OUT_HLS:
-                // todo hls
-                break;
+                $out = VlcOutput::hls(
+                    $this->telnet,
+                    $source,
+                    $path,
+                    $this->requestPort()
+                );
+                $this->outputs[] = $out;
+                return $out;
+            case self::OUT_HLS2:
+                $out = VlcOutput::hls2(
+                    $this->telnet,
+                    $source,
+                    $path
+                );
+                $this->outputs[] = $out;
+                return $out;
+            case self::OUT_REC:
+                $out = VlcOutput::rec(
+                    $this->telnet,
+                    $source,
+                    $path
+                );
+                $this->outputs[] = $out;
+                return $out;
         }
-        throw new SystemException("unknown output type ".$type);
+        throw new SystemException("unknown output type " . $type);
     }
 
     public function start()
     {
         $this->command->execute();
-        sleep(5);   // todo wait for network connection
+        $wait = 10;
+        while ($wait-- > 0) {
+            Helpers::log("wait $wait for service start...", __METHOD__);
+            if (Helpers::checkPort($this->portTelnet, $this->host)) break;
+            sleep(1);
+        }
+        //sleep(5);   // todo wait for network connection
         //echo $this->command->cmd;
 
         parent::start();
@@ -168,7 +204,7 @@ class Vlc extends Dvr
      */
     public function stop()
     {
-        $this->commands['stop']->execute();
+        $this->commands['shutdown']->execute();
 
         parent::stop();
     }

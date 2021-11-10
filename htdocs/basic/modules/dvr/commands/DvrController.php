@@ -7,9 +7,14 @@ use dvr\system\common\SystemException;
 use dvr\system\vlc\Vlc;
 use yii\console\Controller;
 
+/**
+ *
+ */
 class DvrController extends Controller
 {
     private System $system;
+
+    private const URI_TEST = 'file:///mnt/data/test/104.mp4';
 
     /**
      * @throws SystemException
@@ -22,9 +27,11 @@ class DvrController extends Controller
         $dvr = new Vlc($this->system);
         $this->system->addDvr($dvr);
         // file input
-        $s1 = $dvr->createSource('test', 'file:///mnt/data/test/104.mp4');
+        $s1 = $dvr->createSource('test', self::URI_TEST);
         // http output
-        $o1 = $dvr->createOutput($s1, Vlc::OUT_LIVE);
+        $o1 = $dvr->createOutput($s1, Vlc::OUT_HTTP);
+        $dvr->createOutput($s1, Vlc::OUT_HLS2);
+        $dvr->createOutput($o1, Vlc::OUT_REC);
     }
 
     public function actionStart()

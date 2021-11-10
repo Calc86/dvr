@@ -9,18 +9,17 @@ use yii\base\Model;
  */
 abstract class Source extends Model
 {
-    protected string $name;
+    public string $name;
     protected string $uri;
     protected ?Auth $auth = null;
 
-    public function __construct($name, $uri)
+    public function __construct($name, $uri, array $config = [])
     {
         $this->name = $name;
         $this->uri = $uri;
 
-        parent::__construct();
+        parent::__construct($config);
     }
-
 
     public function getUri(): string
     {
