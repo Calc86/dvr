@@ -27,9 +27,9 @@ class Vlc extends Dvr
     private const INTERFACE = '-I http --http-host={host} --http-port {http} -I telnet --telnet-port {telnet}  --telnet-password {password}';
     private const WITH_LOGS = '--extraintf=http --file-logging --log-verbose {verbose} --logfile {file}';   // logger deprecated
     private const NO_LOGS = '--extraintf=http';
-    private const SHELL = "{bin} {hw} {daemon} {interface} --http-password {password} --repeat --loop --live-caching {live_cache} "
-    . " --network-caching {network_cache} --sout-mux-caching {mux_cache}  --sout-ts-dts-delay {dts_delay} {vlm} "
-    . "--pidfile {pid} {logs}";  // убрал параметр --rtsp-tcp
+    private const SHELL = '{bin} {hw} {daemon} {interface} --http-password {password} --repeat --loop --live-caching {live_cache}'
+    . ' --network-caching {network_cache} --sout-mux-caching {mux_cache}  --sout-ts-dts-delay {dts_delay} {vlm}'
+    . ' --pidfile {pid} {logs}';  // убрал параметр --rtsp-tcp
 
     protected BashCommand $command;
     protected Daemon $daemon;
@@ -56,8 +56,8 @@ class Vlc extends Dvr
      */
     public function init()
     {
-        $this->portHttp = $this->requestPort();
-        $this->portTelnet = $this->requestPort();
+        $this->portHttp = $this->requestPort('http');
+        $this->portTelnet = $this->requestPort('telnet');
         /** @var VlcTelnet $telnetTemplate */
         $telnetTemplate = Yii::$app->get(VlcTelnet::DEFAULT);
         $this->telnet = $telnetTemplate->copy($this->host, $this->portTelnet);
@@ -135,7 +135,7 @@ class Vlc extends Dvr
             $name,
             $uri
         );
-        $this->sources[] = $s;
+        $this->sources[$name] = $s;
         return $s;
     }
 
@@ -151,7 +151,7 @@ class Vlc extends Dvr
                 $out = VlcOutput::http(
                     $this->telnet,
                     $source,
-                    $this->requestPort()
+                    $this->requestPort($type)
                 );
                 $this->outputs[] = $out;
                 return $out;
@@ -160,7 +160,7 @@ class Vlc extends Dvr
                     $this->telnet,
                     $source,
                     $path,
-                    $this->requestPort()
+                    $this->requestPort($type)
                 );
                 $this->outputs[] = $out;
                 return $out;
@@ -193,8 +193,6 @@ class Vlc extends Dvr
             if (Helpers::checkPort($this->portTelnet, $this->host)) break;
             sleep(1);
         }
-        //sleep(5);   // todo wait for network connection
-        //echo $this->command->cmd;
 
         parent::start();
     }

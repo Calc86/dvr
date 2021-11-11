@@ -44,7 +44,8 @@ abstract class Dvr extends Model implements IPath
     /**
      * @var Output[] name->value map
      */
-    protected array $outputs;
+    protected array $outputs = [];
+    protected array $daemons = [];
 
     protected function getName(): string
     {
@@ -90,16 +91,19 @@ abstract class Dvr extends Model implements IPath
 
     abstract public function createOutput(Source $source, string $type): Output;
 
-    protected function addPort(int $port): int
+    protected function addPort(int $port, ?string $name): int
     {
-        self::$ports[] = $port;
+        if(empty($name))
+            self::$ports[] = $port;
+        else
+            self::$ports[$name] = $port;
         return $port;
     }
 
-    public function requestPort(): int
+    public function requestPort(?string $name = null): int
     {
-        if(empty(self::$ports)) return $this->addPort($this->port);
-        return $this->addPort(max(self::$ports) + 1);
+        if (empty(self::$ports)) return $this->addPort($this->port, $name);
+        return $this->addPort(max(self::$ports) + 1, $name);
     }
 
     public function start()
@@ -127,8 +131,20 @@ abstract class Dvr extends Model implements IPath
 
     }
 
-    public function requirePath(string $path) {
+    public function requirePath(string $path)
+    {
         // /mnt/data/hls/test/
         Helpers::mkDir($path);
+    }
+
+    public function addOutput(Output $out): Output
+    {
+        $this->outputs[] = $out;
+        return $out;
+    }
+
+    public function addDaemon(Daemon $daemon): void
+    {
+        $this->daemons[] = $daemon;
     }
 }
